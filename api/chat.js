@@ -49,34 +49,44 @@ Reglas:
     { role: 'user', content: message }
   ];
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1200,
-        system: systemPrompt,
-        messages: formattedMessages
-      })
-    });
+  // Modelos compatibles con tu cuenta activa
+  const modelsToTry = [
+    'claude-haiku-5-5',
+    'claude-sonnet-5-5',
+    'claude-3-7-sonnet-20250219',
+    'claude-3-5-haiku-latest'
+  ];
 
-    const data = await response.json();
+  let lastError = null;
 
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: data?.error?.message || 'Error al comunicarse con Anthropic.'
+  for (const modelName of modelsToTry) {
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: modelName,
+          max_tokens: 1200,
+          system: systemPrompt,
+          messages: formattedMessages
+        })
       });
+
+      const data = await response.json();
+
+      if (response.ok && data.content?.[0]?.text) {
+        return res.status(200).json({ reply: data.content[0].text });
+      }
+
+      lastError = data?.error?.message || `Error con modelo ${modelName}`;
+    } catch (err) {
+      lastError = err.message;
     }
-
-    const reply = data.content?.[0]?.text || 'No se obtuvo respuesta del modelo.';
-    return res.status(200).json({ reply });
-
-  } catch (err) {
-    return res.status(500).json({ error: 'Error interno del servidor: ' + err.message });
   }
+
+  return res.status(500).json({ error: lastError || 'Error conectando con la API de Anthropic.' });
 }
