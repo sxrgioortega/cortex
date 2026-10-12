@@ -3,9 +3,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY no configurada en Vercel.' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY no configurada en Vercel.' });
   }
 
   const { specialist, message, history = [] } = req.body;
@@ -39,30 +39,32 @@ Reglas:
 3. Asiste en operativización de variables, hipótesis y muestreo metodológico.`
   };
 
-  const systemPrompt = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
+  const systemInstruction = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
 
-  // Formato de mensajes para Anthropic
-  const formattedMessages = [
+  // Formato de historial para Google Gemini
+  const contents = [
     ...history.slice(-6).map(m => ({
-      role: m.role === 'user' ? 'user' : 'assistant',
-      content: m.text
+      role: m.role === 'user' ? 'user' : 'model',
+      parts: [{ text: m.text }]
     })),
-    { role: 'user', content: message }
+    { role: 'user', parts: [{ text: message }] }
   ];
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-20241022',
-        max_tokens: 1200,
-        system: systemPrompt,
-        messages: formattedMessages
+        systemInstruction: {
+          parts: [{ text: systemInstruction }]
+        },
+        contents: contents,
+        generationConfig: {
+          temperature: 0.4,
+          maxOutputTokens: 1200
+        }
       })
     });
 
@@ -70,11 +72,11 @@ Reglas:
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data?.error?.message || 'Error al comunicarse con Anthropic.'
+        error: data?.error?.message || 'Error al comunicarse con Gemini API.'
       });
     }
 
-    const reply = data.content?.[0]?.text || 'No se obtuvo respuesta del modelo.';
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No se obtuvo respuesta del modelo.';
     return res.status(200).json({ reply });
 
   } catch (err) {
