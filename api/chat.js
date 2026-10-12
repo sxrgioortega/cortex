@@ -88,7 +88,7 @@ Reglas:
       },
       body: JSON.stringify({
         model: selectedModel,
-        max_tokens: 1500,
+        max_tokens: 3000,
         system: systemPrompt,
         messages: formattedMessages
       })
