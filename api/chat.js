@@ -48,7 +48,7 @@ Reglas:
     },
     {
       role: 'model',
-      parts: [{ text: 'Entendido. Procedo con el rol asignado y el rigor correspondiente.' }]
+      parts: [{ text: 'Entendido. Asumo el rol asignado y responderé con rigor técnico.' }]
     },
     ...history.slice(-6).map(m => ({
       role: m.role === 'user' ? 'user' : 'model',
@@ -60,40 +60,53 @@ Reglas:
     }
   ];
 
-  // Lista de modelos a intentar en orden de disponibilidad
-  const candidateModels = [
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-    'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent'
-  ];
+  try {
+    // 1. Consultar dinámicamente los modelos habilitados para tu API Key
+    const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+    const listData = await listRes.json();
 
-  let lastError = null;
-
-  for (const endpoint of candidateModels) {
-    try {
-      const response = await fetch(`${endpoint}?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: contents,
-          generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 1200
-          }
-        })
+    if (!listRes.ok) {
+      return res.status(listRes.status).json({
+        error: listData?.error?.message || 'Error validando GEMINI_API_KEY en Google AI Studio.'
       });
-
-      const data = await response.json();
-
-      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
-        return res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
-      }
-
-      lastError = data?.error?.message || `Error con ${endpoint}`;
-    } catch (err) {
-      lastError = err.message;
     }
-  }
 
-  return res.status(500).json({ error: lastError || 'No se pudo conectar con los modelos de Gemini.' });
+    // 2. Encontrar un modelo disponible que soporte generateContent
+    const availableModels = listData.models || [];
+    const chosenModelObj = availableModels.find(m => 
+      m.supportedGenerationMethods?.includes('generateContent') &&
+      (m.name.includes('flash') || m.name.includes('gemini'))
+    ) || availableModels.find(m => m.supportedGenerationMethods?.includes('generateContent'));
+
+    if (!chosenModelObj) {
+      return res.status(500).json({ error: 'No se encontraron modelos compatibles con generateContent para esta clave.' });
+    }
+
+    // 3. Ejecutar la llamada con el modelo detectado
+    const genRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/${chosenModelObj.name}:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: contents,
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: 1200
+        }
+      })
+    });
+
+    const genData = await genRes.json();
+
+    if (!genRes.ok) {
+      return res.status(genRes.status).json({
+        error: genData?.error?.message || 'Error generando contenido con Gemini.'
+      });
+    }
+
+    const reply = genData.candidates?.[0]?.content?.parts?.[0]?.text || 'No se obtuvo respuesta del modelo.';
+    return res.status(200).json({ reply });
+
+  } catch (err) {
+    return res.status(500).json({ error: 'Error interno del servidor: ' + err.message });
+  }
 }
