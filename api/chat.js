@@ -3,9 +3,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY no configurada en Vercel.' });
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY no configurada en Vercel.' });
   }
 
   const { specialist, message, history = [] } = req.body;
@@ -39,37 +39,29 @@ Reglas:
 3. Asiste en operativización de variables, hipótesis y muestreo metodológico.`
   };
 
-  const systemInstruction = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
+  const systemPrompt = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
 
-  const contents = [
-    {
-      role: 'user',
-      parts: [{ text: `[INSTRUCCIÓN DE ROL]:\n${systemInstruction}\n\nPor favor, responde asumiendo este rol.` }]
-    },
-    {
-      role: 'model',
-      parts: [{ text: 'Entendido. Asumo plenamente este rol y responderé con rigor técnico.' }]
-    },
+  const formattedMessages = [
     ...history.slice(-6).map(m => ({
-      role: m.role === 'user' ? 'user' : 'model',
-      parts: [{ text: m.text }]
+      role: m.role === 'user' ? 'user' : 'assistant',
+      content: m.text
     })),
-    {
-      role: 'user',
-      parts: [{ text: message }]
-    }
+    { role: 'user', content: message }
   ];
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
       body: JSON.stringify({
-        contents: contents,
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 1200
-        }
+        model: 'claude-3-5-haiku-20241022',
+        max_tokens: 1200,
+        system: systemPrompt,
+        messages: formattedMessages
       })
     });
 
@@ -77,11 +69,11 @@ Reglas:
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data?.error?.message || 'Error al comunicarse con Gemini API.'
+        error: data?.error?.message || 'Error al comunicarse con Anthropic.'
       });
     }
 
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No se obtuvo respuesta del modelo.';
+    const reply = data.content?.[0]?.text || 'No se obtuvo respuesta del modelo.';
     return res.status(200).json({ reply });
 
   } catch (err) {
