@@ -41,15 +41,14 @@ Reglas:
 
   const systemInstruction = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
 
-  // Estructuramos el contenido integrando la instrucción de rol con el historial
   const contents = [
     {
       role: 'user',
-      parts: [{ text: `[INSTRUCCIÓN DE ROL Y SISTEMA]:\n${systemInstruction}\n\nPor favor, responde a partir de ahora asumiendo estrictamente este rol.` }]
+      parts: [{ text: `[INSTRUCCIÓN DE ROL]:\n${systemInstruction}\n\nPor favor, responde asumiendo este rol.` }]
     },
     {
       role: 'model',
-      parts: [{ text: 'Entendido. Asumo plenamente este rol y responderé con el rigor técnico y las directrices solicitadas.' }]
+      parts: [{ text: 'Entendido. Procedo con el rol asignado y el rigor correspondiente.' }]
     },
     ...history.slice(-6).map(m => ({
       role: m.role === 'user' ? 'user' : 'model',
@@ -61,35 +60,40 @@ Reglas:
     }
   ];
 
-  try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+  // Lista de modelos a intentar en orden de disponibilidad
+  const candidateModels = [
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+    'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent'
+  ];
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contents: contents,
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 1200
-        }
-      })
-    });
+  let lastError = null;
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: data?.error?.message || 'Error al comunicarse con Gemini API.'
+  for (const endpoint of candidateModels) {
+    try {
+      const response = await fetch(`${endpoint}?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: contents,
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 1200
+          }
+        })
       });
+
+      const data = await response.json();
+
+      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        return res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
+      }
+
+      lastError = data?.error?.message || `Error con ${endpoint}`;
+    } catch (err) {
+      lastError = err.message;
     }
-
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No se obtuvo respuesta del modelo.';
-    return res.status(200).json({ reply });
-
-  } catch (err) {
-    return res.status(500).json({ error: 'Error interno del servidor: ' + err.message });
   }
+
+  return res.status(500).json({ error: lastError || 'No se pudo conectar con los modelos de Gemini.' });
 }
