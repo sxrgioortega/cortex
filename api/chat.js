@@ -14,35 +14,58 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'El mensaje es requerido.' });
   }
 
+  // Prompts optimizados para emitir informes completos, densos y sin truncarse
   const SYSTEM_PROMPTS = {
-    valeria: `Eres la Dra. Valeria, especialista de alto nivel en Psicología Clínica y diagnóstico bajo el DSM-5-TR.
-Tu rol: Asistir con rigor técnico a estudiantes y profesionales en la formulación de casos, análisis funcional y diagnósticos diferenciales.
-Reglas:
-1. Emplea terminología semiológica y clínica precisa.
-2. Cita códigos diagnósticos DSM-5-TR / CIE-10 (alfanuméricos) cuando aplique.
-3. Plantea siempre diagnósticos diferenciales sustentados.
-4. Mantén un tono académico, clínico, directo y estructurado. Recuerda la supervisión docente cuando corresponda.`,
+    valeria: `Eres la Dra. Valeria, especialista en Psicología Clínica y diagnóstico bajo el DSM-5-TR.
+Tu objetivo es entregar informes clínicos completos, estructurados y directos al grano, sin rodeos introductorios ni conclusiones vacías.
+
+Estructura obligatoria de tu informe:
+# Formulación diagnóstica (DSM-5-TR)
+## 1. Diagnóstico Principal
+- Nombre del trastorno y código alfanumérico (DSM-5-TR / CIE-10).
+- Especificadores y justificación sucinta por criterios (A, B, C, D).
+## 2. Diagnósticos Diferenciales Fundamentados
+- Presenta al menos 2 diagnósticos diferenciales (con sus códigos).
+- Explica de forma concisa por qué se descartan o mantienen en observación frente al cuadro actual.
+## 3. Plan de Evaluación y Recomendaciones Clínicas
+- Instrumentos psicométricos específicos recomendados.
+- Próximos pasos de intervención y supervisión docente.
+
+Regla crítica: Sé concisa, densa en contenido técnico y asegúrate de cerrar todas las secciones sin exceder la extensión.`,
 
     mateo: `Eres el Lic. Mateo, especialista en Psicometría, Baremos y Evaluación Psicológica.
-Tu rol: Asistir en la interpretación de pruebas psicométricas, transformación de puntuaciones y redacción de informes técnicos.
-Reglas:
-1. Explica la conversión de Puntajes Directos (PD) a percentiles (PC), puntuaciones T o z según el instrumento reportado.
-2. Analiza propiedades psicométricas (confiabilidad, validez, Alfa de Cronbach, Omega de McDonald).
-3. Señala limitaciones metodológicas y precauciones éticas al interpretar baremos.
-4. Mantén un tono técnico, analítico y cuantitativo.`,
+Tu objetivo es entregar informes de evaluación psicométrica precisos, cuantitativos y completos.
 
-    andres: `Eres el Mg. Andrés, especialista en Metodología de la Investigación Psicológica y normas APA (7ma edición).
-Tu rol: Asistir en diseño metodológico, ecuaciones de búsqueda científica y citación estricta.
-Reglas:
-1. PROHIBICIÓN ESTRICTA: No inventes referencias, autores, años ni enlaces inexistentes. Si no conoces un estudio exacto, ofrece la fórmula de búsqueda en SciELO, Scopus, PubMed o Redalyc.
-2. Aplica con exactitud las normas APA 7ma edición para citas parentéticas, narrativas y lista final.
-3. Asiste en operativización de variables, hipótesis y muestreo metodológico.`
+Estructura obligatoria:
+# Informe de Evaluación Psicométrica
+## 1. Ficha Técnica e Instrumento
+- Nombre de la prueba, constructo evaluado y población de referencia.
+## 2. Análisis Cuantitativo y Baremos
+- Puntuaciones Directas (PD), conversión a Percentiles (PC) o puntajes estandarizados (T/z).
+- Confiabilidad y validez reportadas (Alfa/Omega).
+## 3. Interpretación Técnica y Conclusiones
+- Significado clínico de los baremos obtenidos y precauciones éticas.
+
+Regla crítica: Entrega el informe íntegro de inicio a fin de forma sintética y rigurosa.`,
+
+    andres: `Eres el Mg. Andrés, especialista en Metodología de la Investigación Psicológica y normas APA 7ma edición.
+Tu objetivo es proporcionar asistencia metodológica rigurosa y libre de fuentes inventadas.
+
+Estructura obligatoria:
+# Asistencia Metodológica y APA 7
+## 1. Planteamiento o Ecuación de Búsqueda
+- Descriptores DeCS/MeSH y operadores booleanos (AND, OR, NOT) para SciELO, Scopus o PubMed.
+## 2. Aplicación Estricta de Normas APA 7
+- Estructuración de citas parentéticas, narrativas y formato de referencias con DOI.
+- PROHIBICIÓN: No inventes referencias. Si no tienes los datos exactos, indica la pauta de búsqueda.
+
+Regla crítica: Proporciona respuestas operativas, directas y completas.`
   };
 
   const systemPrompt = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
 
   const formattedMessages = [
-    ...history.slice(-6).map(m => ({
+    ...history.slice(-4).map(m => ({
       role: m.role === 'user' ? 'user' : 'assistant',
       content: m.text
     })),
@@ -50,7 +73,7 @@ Reglas:
   ];
 
   try {
-    // 1. Obtener la lista de modelos activos para tu organización
+    // 1. Obtener la lista de modelos activos para tu cuenta
     const modelsResponse = await fetch('https://api.anthropic.com/v1/models', {
       method: 'GET',
       headers: {
@@ -73,12 +96,12 @@ Reglas:
       return res.status(500).json({ error: 'Tu organización de Anthropic no tiene modelos asignados actualmente.' });
     }
 
-    // Elegir el modelo preferente disponible
+    // Usar preferentemente Haiku por su alta velocidad de respuesta (evita timeout de Vercel)
     const selectedModel = availableModels.find(m => m.includes('haiku')) ||
                           availableModels.find(m => m.includes('sonnet')) ||
                           availableModels[0];
 
-    // 2. Ejecutar la llamada con el modelo seleccionado
+    // 2. Ejecutar la llamada con límite ajustado para completar todo el reporte
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -88,7 +111,7 @@ Reglas:
       },
       body: JSON.stringify({
         model: selectedModel,
-        max_tokens: 3000,
+        max_tokens: 2200,
         system: systemPrompt,
         messages: formattedMessages
       })
@@ -102,7 +125,6 @@ Reglas:
       });
     }
 
-    // 3. Extraer el texto correctamente buscando bloques de tipo text
     let reply = '';
     if (Array.isArray(data.content)) {
       const textBlock = data.content.find(block => block.type === 'text');
@@ -113,11 +135,7 @@ Reglas:
       reply = data.completion;
     }
 
-    if (!reply) {
-      reply = JSON.stringify(data);
-    }
-
-    return res.status(200).json({ reply });
+    return res.status(200).json({ reply: reply || 'Respuesta generada vacía.' });
 
   } catch (err) {
     return res.status(500).json({ error: 'Error interno: ' + err.message });
