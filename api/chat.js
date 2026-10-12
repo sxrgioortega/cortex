@@ -1,6 +1,6 @@
 export const config = { maxDuration: 60 };
 
-const MODEL = 'claude-haiku-5-5'; // más barato; usa 'claude-sonnet-5-5' si quieres más calidad clínica
+const MODEL = 'claude-haiku-5-5';
 const MAX_TOKENS = 8000;
 
 const SYSTEM_PROMPTS = {
@@ -14,7 +14,7 @@ Estructura obligatoria del informe:
 - Dos diagnósticos diferenciales con sus códigos y el motivo puntual de descarte.
 ## 3. Recomendaciones de Evaluación
 - Pruebas complementarias sugeridas y supervisión docente.
-Sé conciso (máximo ~700 palabras) y concluye siempre las tres secciones.`,
+Sé conciso y concluye siempre las tres secciones íntegras.`,
 
   mateo: `Eres el Lic. Mateo, especialista en Psicometría y Evaluación Psicológica.
 Estructura obligatoria:
@@ -105,14 +105,13 @@ export default async function handler(req, res) {
           if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
             res.write(evt.delta.text);
           } else if (evt.type === 'message_delta') {
-            console.log('stop_reason:', evt.delta?.stop_reason);
             if (evt.delta?.stop_reason === 'max_tokens') {
               res.write('\n\n> ⚠️ Respuesta cortada por límite de longitud.');
             }
           } else if (evt.type === 'error') {
             res.write(`\n\n> ⚠️ Error: ${evt.error?.message}`);
           }
-        } catch { /* línea incompleta o evento no JSON */ }
+        } catch { /* línea incompleta */ }
       }
     }
     res.end();
