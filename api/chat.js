@@ -41,28 +41,38 @@ Reglas:
 
   const systemInstruction = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
 
-  // Formato de historial para Google Gemini
+  // Estructuramos el contenido integrando la instrucción de rol con el historial
   const contents = [
+    {
+      role: 'user',
+      parts: [{ text: `[INSTRUCCIÓN DE ROL Y SISTEMA]:\n${systemInstruction}\n\nPor favor, responde a partir de ahora asumiendo estrictamente este rol.` }]
+    },
+    {
+      role: 'model',
+      parts: [{ text: 'Entendido. Asumo plenamente este rol y responderé con el rigor técnico y las directrices solicitadas.' }]
+    },
     ...history.slice(-6).map(m => ({
       role: m.role === 'user' ? 'user' : 'model',
       parts: [{ text: m.text }]
     })),
-    { role: 'user', parts: [{ text: message }] }
+    {
+      role: 'user',
+      parts: [{ text: message }]
+    }
   ];
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: systemInstruction }]
-        },
         contents: contents,
         generationConfig: {
-          temperature: 0.4,
+          temperature: 0.3,
           maxOutputTokens: 1200
         }
       })
