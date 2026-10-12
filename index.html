@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Córtex · Workspace de Psicología</title>
 
-  <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
-  <!-- Tailwind CSS & Marked.js para renderizar Markdown -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   
@@ -28,8 +26,7 @@
               card: '#121216',
               border: '#23232a',
               hover: '#181820',
-              accent: '#8b5cf6',
-              accentLight: '#a78bfa'
+              accent: '#8b5cf6'
             }
           }
         }
@@ -54,7 +51,6 @@
       background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16) 0%, transparent 65%);
     }
 
-    /* Estilos para el texto Markdown renderizado */
     .markdown-body h1 { font-size: 1.35rem; font-weight: 800; color: #f4f4f5; margin-top: 1.25rem; margin-bottom: 0.75rem; border-bottom: 1px solid #27272a; padding-bottom: 0.35rem; }
     .markdown-body h2 { font-size: 1.15rem; font-weight: 700; color: #e4e4e7; margin-top: 1rem; margin-bottom: 0.5rem; }
     .markdown-body h3 { font-size: 1rem; font-weight: 600; color: #c4b5fd; margin-top: 0.85rem; margin-bottom: 0.35rem; }
@@ -65,12 +61,14 @@
     .markdown-body strong { color: #fafafa; font-weight: 700; }
     .markdown-body blockquote { border-left: 3px solid #8b5cf6; padding-left: 0.85rem; color: #a1a1aa; font-style: italic; margin: 0.75rem 0; }
     .markdown-body code { background: #18181b; padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.85rem; color: #ddd6fe; border: 1px solid #27272a; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
+    .markdown-body th, .markdown-body td { border: 1px solid #27272a; padding: 0.5rem 0.75rem; text-align: left; }
+    .markdown-body th { background: #18181b; color: #f4f4f5; font-weight: 600; }
   </style>
 </head>
 
 <body class="bg-cortex-bg text-zinc-100 font-sans antialiased flex flex-col min-h-screen selection:bg-violet-500/30 selection:text-violet-200">
 
-  <!-- TOP NAVIGATION -->
   <header class="h-16 border-b border-cortex-border bg-cortex-bg/90 backdrop-blur-md sticky top-0 z-50 shrink-0">
     <div class="max-w-7xl mx-auto h-full px-6 flex items-center justify-between">
       <div class="flex items-center gap-3 cursor-pointer" onclick="showView('lobby')">
@@ -93,25 +91,24 @@
         <div class="h-5 w-px bg-cortex-border mx-1 hidden sm:block"></div>
         <div class="hidden sm:flex items-center gap-2 text-xs bg-cortex-card border border-cortex-border px-3 py-1.5 rounded-full text-zinc-400">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>DSM-5-TR &amp; APA 7 Activos</span>
+          <span>DSM-5-TR &amp; APA 7</span>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- VISTA 1: LOBBY -->
   <main id="view-lobby" class="w-full flex-1 glow-purple block">
     <div class="max-w-6xl mx-auto px-6 py-12 sm:py-16 flex flex-col items-center">
       <div class="text-center max-w-3xl mb-16 relative w-full">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/30 bg-violet-950/40 text-violet-300 text-xs font-semibold mb-6">
-          <i class="fa-solid fa-sparkles text-xs"></i> Asistentes Especializados para Universitarios
+          <i class="fa-solid fa-bolt text-xs"></i> Motor Claude con Streaming en Vivo
         </div>
         <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
           El entorno técnico para <br>
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400">estudiantes de psicología</span>
         </h1>
         <p class="text-base sm:lg text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-          Estructura informes clínicos, interpreta baremos psicométricos y redacta citas en APA 7ma edición con rigor y exactitud.
+          Formulaciones de casos con DSM-5-TR, análisis cuantitativo psicométrico y citación metodológica sin cortes.
         </p>
       </div>
 
@@ -124,11 +121,11 @@
             <span class="text-xs font-semibold text-violet-400 uppercase tracking-wider">Módulo 01</span>
             <h3 class="text-xl font-bold text-white mt-1 mb-3">Clínica &amp; DSM-5-TR</h3>
             <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Análisis funcional, criterios diagnósticos alfanuméricos y diagnósticos diferenciales detallados para casos clínicos.
+              Formulaciones diagnósticas completas, códigos alfanuméricos y criterios diferenciales sustentados.
             </p>
           </div>
           <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
-            <span>Iniciar análisis de caso</span>
+            <span>Iniciar análisis</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -141,11 +138,11 @@
             <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Módulo 02</span>
             <h3 class="text-xl font-bold text-white mt-1 mb-3">Psicometría &amp; Baremos</h3>
             <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Interpretación de puntajes directos (PD), conversión a percentiles (PC) y redacción técnica de informes de evaluación.
+              Conversión de PD a percentiles/T, propiedades psicométricas y redacción técnica de informes.
             </p>
           </div>
           <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-indigo-300">
-            <span>Interpretar prueba</span>
+            <span>Interpretar baremos</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -158,11 +155,11 @@
             <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Módulo 03</span>
             <h3 class="text-xl font-bold text-white mt-1 mb-3">Metodología &amp; APA 7</h3>
             <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Cero alucinaciones: diseño de búsquedas en SciELO/Scopus, estructuración de antecedentes y citas según APA 7ma edición.
+              Diseño de ecuaciones SciELO/Scopus y citas parentéticas o narrativas estrictas en APA 7.
             </p>
           </div>
           <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-purple-300">
-            <span>Estructurar referencias</span>
+            <span>Estructurar citas</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
@@ -170,7 +167,6 @@
     </div>
   </main>
 
-  <!-- VISTA 2: WORKSPACE -->
   <main id="view-workspace" class="flex-1 flex overflow-hidden hidden" style="height: calc(100vh - 64px);">
     <aside class="w-72 bg-cortex-card border-r border-cortex-border flex flex-col justify-between shrink-0">
       <div class="p-4 space-y-4">
@@ -208,7 +204,7 @@
       <div class="p-4 border-t border-cortex-border/80 bg-cortex-bg/40 flex items-center justify-between text-xs text-zinc-400">
         <span>Motor de IA</span>
         <span class="text-violet-400 font-semibold flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Claude Activo
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Streaming Activo
         </span>
       </div>
     </aside>
@@ -232,14 +228,14 @@
 
           <div class="flex items-end gap-3 bg-cortex-card border border-cortex-border focus-within:border-violet-500 rounded-2xl p-2.5 transition">
             <textarea id="user-input" rows="2" placeholder="Escribe tu consulta o caso clínico..." class="flex-1 bg-transparent text-sm text-white placeholder-zinc-500 resize-none px-3 py-1.5 focus:outline-none"></textarea>
-            <button onclick="handleSend()" class="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center transition shrink-0 shadow-lg shadow-violet-600/30">
+            <button id="send-btn" onclick="handleSend()" class="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center transition shrink-0 shadow-lg shadow-violet-600/30">
               <i class="fa-solid fa-arrow-up text-sm"></i>
             </button>
           </div>
           
           <div class="flex items-center justify-between text-[11px] text-zinc-500 px-1">
-            <span>Presiona Shift + Enter para saltar línea</span>
-            <span>Córtex v1.0 · Motor Clínico Claude</span>
+            <span>Shift + Enter para salto de línea</span>
+            <span>Córtex v1.1 · Claude Haiku Streaming</span>
           </div>
         </div>
       </div>
@@ -255,7 +251,7 @@
         roleTag: 'CL',
         welcome: 'Hola. Soy la Dra. Valeria. Comparte los signos, síntomas o motivo de consulta para estructurar la formulación clínica bajo el DSM-5-TR, calcular diagnósticos diferenciales y sustentar criterios.',
         chips: [
-          'Analizar caso de Crisis de Pánico con Agorafobia',
+          'Caso de Crisis de Pánico con Agorafobia',
           'Diferencial: Depresión Mayor vs. Distimia',
           'Formulación de caso en TAG'
         ]
@@ -339,13 +335,11 @@
       renderChat();
     }
 
-    function copyToClipboard(button, textToCopy) {
-      navigator.clipboard.writeText(textToCopy).then(() => {
-        const originalText = button.innerHTML;
+    function copyToClipboard(button, rawText) {
+      navigator.clipboard.writeText(rawText).then(() => {
+        const original = button.innerHTML;
         button.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copiado';
-        setTimeout(() => {
-          button.innerHTML = originalText;
-        }, 2000);
+        setTimeout(() => { button.innerHTML = original; }, 2000);
       });
     }
 
@@ -366,7 +360,7 @@
           </div>
         `;
       } else {
-        stream.innerHTML = history.map((msg, index) => {
+        stream.innerHTML = history.map((msg, idx) => {
           if (msg.role === 'user') {
             return `
               <div class="flex items-start gap-3 max-w-2xl ml-auto justify-end">
@@ -376,9 +370,7 @@
               </div>
             `;
           } else {
-            // Renderizado Markdown enriquecido
-            const parsedHtml = marked.parse(msg.text);
-            const encodedText = encodeURIComponent(msg.text);
+            const parsed = marked.parse(msg.text);
             return `
               <div class="flex items-start gap-3.5 max-w-3xl group">
                 <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
@@ -386,18 +378,26 @@
                 </div>
                 <div class="bg-cortex-card border border-cortex-border p-6 rounded-2xl rounded-tl-sm text-sm leading-relaxed shadow-sm w-full relative">
                   <div class="flex justify-end mb-2">
-                    <button onclick="copyToClipboard(this, decodeURIComponent('${encodedText}'))" class="text-xs text-zinc-400 hover:text-white bg-zinc-800/80 hover:bg-zinc-700 px-2.5 py-1 rounded-md transition flex items-center gap-1.5 border border-zinc-700/60">
+                    <button id="copy-btn-${idx}" class="text-xs text-zinc-400 hover:text-white bg-zinc-800/80 hover:bg-zinc-700 px-2.5 py-1 rounded-md transition flex items-center gap-1.5 border border-zinc-700/60">
                       <i class="fa-regular fa-copy"></i> Copiar informe
                     </button>
                   </div>
-                  <div class="markdown-body text-zinc-200">
-                    ${parsedHtml}
+                  <div id="content-box-${idx}" class="markdown-body text-zinc-200">
+                    ${parsed}
                   </div>
                 </div>
               </div>
             `;
           }
         }).join('');
+
+        // Vincular eventos de copiado
+        history.forEach((msg, idx) => {
+          if (msg.role !== 'user') {
+            const btn = document.getElementById(`copy-btn-${idx}`);
+            if (btn) btn.onclick = () => copyToClipboard(btn, msg.text);
+          }
+        });
       }
 
       stream.scrollTop = stream.scrollHeight;
@@ -408,80 +408,10 @@
       const text = input.value.trim();
       if (!text) return;
 
+      const sendBtn = document.getElementById('send-btn');
+      sendBtn.disabled = true;
+      input.disabled = true;
+
       chatHistories[activeSpecialistKey].push({ role: 'user', text });
       input.value = '';
       renderChat();
-
-      const stream = document.getElementById('chat-stream');
-      const spec = SPECIALISTS[activeSpecialistKey];
-      const loadingId = 'loading-' + Date.now();
-      
-      const loadingEl = document.createElement('div');
-      loadingEl.id = loadingId;
-      loadingEl.className = 'flex items-start gap-3.5 max-w-3xl';
-      loadingEl.innerHTML = `
-        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0">
-          ${spec.roleTag}
-        </div>
-        <div class="bg-cortex-card border border-cortex-border p-4 rounded-2xl rounded-tl-sm text-sm text-zinc-400 italic flex items-center gap-2 shadow-sm">
-          <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span>
-          Generando formulación técnica...
-        </div>
-      `;
-      stream.appendChild(loadingEl);
-      stream.scrollTop = stream.scrollHeight;
-
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            specialist: activeSpecialistKey,
-            message: text,
-            history: chatHistories[activeSpecialistKey]
-          })
-        });
-
-        const data = await response.json();
-        const loader = document.getElementById(loadingId);
-        if (loader) loader.remove();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Error en la respuesta del servidor');
-        }
-
-        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: data.reply });
-        renderChat();
-      } catch (err) {
-        const loader = document.getElementById(loadingId);
-        if (loader) loader.remove();
-
-        chatHistories[activeSpecialistKey].push({
-          role: 'assistant',
-          text: `⚠️ **Aviso:** ${err.message}`
-        });
-        renderChat();
-      }
-    }
-
-    function handleChipClick(chipText) {
-      document.getElementById('user-input').value = chipText;
-      handleSend();
-    }
-
-    function clearCurrentChat() {
-      chatHistories[activeSpecialistKey] = [];
-      renderChat();
-    }
-
-    document.getElementById('user-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
-    });
-
-    setSpecialist('valeria');
-  </script>
-</body>
-</html>
