@@ -415,3 +415,95 @@
       chatHistories[activeSpecialistKey].push({ role: 'user', text });
       input.value = '';
       renderChat();
+
+      const stream = document.getElementById('chat-stream');
+      const spec = SPECIALISTS[activeSpecialistKey];
+      const assistantIdx = chatHistories[activeSpecialistKey].length;
+
+      // Crear tarjeta para recibir el streaming en vivo
+      const msgWrapper = document.createElement('div');
+      msgWrapper.className = 'flex items-start gap-3.5 max-w-3xl group';
+      msgWrapper.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
+          ${spec.roleTag}
+        </div>
+        <div class="bg-cortex-card border border-cortex-border p-6 rounded-2xl rounded-tl-sm text-sm leading-relaxed shadow-sm w-full relative">
+          <div class="flex justify-end mb-2">
+            <button id="live-copy-btn" class="text-xs text-zinc-400 hover:text-white bg-zinc-800/80 hover:bg-zinc-700 px-2.5 py-1 rounded-md transition flex items-center gap-1.5 border border-zinc-700/60">
+              <i class="fa-regular fa-copy"></i> Copiar informe
+            </button>
+          </div>
+          <div id="live-content-box" class="markdown-body text-zinc-200">
+            <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span> Escribiendo análisis...
+          </div>
+        </div>
+      `;
+      stream.appendChild(msgWrapper);
+      stream.scrollTop = stream.scrollHeight;
+
+      let fullAccumulatedText = '';
+      const liveBox = document.getElementById('live-content-box');
+      const liveCopy = document.getElementById('live-copy-btn');
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            specialist: activeSpecialistKey,
+            message: text,
+            history: chatHistories[activeSpecialistKey].slice(0, -1)
+          })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.error || 'Error en la respuesta del servidor');
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          fullAccumulatedText += chunk;
+          liveBox.innerHTML = marked.parse(fullAccumulatedText);
+          stream.scrollTop = stream.scrollHeight;
+        }
+
+        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: fullAccumulatedText });
+        liveCopy.onclick = () => copyToClipboard(liveCopy, fullAccumulatedText);
+
+      } catch (err) {
+        liveBox.innerHTML = `<span class="text-rose-400 font-semibold">⚠️ ${err.message}</span>`;
+        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: `⚠️ Error: ${err.message}` });
+      } finally {
+        sendBtn.disabled = false;
+        input.disabled = false;
+        input.focus();
+      }
+    }
+
+    function handleChipClick(chipText) {
+      document.getElementById('user-input').value = chipText;
+      handleSend();
+    }
+
+    function clearCurrentChat() {
+      chatHistories[activeSpecialistKey] = [];
+      renderChat();
+    }
+
+    document.getElementById('user-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    setSpecialist('valeria');
+  </script>
+</body>
+</html>
