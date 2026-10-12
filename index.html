@@ -237,8 +237,8 @@
       </div>
 
       <div class="p-4 border-t border-cortex-border/80 bg-cortex-bg/40 flex items-center justify-between text-xs text-zinc-400">
-        <span>Plan Académico</span>
-        <span class="text-violet-400 font-semibold">Ilimitado</span>
+        <span>Motor de IA</span>
+        <span class="text-violet-400 font-semibold">Claude Activo</span>
       </div>
     </aside>
 
@@ -268,7 +268,7 @@
           
           <div class="flex items-center justify-between text-[11px] text-zinc-500 px-1">
             <span>Presiona Shift + Enter para saltar línea</span>
-            <span>Córtex v1.0 · Rigor Metodológico</span>
+            <span>Córtex v1.0 · Conectado con Claude API</span>
           </div>
         </div>
       </div>
@@ -414,7 +414,7 @@
       stream.scrollTop = stream.scrollHeight;
     }
 
-    function handleSend() {
+    async function handleSend() {
       const input = document.getElementById('user-input');
       const text = input.value.trim();
       if (!text) return;
@@ -423,19 +423,56 @@
       input.value = '';
       renderChat();
 
-      setTimeout(() => {
-        let simulatedReply = "";
-        if (activeSpecialistKey === 'valeria') {
-          simulatedReply = "### Análisis Clínico (DSM-5-TR)\n\n**Impresión Diagnóstica:** Criterios preliminares compatibles con Trastorno de Ansiedad Generalizada (300.02 [F41.1]).\n\n- Cumple Criterio A (temporalidad mayor a 6 meses de preocupación multidimensional).\n- Presenta Criterios C.3 (dificultad para concentrarse), C.5 (tensión muscular) y C.6 (alteraciones del ciclo sueño-vigilia).\n\n**Diferenciales a considerar:**\n1. Trastorno de Pánico (descartado por reactividad específica).\n2. Ansiedad Social (evaluar si el temor central es la evaluación de terceros).\n\n*Recuerda contrastar estos hallazgos con la anamnesis formal.*";
-        } else if (activeSpecialistKey === 'mateo') {
-          simulatedReply = "### Interpretación Psicométrica\n\n**Escala:** BDI-II (Inventario de Depresión de Beck)\n**Puntaje Directo (PD):** Registrado\n\n- La puntuación se sitúa en el rango clínico correspondiente según baremos adaptados.\n- **Recomendación:** Contrastar el ítem 9 (ideación autolítica) independientemente de la puntuación total de corte.";
-        } else {
-          simulatedReply = "### Estrategia de Búsqueda Metodológica (APA 7)\n\n**Ecuación Booleana sugerida para SciELO / Scopus:**\n`(\"ansiedad\" OR \"estrés académico\") AND (\"estudiantes universitarios\") AND (\"Perú\")`\n\n**Estructura de Cita Parentética:**\n(Autor & Coautor, 2024)\n\n*Verifica siempre el DOI en doi.org antes de incorporarlo a tu lista de referencias finales.*";
+      const stream = document.getElementById('chat-stream');
+      const spec = SPECIALISTS[activeSpecialistKey];
+      const loadingId = 'loading-' + Date.now();
+      
+      const loadingEl = document.createElement('div');
+      loadingEl.id = loadingId;
+      loadingEl.className = 'flex items-start gap-3.5 max-w-3xl';
+      loadingEl.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0">
+          ${spec.roleTag}
+        </div>
+        <div class="bg-cortex-card border border-cortex-border p-4 rounded-2xl rounded-tl-sm text-sm text-zinc-400 italic flex items-center gap-2 shadow-sm">
+          <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span>
+          Generando respuesta especializada...
+        </div>
+      `;
+      stream.appendChild(loadingEl);
+      stream.scrollTop = stream.scrollHeight;
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            specialist: activeSpecialistKey,
+            message: text,
+            history: chatHistories[activeSpecialistKey]
+          })
+        });
+
+        const data = await response.json();
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Error en la respuesta del servidor');
         }
 
-        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: simulatedReply });
+        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: data.reply });
         renderChat();
-      }, 500);
+      } catch (err) {
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
+
+        chatHistories[activeSpecialistKey].push({
+          role: 'assistant',
+          text: `⚠️ **Aviso:** ${err.message}`
+        });
+        renderChat();
+      }
     }
 
     function handleChipClick(chipText) {
