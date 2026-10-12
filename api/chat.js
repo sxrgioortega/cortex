@@ -73,12 +73,12 @@ Reglas:
       return res.status(500).json({ error: 'Tu organización de Anthropic no tiene modelos asignados actualmente.' });
     }
 
-    // Elegir preferentemente Haiku o Sonnet de la lista oficial que devolvió tu cuenta
+    // Elegir el modelo preferente disponible
     const selectedModel = availableModels.find(m => m.includes('haiku')) ||
                           availableModels.find(m => m.includes('sonnet')) ||
                           availableModels[0];
 
-    // 2. Enviar la consulta con el modelo garantizado
+    // 2. Ejecutar la llamada con el modelo seleccionado
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -88,7 +88,7 @@ Reglas:
       },
       body: JSON.stringify({
         model: selectedModel,
-        max_tokens: 1200,
+        max_tokens: 1500,
         system: systemPrompt,
         messages: formattedMessages
       })
@@ -102,7 +102,21 @@ Reglas:
       });
     }
 
-    const reply = data.content?.[0]?.text || 'No se obtuvo respuesta del modelo.';
+    // 3. Extraer el texto correctamente buscando bloques de tipo text
+    let reply = '';
+    if (Array.isArray(data.content)) {
+      const textBlock = data.content.find(block => block.type === 'text');
+      reply = textBlock ? textBlock.text : (data.content[0]?.text || '');
+    }
+
+    if (!reply && typeof data.completion === 'string') {
+      reply = data.completion;
+    }
+
+    if (!reply) {
+      reply = JSON.stringify(data);
+    }
+
     return res.status(200).json({ reply });
 
   } catch (err) {
