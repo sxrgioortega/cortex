@@ -49,44 +49,63 @@ Reglas:
     { role: 'user', content: message }
   ];
 
-  // Modelos compatibles con tu cuenta activa
-  const modelsToTry = [
-    'claude-haiku-5-5',
-    'claude-sonnet-5-5',
-    'claude-3-7-sonnet-20250219',
-    'claude-3-5-haiku-latest'
-  ];
-
-  let lastError = null;
-
-  for (const modelName of modelsToTry) {
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: modelName,
-          max_tokens: 1200,
-          system: systemPrompt,
-          messages: formattedMessages
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.content?.[0]?.text) {
-        return res.status(200).json({ reply: data.content[0].text });
+  try {
+    // 1. Obtener la lista de modelos activos para tu organización
+    const modelsResponse = await fetch('https://api.anthropic.com/v1/models', {
+      method: 'GET',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
       }
+    });
 
-      lastError = data?.error?.message || `Error con modelo ${modelName}`;
-    } catch (err) {
-      lastError = err.message;
+    const modelsData = await modelsResponse.json();
+
+    if (!modelsResponse.ok) {
+      return res.status(modelsResponse.status).json({
+        error: modelsData?.error?.message || 'Error al consultar la lista de modelos en Anthropic.'
+      });
     }
-  }
 
-  return res.status(500).json({ error: lastError || 'Error conectando con la API de Anthropic.' });
+    const availableModels = (modelsData.data || []).map(m => m.id);
+
+    if (availableModels.length === 0) {
+      return res.status(500).json({ error: 'Tu organización de Anthropic no tiene modelos asignados actualmente.' });
+    }
+
+    // Elegir preferentemente Haiku o Sonnet de la lista oficial que devolvió tu cuenta
+    const selectedModel = availableModels.find(m => m.includes('haiku')) ||
+                          availableModels.find(m => m.includes('sonnet')) ||
+                          availableModels[0];
+
+    // 2. Enviar la consulta con el modelo garantizado
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: selectedModel,
+        max_tokens: 1200,
+        system: systemPrompt,
+        messages: formattedMessages
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json({
+        error: `[Modelo: ${selectedModel}] ${data?.error?.message || 'Error en la respuesta de Anthropic.'}`
+      });
+    }
+
+    const reply = data.content?.[0]?.text || 'No se obtuvo respuesta del modelo.';
+    return res.status(200).json({ reply });
+
+  } catch (err) {
+    return res.status(500).json({ error: 'Error interno: ' + err.message });
+  }
 }
