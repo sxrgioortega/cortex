@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Córtex · Workspace de Psicología</title>
+
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          },
+          colors: {
+            cortex: {
+              bg: '#08080a',
+              card: '#121216',
+              border: '#23232a',
+              hover: '#181820',
+              accent: '#8b5cf6',
+              accentLight: '#a78bfa'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html, body {
+      background-color: #08080a;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #23232a; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+    /* Fondo resplandor */
+    .glow-purple {
+      background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16) 0%, transparent 65%);
+    }
+    .card-glow:hover {
+      box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25);
+    }
+
+    /* Animaciones de elementos flotantes */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-16px) rotate(4deg); }
+    }
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(14px) rotate(-4deg); }
+    }
+    .float-item-1 { animation: floatSlow 7s ease-in-out infinite; }
+    .float-item-2 { animation: floatReverse 9s ease-in-out infinite; }
+    .float-item-3 { animation: floatSlow 8s ease-in-out infinite 1.5s; }
+  </style>
+</head>
+
+<body class="bg-cortex-bg text-zinc-100 font-sans antialiased flex flex-col min-h-screen selection:bg-violet-500/30 selection:text-violet-200">
+
+  <!-- ==================== TOP NAVIGATION ==================== -->
+  <header class="h-16 border-b border-cortex-border bg-cortex-bg/
