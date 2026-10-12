@@ -48,7 +48,7 @@ Reglas:
     },
     {
       role: 'model',
-      parts: [{ text: 'Entendido. Asumo el rol asignado y responderé con rigor técnico.' }]
+      parts: [{ text: 'Entendido. Asumo plenamente este rol y responderé con rigor técnico.' }]
     },
     ...history.slice(-6).map(m => ({
       role: m.role === 'user' ? 'user' : 'model',
@@ -61,29 +61,7 @@ Reglas:
   ];
 
   try {
-    // 1. Consultar dinámicamente los modelos habilitados para tu API Key
-    const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-    const listData = await listRes.json();
-
-    if (!listRes.ok) {
-      return res.status(listRes.status).json({
-        error: listData?.error?.message || 'Error validando GEMINI_API_KEY en Google AI Studio.'
-      });
-    }
-
-    // 2. Encontrar un modelo disponible que soporte generateContent
-    const availableModels = listData.models || [];
-    const chosenModelObj = availableModels.find(m => 
-      m.supportedGenerationMethods?.includes('generateContent') &&
-      (m.name.includes('flash') || m.name.includes('gemini'))
-    ) || availableModels.find(m => m.supportedGenerationMethods?.includes('generateContent'));
-
-    if (!chosenModelObj) {
-      return res.status(500).json({ error: 'No se encontraron modelos compatibles con generateContent para esta clave.' });
-    }
-
-    // 3. Ejecutar la llamada con el modelo detectado
-    const genRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/${chosenModelObj.name}:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -95,15 +73,15 @@ Reglas:
       })
     });
 
-    const genData = await genRes.json();
+    const data = await response.json();
 
-    if (!genRes.ok) {
-      return res.status(genRes.status).json({
-        error: genData?.error?.message || 'Error generando contenido con Gemini.'
+    if (!response.ok) {
+      return res.status(response.status).json({
+        error: data?.error?.message || 'Error al comunicarse con Gemini API.'
       });
     }
 
-    const reply = genData.candidates?.[0]?.content?.parts?.[0]?.text || 'No se obtuvo respuesta del modelo.';
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No se obtuvo respuesta del modelo.';
     return res.status(200).json({ reply });
 
   } catch (err) {
