@@ -49,12 +49,10 @@
     ::-webkit-scrollbar-thumb { background: #23232a; border-radius: 999px; }
     ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
 
-    /* Fondo ambiental Córtex */
     .glow-purple {
       background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.18) 0%, transparent 65%);
     }
 
-    /* Tipografía clínica renderizada */
     .markdown-body h1 { font-size: 1.25rem; font-weight: 800; color: #f4f4f5; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #27272a; padding-bottom: 0.3rem; }
     .markdown-body h2 { font-size: 1.1rem; font-weight: 700; color: #e4e4e7; margin-top: 0.85rem; margin-bottom: 0.4rem; }
     .markdown-body h3 { font-size: 0.95rem; font-weight: 600; color: #c4b5fd; margin-top: 0.75rem; margin-bottom: 0.3rem; }
@@ -174,7 +172,7 @@
     </div>
 
     <!-- PANTALLA 2: WORKSPACE -->
-    <div id="view-workspace" style="display: none;" class="w-full h-full flex overflow-hidden">
+    <div id="view-workspace" class="hidden w-full h-full flex overflow-hidden">
       <!-- SIDEBAR -->
       <aside class="w-64 bg-cortex-card border-r border-cortex-border flex flex-col justify-between shrink-0">
         <div class="p-4 space-y-3">
@@ -286,15 +284,23 @@
     let chatHistories = { valeria: [], mateo: [], andres: [] };
 
     function showLobbyView() {
-      document.getElementById('view-lobby').style.display = 'block';
-      document.getElementById('view-workspace').style.display = 'none';
+      const lobby = document.getElementById('view-lobby');
+      const workspace = document.getElementById('view-workspace');
+      lobby.classList.remove('hidden');
+      lobby.classList.add('block');
+      workspace.classList.add('hidden');
+      workspace.classList.remove('flex');
       document.getElementById('nav-lobby-btn').className = "text-xs font-semibold px-3.5 py-2 rounded-lg bg-zinc-800 text-white transition";
       document.getElementById('nav-workspace-btn').className = "text-xs font-semibold px-3.5 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition";
     }
 
     function showWorkspaceView() {
-      document.getElementById('view-lobby').style.display = 'none';
-      document.getElementById('view-workspace').style.display = 'flex';
+      const lobby = document.getElementById('view-lobby');
+      const workspace = document.getElementById('view-workspace');
+      lobby.classList.add('hidden');
+      lobby.classList.remove('block');
+      workspace.classList.remove('hidden');
+      workspace.classList.add('flex');
       document.getElementById('nav-workspace-btn').className = "text-xs font-semibold px-3.5 py-2 rounded-lg bg-zinc-800 text-white transition";
       document.getElementById('nav-lobby-btn').className = "text-xs font-semibold px-3.5 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition";
       renderChat();
@@ -344,7 +350,6 @@
       renderChat();
     }
 
-    // Copia limpia a Word: sin fondos morados ni estilos oscuros
     function copyCleanReport(button, rawMarkdown) {
       const cleanText = rawMarkdown
         .replace(/^#+\s*(.*?)$/gm, '$1')
@@ -408,4 +413,115 @@
               </div>
               <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
                 <div class="flex justify-end mb-2">
-                  <button id="copy-btn
+                  <button id="copy-btn-${idx}" class="text-[10px] text-zinc-400 hover:text-white bg-zinc-800 px-2.5 py-1 rounded transition flex items-center gap-1.5 border border-zinc-700/60">
+                    <i class="fa-regular fa-copy"></i> Copiar informe
+                  </button>
+                </div>
+                <div class="markdown-body">${parsed}</div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      list.forEach((item, idx) => {
+        if (item.role !== 'user') {
+          const btn = document.getElementById(`copy-btn-${idx}`);
+          if (btn) btn.onclick = () => copyCleanReport(btn, item.text);
+        }
+      });
+
+      box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const btn = document.getElementById('send-btn');
+      btn.disabled = true;
+      input.disabled = true;
+
+      chatHistories[activeKey].push({ role: 'user', text: val });
+      input.value = '';
+      renderChat();
+
+      const box = document.getElementById('chat-messages');
+      const data = CONFIG[activeKey];
+
+      const liveDiv = document.createElement('div');
+      liveDiv.className = 'flex items-start gap-3 max-w-3xl';
+      liveDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
+          ${data.tag}
+        </div>
+        <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
+          <div id="live-stream-content" class="markdown-body">
+            <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span> Generando respuesta...
+          </div>
+        </div>
+      `;
+      box.appendChild(liveDiv);
+      box.scrollTop = box.scrollHeight;
+
+      const targetContent = document.getElementById('live-stream-content');
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            specialist: activeKey,
+            message: val,
+            history: chatHistories[activeKey].slice(0, -1)
+          })
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        let fullText = '';
+
+        if (contentType.includes('application/json')) {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Error al comunicarse con el servidor');
+          fullText = data.reply || '';
+          targetContent.innerHTML = marked.parse(fullText);
+        } else {
+          if (!res.ok) {
+            const errObj = await res.json().catch(() => ({}));
+            throw new Error(errObj.error || 'Error en la respuesta del servidor');
+          }
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            fullText += decoder.decode(value, { stream: true });
+            targetContent.innerHTML = marked.parse(fullText);
+            box.scrollTop = box.scrollHeight;
+          }
+        }
+
+        chatHistories[activeKey].push({ role: 'assistant', text: fullText });
+      } catch (err) {
+        targetContent.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${err.message}</span>`;
+        chatHistories[activeKey].push({ role: 'assistant', text: `⚠️ ${err.message}` });
+      } finally {
+        btn.disabled = false;
+        input.disabled = false;
+        input.focus();
+        renderChat();
+      }
+    }
+
+    document.getElementById('user-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    setSpecialist('valeria');
+  </script>
+</body>
+</html>
