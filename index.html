@@ -1184,6 +1184,42 @@
 
     setSpecialist('valeria');
     updateTrialUI();
+  function setActiveNavLink(activeId) {
+      const links = document.querySelectorAll('#landing-nav .nav-link');
+      links.forEach(link => {
+        const href = link.getAttribute('href').replace('#', '');
+        if (href === activeId) {
+          link.className = 'nav-link text-violet-400 font-bold transition-colors';
+        } else {
+          link.className = 'nav-link text-zinc-400 hover:text-violet-300 font-medium transition-colors';
+        }
+      });
+    }
+
+    function handleNavClick(element, sectionId) {
+      if (document.getElementById('view-lobby').style.display === 'none') {
+        showLobbyView();
+      }
+      setActiveNavLink(sectionId);
+    }
+
+    // Detector de scroll (ilumina el enlace correspondiente al deslizar la página)
+    const lobbyContainer = document.getElementById('view-lobby');
+    if (lobbyContainer) {
+      lobbyContainer.addEventListener('scroll', () => {
+        const sections = ['especialistas', 'comparativa', 'pasos', 'precios', 'testimonios', 'faq', 'seguridad'];
+        const scrollPosition = lobbyContainer.scrollTop + 140;
+
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const sectionEl = document.getElementById(sections[i]);
+          if (sectionEl && sectionEl.offsetTop <= scrollPosition) {
+            setActiveNavLink(sections[i]);
+            break;
+          }
+        }
+      });
+    }
+    
   </script>
 </body>
 </html>
