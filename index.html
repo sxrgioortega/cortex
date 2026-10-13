@@ -140,3 +140,799 @@
 
         <div class="flex flex-wrap items-center justify-center gap-3">
           <button onclick="showWorkspaceView()" class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-violet-600/30 transition flex items-center gap-2">
+            <span>Abrir Workspace Gratuito</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+          <a href="#precios" class="px-5 py-3 rounded-xl bg-cortex-card hover:bg-zinc-800 border border-cortex-border text-zinc-300 text-xs font-semibold transition">
+            Ver Planes &amp; Precios
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 w-full max-w-4xl pt-8 border-t border-cortex-border/70 text-left">
+          <div class="p-3 bg-cortex-card/50 rounded-xl border border-cortex-border/60">
+            <div class="text-sm font-bold text-violet-400">DSM-5-TR</div>
+            <div class="text-[11px] text-zinc-400">Criterios nosológicos oficiales y diagnósticos diferenciales</div>
+          </div>
+          <div class="p-3 bg-cortex-card/50 rounded-xl border border-cortex-border/60">
+            <div class="text-sm font-bold text-indigo-400">Psicometría</div>
+            <div class="text-[11px] text-zinc-400">Baremos normativos de WISC-V, WAIS-IV, BDI-II y STAI</div>
+          </div>
+          <div class="p-3 bg-cortex-card/50 rounded-xl border border-cortex-border/60">
+            <div class="text-sm font-bold text-purple-400">Informe Psicológico</div>
+            <div class="text-[11px] text-zinc-400">Estructura formal con áreas, tablas y recomendaciones</div>
+          </div>
+          <div class="p-3 bg-cortex-card/50 rounded-xl border border-cortex-border/60">
+            <div class="text-sm font-bold text-emerald-400">Ética Profesional</div>
+            <div class="text-[11px] text-zinc-400">Respaldo deontológico CPsP y confidencialidad Ley 29733</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN: COMPARATIVA -->
+      <section id="comparativa" class="max-w-5xl mx-auto px-6 py-12">
+        <div class="text-center mb-8">
+          <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Eficiencia Real</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">El problema no es tu vocación. Es tabular a mano a las 2 AM.</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-cortex-card/80 border border-rose-950/60 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider mb-3">
+              <i class="fa-regular fa-circle-xmark"></i> Tu entrega sin Córtex
+            </div>
+            <p class="text-xs text-zinc-300 leading-relaxed mb-3">
+              Domingo, 11:30 PM. Tienes que entregar la práctica de Psicometría o el informe de caso clínico el lunes temprano. Tienes 4 manuales en PDF abiertos buscando tablas de baremos, te mareas calculando las discrepancias del WISC o redactando el diagnóstico diferencial en párrafos sueltos.
+            </p>
+            <div class="text-[11px] text-rose-400 font-medium">
+              Horas perdidas buscando fórmulas y riesgo de inconsistencias técnicas.
+            </div>
+          </div>
+
+          <div class="bg-cortex-card/80 border border-emerald-950/60 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-3">
+              <i class="fa-regular fa-circle-check"></i> Tu entrega con Córtex
+            </div>
+            <p class="text-xs text-zinc-300 leading-relaxed mb-3">
+              Domingo, 11:45 PM. Introduces las puntuaciones directas o los síntomas al especialista correspondiente. En 40 segundos tienes la tabla estandarizada, la interpretación cuantitativa, el perfil cualitativo y la conclusión diagnóstica redactada con rigor técnico.
+            </p>
+            <div class="text-[11px] text-emerald-400 font-medium">
+              Copias o descargas en formato Word institucional listo para entregar o archivar.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN: ESPECIALISTAS -->
+      <section id="especialistas" class="max-w-5xl mx-auto px-6 py-12">
+        <div class="text-center mb-10">
+          <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Módulos Activos</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Especialistas entrenados en normativa técnica</h2>
+          <p class="text-xs text-zinc-400 mt-2">Cada agente trabaja con manuales de evaluación y lineamientos metodológicos.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div onclick="openSpecialist('valeria')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-lg mb-4">
+                <i class="fa-solid fa-notes-medical"></i>
+              </div>
+              <span class="text-[11px] font-semibold text-violet-400 uppercase tracking-wider">Módulo 01</span>
+              <h3 class="text-lg font-bold text-white mt-1 mb-2">Dra. Valeria</h3>
+              <p class="text-[11px] text-zinc-400 font-mono mb-2">Clínica · DSM-5-TR / CIE-10</p>
+              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+                Estructura formulaciones clínicas, establece diagnósticos diferenciales sustentados en criterios A-D y orienta el plan de evaluación.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
+              <span>Consultar caso</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div onclick="openSpecialist('mateo')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-lg mb-4">
+                <i class="fa-solid fa-chart-pie"></i>
+              </div>
+              <span class="text-[11px] font-semibold text-indigo-400 uppercase tracking-wider">Módulo 02</span>
+              <h3 class="text-lg font-bold text-white mt-1 mb-2">Dr. Mateo</h3>
+              <p class="text-[11px] text-indigo-400 font-mono mb-2">Psicometría · Baremos &amp; Tests</p>
+              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+                Convierte puntuaciones directas (PD), detecta discrepancias inter-índices (WISC/WAIS/BDI) y redacta la tabla de resultados para informe.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-indigo-300">
+              <span>Interpretar prueba</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div onclick="openSpecialist('andres')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-lg mb-4">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </div>
+              <span class="text-[11px] font-semibold text-purple-400 uppercase tracking-wider">Módulo 03</span>
+              <h3 class="text-lg font-bold text-white mt-1 mb-2">Mg. Andrés</h3>
+              <p class="text-[11px] text-purple-400 font-mono mb-2">Metodología · APA 7 &amp; Tesis</p>
+              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+                Genera operadores booleanos precisos para Scopus/SciELO, alinea matrices de consistencia y formatea citas según APA 7ma edición.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-purple-300">
+              <span>Formatear marco</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN: PLANES Y PRECIOS -->
+      <section id="precios" class="max-w-5xl mx-auto px-6 py-14">
+        <div class="text-center mb-10">
+          <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest block mb-1">Acceso Flexible</span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Elige tu plan según tu ritmo académico</h2>
+          <p class="text-xs text-zinc-400 mt-2">Tarifas accesibles para estudiantes y practicantes de psicología en Perú.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 items-stretch">
+          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-6 flex flex-col justify-between hover:border-zinc-700 transition">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Pago Único</span>
+              <h3 class="text-lg font-bold text-white mt-1">Estudiante en Apuros</h3>
+              <p class="text-xs text-zinc-400 mt-1 mb-4">Para resolver la tarea o informe que vence hoy.</p>
+              
+              <div class="flex items-baseline gap-1 my-4">
+                <span class="text-3xl font-extrabold text-white">S/ 4.90</span>
+                <span class="text-xs text-zinc-400">/ pase puntual</span>
+              </div>
+
+              <ul class="text-xs text-zinc-300 space-y-2.5 my-6">
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> <strong>5 consultas completas</strong>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-gift text-violet-400 text-xs"></i> <strong>+1 consulta de regalo</strong>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Acceso a los 3 especialistas
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Copiado estructurado y descarga Word
+                </li>
+              </ul>
+            </div>
+
+            <a href="https://wa.me/51914484283?text=Hola,%20deseo%20activar%20el%20Plan%20Estudiante%20en%20Apuros%20(S/%204.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold text-center block transition">
+              Elegir en Apuros
+            </a>
+          </div>
+
+          <div class="bg-cortex-card border-2 border-violet-500/80 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl shadow-violet-950/30">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-violet-600 text-white text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider shadow">
+              Más Popular en Pregrado
+            </div>
+            
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-violet-400">Suscripción Mensual</span>
+              <h3 class="text-lg font-bold text-white mt-1">Estudiante</h3>
+              <p class="text-xs text-zinc-400 mt-1 mb-4">Ideal para todo el ciclo de cursos evaluativos.</p>
+              
+              <div class="flex items-baseline gap-1 my-4">
+                <span class="text-3xl font-extrabold text-white">S/ 19.90</span>
+                <span class="text-xs text-zinc-400">/ mes</span>
+              </div>
+
+              <ul class="text-xs text-zinc-300 space-y-2.5 my-6">
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> <strong>Consultas continuas durante el mes</strong>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Pruebas Psicométricas &amp; WISC/WAIS
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Diagnósticos clínicos DSM-5-TR
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Soporte para matrices de tesis APA 7
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Exportación directa a Word (.doc)
+                </li>
+              </ul>
+            </div>
+
+            <a href="https://wa.me/51914484283?text=Hola,%20deseo%20activar%20el%20Plan%20Estudiante%20Mensual%20(S/%2019.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold text-center block shadow transition">
+              Activar Plan Estudiante
+            </a>
+          </div>
+
+          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-6 flex flex-col justify-between hover:border-zinc-700 transition">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Internado &amp; Clínica</span>
+              <h3 class="text-lg font-bold text-white mt-1">Plan Profesional</h3>
+              <p class="text-xs text-zinc-400 mt-1 mb-4">Para internos, consultorios privados y alta demanda.</p>
+              
+              <div class="flex items-baseline gap-1 my-4">
+                <span class="text-3xl font-extrabold text-white">S/ 34.90</span>
+                <span class="text-xs text-zinc-400">/ mes</span>
+              </div>
+
+              <ul class="text-xs text-zinc-300 space-y-2.5 my-6">
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> <strong>Consultas ilimitadas de alta prioridad</strong>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Informes neuropsicológicos complejos
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Formato formal de Historia Clínica
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Soporte directo prioritario por WhatsApp
+                </li>
+              </ul>
+            </div>
+
+            <a href="https://wa.me/51914484283?text=Hola,%20deseo%20activar%20el%20Plan%20Profesional%20(S/%2034.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold text-center block transition">
+              Elegir Profesional
+            </a>
+          </div>
+        </div>
+
+        <div class="text-center mt-6 text-[11px] text-zinc-400">
+          Pagos seguros vía <strong>Yape, Plin o Transferencia BCP / BBVA</strong> con activación inmediata.
+        </div>
+      </section>
+
+      <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ ACORDEÓN) -->
+      <section id="faq" class="max-w-4xl mx-auto px-6 py-14 border-t border-cortex-border">
+        <div class="text-center mb-10">
+          <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Dudas Habituales</span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Preguntas frecuentes</h2>
+          <p class="text-xs text-zinc-400 mt-2">Todo lo que necesitas saber antes de utilizar Córtex en tus casos académicos o clínicos.</p>
+        </div>
+
+        <div class="space-y-3">
+          <!-- FAQ 1 -->
+          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
+            <button onclick="toggleFaq(1)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
+              <span>¿La IA puede inventar baremos o percentiles?</span>
+              <i id="faq-icon-1" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
+            </button>
+            <div id="faq-ans-1" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
+              No. El Dr. Mateo está instruido para no inventar tablas normativas. Si ingresas una puntuación directa sin especificar el grupo etario o el baremo específico (por ejemplo, baremo peruano o general), te indicará el rango esperado y solicitará el grupo normativo en lugar de generar percentiles ficticios.
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
+            <button onclick="toggleFaq(2)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
+              <span>¿En qué se diferencia de usar ChatGPT o Claude directamente?</span>
+              <i id="faq-icon-2" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
+            </button>
+            <div id="faq-ans-2" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
+              ChatGPT es un modelo general: suele mezclar normas de diferentes países, no estructura informes según la nosología formal del DSM-5-TR ni calcula discrepancias inter-escalas. Córtex cuenta con prompts técnicos especializados preconfigurados y genera informes limpios que se copian o descargan directamente a Word sin tablas rotas ni formatos web oscuros.
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
+            <button onclick="toggleFaq(3)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
+              <span>¿Córtex reemplaza el criterio del evaluador o psicólogo?</span>
+              <i id="faq-icon-3" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
+            </button>
+            <div id="faq-ans-3" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
+              Bajo ningún concepto. Córtex es un asistente de apoyo técnico y redacción. El juicio clínico, la contrastación de la hipótesis con la observación conductual y la firma final del informe siempre corresponden al estudiante bajo supervisión docente o al psicólogo colegiado.
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
+            <button onclick="toggleFaq(4)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
+              <span>¿Los formatos sirven para las facultades de psicología en Perú (UTP, UCV, UPAO, etc.)?</span>
+              <i id="faq-icon-4" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
+            </button>
+            <div id="faq-ans-4" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
+              Sí. Los especialistas están estructurados siguiendo el esquema estándar universitario e institucional: Ficha técnica, puntuaciones directas, tipificación normativo-cualitativa, análisis de áreas (cognitiva, afectiva, conductual) y recomendaciones aplicadas.
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
+            <button onclick="toggleFaq(5)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
+              <span>¿Cómo recibo mi acceso tras realizar el pago?</span>
+              <i id="faq-icon-5" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
+            </button>
+            <div id="faq-ans-5" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
+              Al hacer clic en el botón de tu plan serás redirigido directamente a nuestro WhatsApp oficial (+51 914 484 283). Envías la constancia de Yape o Plin y recibirás la activación inmediata de tus consultas.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN: PRIVACIDAD Y ÉTICA PROFESIONAL -->
+      <section id="seguridad" class="max-w-5xl mx-auto px-6 py-12 border-t border-cortex-border">
+        <div class="bg-cortex-card/40 border border-cortex-border rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8">
+          <div class="w-16 h-16 rounded-2xl bg-violet-950/50 border border-violet-500/30 flex items-center justify-center text-violet-300 text-2xl shrink-0">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white mb-2">Confidencialidad bajo el Código de Ética del CPsP</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Tus consultas, viñetas de casos y evaluaciones no se utilizan para re-entrenar modelos públicos. Córtex opera con aislamiento de sesión y memoria local en tu propio navegador, garantizando el secreto profesional y el cumplimiento de la Ley 29733 de Protección de Datos Personales en el Perú.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="max-w-5xl mx-auto px-6 py-8 border-t border-cortex-border text-center text-[11px] text-zinc-400 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>© 2026 Córtex · Workspace de Psicología en Perú. Todos los derechos reservados.</div>
+        <div class="flex items-center gap-4">
+          <a href="#especialistas" class="hover:text-zinc-300 transition">Especialistas</a>
+          <a href="#precios" class="hover:text-zinc-300 transition">Planes</a>
+          <a href="#faq" class="hover:text-zinc-300 transition">FAQ</a>
+          <button onclick="showWorkspaceView()" class="text-violet-400 hover:underline">Abrir Workspace</button>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- PANTALLA 2: WORKSPACE (CHATS) -->
+    <div id="view-workspace" style="display: none;" class="w-full h-full overflow-hidden">
+      <!-- SIDEBAR -->
+      <aside class="w-64 bg-cortex-card border-r border-cortex-border flex flex-col justify-between shrink-0">
+        <div class="p-4 space-y-3">
+          <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider px-2 block">
+            Especialistas
+          </span>
+
+          <div class="space-y-1">
+            <button id="tab-valeria" onclick="setSpecialist('valeria')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition">
+              <div id="badge-valeria" class="w-8 h-8 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0">CL</div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs text-white truncate">Dra. Valeria</div>
+                <div class="text-[10px] text-zinc-400 truncate">Clínica &amp; DSM-5-TR</div>
+              </div>
+            </button>
+
+            <button id="tab-mateo" onclick="setSpecialist('mateo')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+              <div id="badge-mateo" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">PS</div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs text-zinc-300 truncate">Dr. Mateo</div>
+                <div class="text-[10px] text-zinc-400 truncate">Psicometría &amp; Baremos</div>
+              </div>
+            </button>
+
+            <button id="tab-andres" onclick="setSpecialist('andres')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+              <div id="badge-andres" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">AP</div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs text-zinc-300 truncate">Mg. Andrés</div>
+                <div class="text-[10px] text-zinc-400 truncate">Metodología &amp; APA 7</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-3 border-t border-cortex-border text-[11px] text-zinc-400 flex items-center justify-between">
+          <span>Motor Activo</span>
+          <span class="text-emerald-400 font-semibold flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Claude
+          </span>
+        </div>
+      </aside>
+
+      <!-- CHAT VIEW -->
+      <section class="flex-1 flex flex-col bg-cortex-bg overflow-hidden">
+        <div class="h-12 border-b border-cortex-border px-6 flex items-center justify-between bg-cortex-card/40 shrink-0">
+          <span id="chat-header-title" class="font-bold text-xs text-white">Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)</span>
+          <button onclick="clearHistory()" class="text-[11px] text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition">
+            <i class="fa-regular fa-trash-can"></i> Limpiar chat
+          </button>
+        </div>
+
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+
+        <div class="p-4 border-t border-cortex-border bg-cortex-card/30 shrink-0">
+          <div class="max-w-4xl mx-auto space-y-2">
+            <div id="chips-container" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs"></div>
+
+            <div class="flex items-end gap-2 bg-cortex-card border border-cortex-border focus-within:border-violet-500 rounded-xl p-2 transition">
+              <textarea id="user-input" rows="2" placeholder="Escribe tu consulta o caso clínico..." class="flex-1 bg-transparent text-xs text-white placeholder-zinc-500 resize-none px-2 py-1 focus:outline-none"></textarea>
+              <button id="send-btn" onclick="sendMessage()" class="w-9 h-9 rounded-lg bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center transition shrink-0">
+                <i class="fa-solid fa-arrow-up text-xs"></i>
+              </button>
+            </div>
+            <div class="text-[10px] text-zinc-500 text-right">
+              Shift + Enter para salto de línea · Formato compatible con Word
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- Botón Flotante de WhatsApp -->
+  <a href="https://wa.me/51914484283?text=Hola,%20tengo%20una%20consulta%20sobre%20C%C3%B3rtex" target="_blank" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition hover:scale-105 z-50">
+    <i class="fa-brands fa-whatsapp text-2xl"></i>
+  </a>
+
+  <script>
+    const CONFIG = {
+      valeria: {
+        title: 'Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)',
+        tag: 'CL',
+        welcome: 'Hola. Soy la Dra. Valeria. Comparte los signos, síntomas o motivo de consulta para estructurar la formulación clínica bajo el DSM-5-TR, calcular diagnósticos diferenciales y sustentar criterios.',
+        chips: [
+          'Caso de Ansiedad Generalizada vs Pánico',
+          'Diferencial: Depresión Mayor vs Distimia',
+          'Estructura de Anamnesis / Examen Mental',
+          'Formulación de caso en TAG'
+        ]
+      },
+      mateo: {
+        title: 'Dr. Mateo · Psicometría, Baremos y Evaluación',
+        tag: 'PS',
+        welcome: 'Hola. Soy el Dr. Mateo. Facilítame el instrumento y las puntuaciones directas (PD) o baremos para calcular percentiles y redactar el informe técnico.',
+        chips: [
+          'Informe para BDI-II (PD 23, adulto)',
+          'Interpretación WISC-V (Discrepancias)',
+          'STAI Ansiedad Rasgo/Estado',
+          'Conversión de Puntaje T a Percentil'
+        ]
+      },
+      andres: {
+        title: 'Mg. Andrés · Metodología de Investigación & APA 7',
+        tag: 'AP',
+        welcome: 'Hola. Soy el Mg. Andrés. Diseñemos ecuaciones de búsqueda científica o formateemos citas según APA 7ma edición.',
+        chips: [
+          'Ecuación Scopus / SciELO para Tesis',
+          'Criterios PRISMA para Revisión',
+          'Citas con 3 o más autores en APA 7',
+          'Matriz de Consistencia Metodológica'
+        ]
+      }
+    };
+
+    let activeKey = 'valeria';
+    let chatHistories = { valeria: [], mateo: [], andres: [] };
+
+    try {
+      chatHistories = {
+        valeria: JSON.parse(localStorage.getItem('cortex_valeria') || '[]'),
+        mateo: JSON.parse(localStorage.getItem('cortex_mateo') || '[]'),
+        andres: JSON.parse(localStorage.getItem('cortex_andres') || '[]')
+      };
+    } catch (e) {
+      chatHistories = { valeria: [], mateo: [], andres: [] };
+    }
+
+    function saveToStorage() {
+      try {
+        localStorage.setItem('cortex_valeria', JSON.stringify(chatHistories.valeria));
+        localStorage.setItem('cortex_mateo', JSON.stringify(chatHistories.mateo));
+        localStorage.setItem('cortex_andres', JSON.stringify(chatHistories.andres));
+      } catch (e) {}
+    }
+
+    function toggleFaq(num) {
+      const ans = document.getElementById(`faq-ans-${num}`);
+      const icon = document.getElementById(`faq-icon-${num}`);
+      if (!ans || !icon) return;
+
+      if (ans.classList.contains('hidden')) {
+        ans.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        ans.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    function updateNavStyles(activeView) {
+      const lobbyBtn = document.getElementById('nav-lobby-btn');
+      const workspaceBtn = document.getElementById('nav-workspace-btn');
+
+      if (activeView === 'lobby') {
+        lobbyBtn.className = "text-xs font-semibold px-4 py-2 rounded-xl bg-violet-600/20 text-violet-300 border border-violet-500/40 transition hover:bg-violet-600 hover:text-white";
+        workspaceBtn.className = "text-xs font-semibold px-4 py-2 rounded-xl text-zinc-400 border border-transparent transition hover:bg-violet-600/20 hover:text-violet-300 hover:border-violet-500/30";
+      } else {
+        workspaceBtn.className = "text-xs font-semibold px-4 py-2 rounded-xl bg-violet-600/20 text-violet-300 border border-violet-500/40 transition hover:bg-violet-600 hover:text-white";
+        lobbyBtn.className = "text-xs font-semibold px-4 py-2 rounded-xl text-zinc-400 border border-transparent transition hover:bg-violet-600/20 hover:text-violet-300 hover:border-violet-500/30";
+      }
+    }
+
+    function showLobbyView() {
+      const lobby = document.getElementById('view-lobby');
+      const workspace = document.getElementById('view-workspace');
+      workspace.style.display = 'none';
+      workspace.classList.remove('view-smooth');
+      lobby.style.display = 'block';
+      lobby.classList.add('view-smooth');
+      updateNavStyles('lobby');
+    }
+
+    function showWorkspaceView() {
+      const lobby = document.getElementById('view-lobby');
+      const workspace = document.getElementById('view-workspace');
+      lobby.style.display = 'none';
+      lobby.classList.remove('view-smooth');
+      workspace.style.display = 'flex';
+      workspace.classList.add('view-smooth');
+      updateNavStyles('workspace');
+      renderChat();
+    }
+
+    function openSpecialist(key) {
+      setSpecialist(key);
+      showWorkspaceView();
+    }
+
+    function setSpecialist(key) {
+      activeKey = key;
+      const data = CONFIG[key];
+      document.getElementById('chat-header-title').innerText = data.title;
+
+      ['valeria', 'mateo', 'andres'].forEach(k => {
+        const btn = document.getElementById(`tab-${k}`);
+        const badge = document.getElementById(`badge-${k}`);
+        if (!btn || !badge) return;
+
+        if (k === key) {
+          btn.className = "w-full flex items-center gap-3 p-2.5 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition";
+          badge.className = "w-8 h-8 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0";
+        } else {
+          btn.className = "w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition";
+          badge.className = "w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0";
+        }
+      });
+
+      const chipsBox = document.getElementById('chips-container');
+      chipsBox.innerHTML = data.chips.map(chip => `
+        <button onclick="useChip('${chip}')" class="whitespace-nowrap px-2.5 py-1 rounded-lg bg-cortex-card hover:bg-zinc-800 border border-cortex-border text-zinc-300 text-[11px] transition">
+          ${chip}
+        </button>
+      `).join('');
+
+      renderChat();
+    }
+
+    function useChip(text) {
+      document.getElementById('user-input').value = text;
+      sendMessage();
+    }
+
+    function clearHistory() {
+      chatHistories[activeKey] = [];
+      saveToStorage();
+      renderChat();
+    }
+
+    function copyCleanReport(button, rawMarkdown) {
+      const cleanText = rawMarkdown
+        .replace(/^#+\s*(.*?)$/gm, '$1')
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/\*(.*?)\*/g, '$1')
+        .replace(/`{1,3}(.*?)`{1,3}/g, '$1')
+        .replace(/^\s*[-*]\s+/gm, '• ')
+        .trim();
+
+      navigator.clipboard.writeText(cleanText).then(() => {
+        const orig = button.innerHTML;
+        button.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copiado';
+        setTimeout(() => { button.innerHTML = orig; }, 1800);
+      }).catch(() => {
+        const t = document.createElement('textarea');
+        t.value = cleanText;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+        const orig = button.innerHTML;
+        button.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copiado';
+        setTimeout(() => { button.innerHTML = orig; }, 1800);
+      });
+    }
+
+    function downloadWordDoc(rawMarkdown) {
+      const htmlBody = marked.parse(rawMarkdown);
+      const wordDocumentContent = `
+        <!DOCTYPE html>
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'>
+          <title>Informe Córtex</title>
+          <style>
+            body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #000; }
+            h1 { font-size: 16pt; color: #1e1b4b; border-bottom: 2pt solid #4338ca; padding-bottom: 4pt; margin-top: 14pt; }
+            h2 { font-size: 13pt; color: #312e81; margin-top: 12pt; }
+            h3 { font-size: 12pt; color: #4338ca; }
+            table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
+            th, td { border: 1pt solid #cbd5e1; padding: 6pt 8pt; text-align: left; }
+            th { background-color: #f1f5f9; font-weight: bold; color: #0f172a; }
+            blockquote { border-left: 3pt solid #6366f1; margin-left: 0; padding-left: 10pt; color: #475569; font-style: italic; }
+            ul, ol { margin-left: 18pt; }
+            li { margin-bottom: 3pt; }
+          </style>
+        </head>
+        <body>
+          ${htmlBody}
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob(['\ufeff', wordDocumentContent], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Informe_${activeKey.toUpperCase()}_Cortex.doc`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function renderChat() {
+      const box = document.getElementById('chat-messages');
+      const list = chatHistories[activeKey];
+      const data = CONFIG[activeKey];
+
+      if (list.length === 0) {
+        box.innerHTML = `
+          <div class="flex items-start gap-3 max-w-2xl">
+            <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0">
+              ${data.tag}
+            </div>
+            <div class="bg-cortex-card border border-cortex-border p-4 rounded-xl text-xs text-zinc-300 leading-relaxed">
+              ${data.welcome}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      box.innerHTML = list.map((item, idx) => {
+        if (item.role === 'user') {
+          return `
+            <div class="flex items-start gap-3 max-w-xl ml-auto justify-end">
+              <div class="bg-violet-600 text-white p-3 rounded-xl text-xs leading-relaxed whitespace-pre-wrap">
+                ${item.text}
+              </div>
+            </div>
+          `;
+        } else {
+          const parsed = marked.parse(item.text);
+          const wordCount = item.text.trim().split(/\s+/).filter(Boolean).length;
+          return `
+            <div class="flex items-start gap-3 max-w-3xl">
+              <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
+                ${data.tag}
+              </div>
+              <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
+                <div class="flex items-center justify-between mb-3 border-b border-zinc-800 pb-2">
+                  <span class="text-[10px] text-zinc-500 font-mono">${wordCount} palabras</span>
+                  <div class="flex items-center gap-1.5">
+                    <button id="copy-btn-${idx}" class="text-[10px] text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 rounded transition flex items-center gap-1.5 border border-zinc-700/60">
+                      <i class="fa-regular fa-copy"></i> Copiar informe
+                    </button>
+                    <button id="word-btn-${idx}" class="text-[10px] text-indigo-300 hover:text-white bg-indigo-950/50 hover:bg-indigo-900/60 px-2.5 py-1 rounded transition flex items-center gap-1.5 border border-indigo-700/50">
+                      <i class="fa-regular fa-file-word"></i> Descargar Word
+                    </button>
+                  </div>
+                </div>
+                <div class="markdown-body">${parsed}</div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      list.forEach((item, idx) => {
+        if (item.role !== 'user') {
+          const copyBtn = document.getElementById(`copy-btn-${idx}`);
+          if (copyBtn) copyBtn.onclick = () => copyCleanReport(copyBtn, item.text);
+
+          const wordBtn = document.getElementById(`word-btn-${idx}`);
+          if (wordBtn) wordBtn.onclick = () => downloadWordDoc(item.text);
+        }
+      });
+
+      box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const btn = document.getElementById('send-btn');
+      btn.disabled = true;
+      input.disabled = true;
+
+      chatHistories[activeKey].push({ role: 'user', text: val });
+      saveToStorage();
+      input.value = '';
+      renderChat();
+
+      const box = document.getElementById('chat-messages');
+      const data = CONFIG[activeKey];
+
+      const liveDiv = document.createElement('div');
+      liveDiv.className = 'flex items-start gap-3 max-w-3xl';
+      liveDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
+          ${data.tag}
+        </div>
+        <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
+          <div id="live-stream-content" class="markdown-body">
+            <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span> Procesando según criterios clínicos...
+          </div>
+        </div>
+      `;
+      box.appendChild(liveDiv);
+      box.scrollTop = box.scrollHeight;
+
+      const targetContent = document.getElementById('live-stream-content');
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            specialist: activeKey,
+            message: val,
+            history: chatHistories[activeKey].slice(0, -1)
+          })
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        let fullText = '';
+
+        if (contentType.includes('application/json')) {
+          const dataRes = await res.json();
+          if (!res.ok) throw new Error(dataRes.error || 'Error al comunicarse con el servidor');
+          fullText = dataRes.reply || '';
+          targetContent.innerHTML = marked.parse(fullText);
+        } else {
+          if (!res.ok) {
+            const errObj = await res.json().catch(() => ({}));
+            throw new Error(errObj.error || 'Error en la respuesta del servidor');
+          }
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            fullText += decoder.decode(value, { stream: true });
+            targetContent.innerHTML = marked.parse(fullText);
+            box.scrollTop = box.scrollHeight;
+          }
+        }
+
+        chatHistories[activeKey].push({ role: 'assistant', text: fullText });
+        saveToStorage();
+      } catch (err) {
+        targetContent.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${err.message}</span>`;
+        chatHistories[activeKey].push({ role: 'assistant', text: `⚠️ ${err.message}` });
+        saveToStorage();
+      } finally {
+        btn.disabled = false;
+        input.disabled = false;
+        input.focus();
+        renderChat();
+      }
+    }
+
+    document.getElementById('user-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    setSpecialist('valeria');
+  </script>
+</body>
+</html>
