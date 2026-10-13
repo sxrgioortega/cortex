@@ -1,7 +1,6 @@
 export const config = { maxDuration: 60 };
 
 const MODEL = 'claude-haiku-5-5';
-const MAX_TOKENS = 8000;
 
 const SYSTEM_PROMPTS = {
   valeria: `Eres la Dra. Valeria, especialista en Psicología Clínica y diagnóstico bajo el DSM-5-TR.
@@ -14,7 +13,7 @@ Estructura obligatoria del informe:
 - Dos diagnósticos diferenciales con sus códigos y el motivo puntual de descarte.
 ## 3. Recomendaciones de Evaluación
 - Pruebas complementarias sugeridas y supervisión docente.
-Sé conciso y concluye siempre las tres secciones íntegras.`,
+Concluye siempre todas las secciones completas.`,
 
   mateo: `Eres el Lic. Mateo, especialista en Psicometría y Evaluación Psicológica.
 Estructura obligatoria:
@@ -22,21 +21,24 @@ Estructura obligatoria:
 ## 1. Ficha Técnica
 ## 2. Puntuaciones y Baremos (PD, PC, T)
 ## 3. Conclusiones Técnicas
-Sé conciso y concluye siempre todas las secciones.`,
+Concluye siempre todas las secciones completas.`,
 
   andres: `Eres el Mg. Andrés, especialista en Metodología de la Investigación y APA 7ma edición.
 Estructura obligatoria:
 # Asistencia Metodológica / APA 7
 ## 1. Estrategia o Ecuación de Búsqueda
 ## 2. Formato APA 7ma Edición
-No inventes fuentes ni referencias. Concluye siempre todas las secciones.`
+No inventes fuentes ni referencias. Concluye siempre todas las secciones completas.`
 };
 
 function buildMessages(history, message) {
-  const clean = history
+  const clean = (history || [])
     .slice(-6)
-    .filter(m => m && m.text)
-    .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
+    .filter(m => m && (m.text || m.content))
+    .map(m => ({ 
+      role: m.role === 'user' ? 'user' : 'assistant', 
+      content: m.text || m.content 
+    }));
   while (clean.length && clean[0].role !== 'user') clean.shift();
   return [...clean, { role: 'user', content: message }];
 }
@@ -66,60 +68,26 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: MODEL,
-        max_tokens: MAX_TOKENS,
-        stream: true,
+        max_tokens: 3500,
         system: SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria,
         messages: buildMessages(history, message)
       })
     });
 
+    const data = await upstream.json();
+
     if (!upstream.ok) {
-      const err = await upstream.json().catch(() => ({}));
-      console.error('Anthropic error:', upstream.status, err);
       return res.status(upstream.status).json({
-        error: err?.error?.message || 'Error al generar respuesta.'
+        error: data?.error?.message || 'Error en la API de Anthropic.'
       });
     }
 
-    res.writeHead(200, {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'no-cache, no-transform'
-    });
+    const textBlock = (data.content || []).find(b => b.type === 'text');
+    const reply = textBlock ? textBlock.text : '';
 
-    const reader = upstream.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
+    return res.status(200).json({ reply });
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-
-      const lines = buffer.split('\n');
-      buffer = lines.pop();
-
-      for (const line of lines) {
-        if (!line.startsWith('data:')) continue;
-        try {
-          const evt = JSON.parse(line.slice(5).trim());
-          if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
-            res.write(evt.delta.text);
-          } else if (evt.type === 'message_delta') {
-            if (evt.delta?.stop_reason === 'max_tokens') {
-              res.write('\n\n> ⚠️ Respuesta cortada por límite de longitud.');
-            }
-          } else if (evt.type === 'error') {
-            res.write(`\n\n> ⚠️ Error: ${evt.error?.message}`);
-          }
-        } catch { /* línea incompleta */ }
-      }
-    }
-    res.end();
   } catch (err) {
-    console.error(err);
-    if (!res.headersSent) {
-      return res.status(500).json({ error: 'Error interno: ' + err.message });
-    }
-    res.end();
+    return res.status(500).json({ error: 'Error interno: ' + err.message });
   }
 }
