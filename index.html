@@ -147,7 +147,7 @@
               </p>
             </div>
             <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-indigo-300">
-              <span>Iniciar con Lic. Mateo</span>
+              <span>Iniciar con Dr. Mateo</span>
               <i class="fa-solid fa-arrow-right"></i>
             </div>
           </div>
@@ -194,7 +194,7 @@
             <button id="tab-mateo" onclick="setSpecialist('mateo')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
               <div id="badge-mateo" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">PS</div>
               <div class="min-w-0">
-                <div class="font-bold text-xs text-zinc-300 truncate">Lic. Mateo</div>
+                <div class="font-bold text-xs text-zinc-300 truncate">Dr. Mateo</div>
                 <div class="text-[10px] text-zinc-400 truncate">Psicometría &amp; Baremos</div>
               </div>
             </button>
@@ -261,9 +261,9 @@
         ]
       },
       mateo: {
-        title: 'Lic. Mateo · Psicometría, Baremos y Evaluación',
+        title: 'Dr. Mateo · Psicometría, Baremos y Evaluación',
         tag: 'PS',
-        welcome: 'Hola. Soy el Lic. Mateo. Facilítame el instrumento y las puntuaciones directas (PD) para calcular percentiles y redactar el informe técnico.',
+        welcome: 'Hola. Soy el Dr. Mateo. Facilítame el instrumento y las puntuaciones directas (PD) o baremos para calcular percentiles y redactar el informe técnico.',
         chips: [
           'Informe para BDI-II (PD 29)',
           'Conversión de Puntaje T a Percentil',
@@ -408,116 +408,4 @@
               </div>
               <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
                 <div class="flex justify-end mb-2">
-                  <button id="copy-btn-${idx}" class="text-[10px] text-zinc-400 hover:text-white bg-zinc-800 px-2.5 py-1 rounded transition flex items-center gap-1.5 border border-zinc-700/60">
-                    <i class="fa-regular fa-copy"></i> Copiar informe
-                  </button>
-                </div>
-                <div class="markdown-body">${parsed}</div>
-              </div>
-            </div>
-          `;
-        }
-      }).join('');
-
-      list.forEach((item, idx) => {
-        if (item.role !== 'user') {
-          const btn = document.getElementById(`copy-btn-${idx}`);
-          if (btn) btn.onclick = () => copyCleanReport(btn, item.text);
-        }
-      });
-
-      box.scrollTop = box.scrollHeight;
-    }
-
-    async function sendMessage() {
-      const input = document.getElementById('user-input');
-      const val = input.value.trim();
-      if (!val) return;
-
-      const btn = document.getElementById('send-btn');
-      btn.disabled = true;
-      input.disabled = true;
-
-      chatHistories[activeKey].push({ role: 'user', text: val });
-      input.value = '';
-      renderChat();
-
-      const box = document.getElementById('chat-messages');
-      const data = CONFIG[activeKey];
-
-      const liveDiv = document.createElement('div');
-      liveDiv.className = 'flex items-start gap-3 max-w-3xl';
-      liveDiv.innerHTML = `
-        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
-          ${data.tag}
-        </div>
-        <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
-          <div id="live-stream-content" class="markdown-body">
-            <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span> Generando respuesta...
-          </div>
-        </div>
-      `;
-      box.appendChild(liveDiv);
-      box.scrollTop = box.scrollHeight;
-
-      const targetContent = document.getElementById('live-stream-content');
-
-      try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            specialist: activeKey,
-            message: val,
-            history: chatHistories[activeKey].slice(0, -1)
-          })
-        });
-
-        // Maneja tanto JSON como Streaming de forma segura
-        const contentType = res.headers.get('content-type') || '';
-        let fullText = '';
-
-        if (contentType.includes('application/json')) {
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'Error al comunicarse con el servidor');
-          fullText = data.reply || '';
-          targetContent.innerHTML = marked.parse(fullText);
-        } else {
-          if (!res.ok) {
-            const errObj = await res.json().catch(() => ({}));
-            throw new Error(errObj.error || 'Error en la respuesta del servidor');
-          }
-          const reader = res.body.getReader();
-          const decoder = new TextDecoder();
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            fullText += decoder.decode(value, { stream: true });
-            targetContent.innerHTML = marked.parse(fullText);
-            box.scrollTop = box.scrollHeight;
-          }
-        }
-
-        chatHistories[activeKey].push({ role: 'assistant', text: fullText });
-      } catch (err) {
-        targetContent.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${err.message}</span>`;
-        chatHistories[activeKey].push({ role: 'assistant', text: `⚠️ ${err.message}` });
-      } finally {
-        btn.disabled = false;
-        input.disabled = false;
-        input.focus();
-        renderChat();
-      }
-    }
-
-    document.getElementById('user-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-
-    setSpecialist('valeria');
-  </script>
-</body>
-</html>
+                  <button id="copy-btn
