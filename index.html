@@ -102,7 +102,8 @@
         <a href="#especialistas" onclick="if(document.getElementById('view-lobby').style.display==='none') showLobbyView()" class="hover:text-violet-300 transition">Especialistas</a>
         <a href="#comparativa" onclick="if(document.getElementById('view-lobby').style.display==='none') showLobbyView()" class="hover:text-violet-300 transition">Por qué Córtex</a>
         <a href="#precios" onclick="if(document.getElementById('view-lobby').style.display==='none') showLobbyView()" class="hover:text-violet-300 transition">Planes</a>
-        <a href="#faq" onclick="if(document.getElementById('view-lobby').style.display==='none') showLobbyView()" class="hover:text-violet-300 transition">Preguntas</a>
+        <a href="#testimonios" onclick="if(document.getElementById('view-lobby').style.display==='none') showLobbyView()" class="hover:text-violet-300 transition">Testimonios</a>
+        <a href="#faq" onclick="if(document.getElementById('view-lobby').style.display==='none') showLobbyView()" class="hover:text-violet-300 transition">FAQ</a>
         <a href="#seguridad" onclick="if(document.getElementById('view-lobby').style.display==='none') showLobbyView()" class="hover:text-violet-300 transition">Ética &amp; CPsP</a>
       </nav>
 
@@ -386,7 +387,7 @@
       </section>
 
       <!-- SECCIÓN: PRUEBA SOCIAL / TESTIMONIOS WHATSAPP -->
-      <section class="max-w-5xl mx-auto px-6 py-14 border-t border-cortex-border">
+      <section id="testimonios" class="max-w-5xl mx-auto px-6 pt-14 pb-12 border-t border-cortex-border">
         <div class="text-center mb-10">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Resultados Reales</span>
           <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Lo que dicen estudiantes e internos que ya usan Córtex</h2>
@@ -394,7 +395,7 @@
         </div>
 
         <div class="grid md:grid-cols-2 gap-5">
-          <!-- Chat 1: Psicometría / Baremos -->
+          <!-- Chat 1 -->
           <div class="bg-[#0b141a] border border-cortex-border/70 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
             <div class="space-y-3 text-[11px] leading-relaxed">
               <div class="bg-[#202c33] text-zinc-200 p-2.5 rounded-xl rounded-tl-none max-w-[85%] border-l-2 border-emerald-500">
@@ -414,7 +415,7 @@
             </div>
           </div>
 
-          <!-- Chat 2: Diagnóstico Clínico / DSM-5-TR -->
+          <!-- Chat 2 -->
           <div class="bg-[#0b141a] border border-cortex-border/70 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
             <div class="space-y-3 text-[11px] leading-relaxed">
               <div class="bg-[#202c33] text-zinc-200 p-2.5 rounded-xl rounded-tl-none max-w-[85%] border-l-2 border-emerald-500">
@@ -434,7 +435,7 @@
             </div>
           </div>
 
-          <!-- Chat 3: Tesis / APA 7 -->
+          <!-- Chat 3 -->
           <div class="bg-[#0b141a] border border-cortex-border/70 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
             <div class="space-y-3 text-[11px] leading-relaxed">
               <div class="bg-[#202c33] text-zinc-200 p-2.5 rounded-xl rounded-tl-none max-w-[85%] border-l-2 border-emerald-500">
@@ -454,7 +455,7 @@
             </div>
           </div>
 
-          <!-- Chat 4: Evaluación de Urgencia -->
+          <!-- Chat 4 -->
           <div class="bg-[#0b141a] border border-cortex-border/70 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
             <div class="space-y-3 text-[11px] leading-relaxed">
               <div class="bg-[#202c33] text-zinc-200 p-2.5 rounded-xl rounded-tl-none max-w-[85%] border-l-2 border-emerald-500">
@@ -474,18 +475,17 @@
             </div>
           </div>
         </div>
-      </section>
 
-   <!-- Cierre de satisfacción antes de FAQ -->
-        <div class="text-center pt-8 pb-10">
-          <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-emerald-500/30 bg-emerald-950/30 text-emerald-300 text-xs font-semibold shadow-sm">
+        <!-- Cierre de satisfacción centrado -->
+        <div class="text-center pt-10 pb-4">
+          <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-emerald-500/30 bg-emerald-950/30 text-emerald-300 text-xs font-semibold shadow-sm">
             <i class="fa-solid fa-circle-check text-emerald-400"></i>
             <span>Y nuestros usuarios entregan a tiempo, aprueban sus informes y están satisfechos con los resultados.</span>
           </div>
         </div>
       </section>
 
-     <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ ACORDEÓN) -->
+      <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ ACORDEÓN) -->
       <section id="faq" class="max-w-4xl mx-auto px-6 py-14 border-t border-cortex-border">
         <div class="text-center mb-10">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Dudas Habituales</span>
@@ -494,58 +494,53 @@
         </div>
 
         <div class="space-y-3">
-          <!-- FAQ 1 -->
           <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
             <button onclick="toggleFaq(1)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
               <span>¿La IA puede inventar baremos o percentiles?</span>
               <i id="faq-icon-1" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
             </button>
             <div id="faq-ans-1" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              No. El Dr. Mateo está instruido para no inventar tablas normativas. Si ingresas una puntuación directa sin especificar el grupo etario o el baremo específico (por ejemplo, baremo peruano o general), te indicará el rango esperado y solicitará el grupo normativo en lugar de generar percentiles ficticios.
+              No. El Dr. Mateo está instruido para no inventar tablas normativas. Si ingresas una puntuación directa sin especificar el grupo etario o el baremo específico, te indicará el rango esperado y solicitará el grupo normativo en vez de generar percentiles ficticios.
             </div>
           </div>
 
-          <!-- FAQ 2 -->
           <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
             <button onclick="toggleFaq(2)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
               <span>¿En qué se diferencia de usar ChatGPT o Claude directamente?</span>
               <i id="faq-icon-2" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
             </button>
             <div id="faq-ans-2" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              ChatGPT es un modelo general: suele mezclar normas de diferentes países, no estructura informes según la nosología formal del DSM-5-TR ni calcula discrepancias inter-escalas. Córtex cuenta con prompts técnicos especializados preconfigurados y genera informes limpios que se copian o descargan directamente a Word sin tablas rotas ni formatos web oscuros.
+              ChatGPT suele mezclar normas de diferentes países, no estructura informes según la nosología del DSM-5-TR ni calcula discrepancias inter-índices. Córtex cuenta con prompts técnicos específicos y genera informes limpios que se copian o descargan directamente a Word.
             </div>
           </div>
 
-          <!-- FAQ 3 -->
           <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
             <button onclick="toggleFaq(3)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
               <span>¿Córtex reemplaza el criterio del evaluador o psicólogo?</span>
               <i id="faq-icon-3" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
             </button>
             <div id="faq-ans-3" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              Bajo ningún concepto. Córtex es un asistente de apoyo técnico y redacción. El juicio clínico, la contrastación de la hipótesis con la observación conductual y la firma final del informe siempre corresponden al estudiante bajo supervisión docente o al psicólogo colegiado.
+              Bajo ningún concepto. Córtex es un asistente de apoyo técnico y redacción. El juicio clínico, la contrastación de hipótesis y la firma final del informe siempre corresponden al estudiante bajo supervisión docente o al psicólogo colegiado.
             </div>
           </div>
 
-          <!-- FAQ 4 -->
           <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
             <button onclick="toggleFaq(4)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
               <span>¿Los formatos sirven para las facultades de psicología en Perú (UTP, UCV, UPAO, etc.)?</span>
               <i id="faq-icon-4" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
             </button>
             <div id="faq-ans-4" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              Sí. Los especialistas están estructurados siguiendo el esquema estándar universitario e institucional: Ficha técnica, puntuaciones directas, tipificación normativo-cualitativa, análisis de áreas (cognitiva, afectiva, conductual) y recomendaciones aplicadas.
+              Sí. Los especialistas siguen el esquema estándar universitario e institucional: Ficha técnica, puntuaciones directas, tipificación normativo-cualitativa, análisis de áreas y recomendaciones aplicadas.
             </div>
           </div>
 
-          <!-- FAQ 5 -->
           <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
             <button onclick="toggleFaq(5)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
               <span>¿Cómo recibo mi acceso tras realizar el pago?</span>
               <i id="faq-icon-5" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
             </button>
             <div id="faq-ans-5" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              Al hacer clic en el botón de tu plan serás redirigido directamente a nuestro WhatsApp oficial (+51 914 484 283). Envías la constancia de Yape o Plin y recibirás la activación inmediata de tus consultas.
+              Al hacer clic en el botón de tu plan serás redirigido directamente a nuestro WhatsApp oficial (+51 914 484 283). Envías la constancia de Yape o Plin y recibirás la activación inmediata.
             </div>
           </div>
         </div>
@@ -644,14 +639,42 @@
                 <i class="fa-solid fa-arrow-up text-xs"></i>
               </button>
             </div>
-            <div class="text-[10px] text-zinc-500 text-right">
-              Shift + Enter para salto de línea · Formato compatible con Word
+            <div class="flex items-center justify-between text-[10px] text-zinc-500">
+              <span id="trial-counter-badge" class="font-mono text-violet-400">Consultas de prueba: 3 restantes</span>
+              <span>Shift + Enter para salto de línea · Formato Word</span>
             </div>
           </div>
         </div>
       </section>
     </div>
 
+  </div>
+
+  <!-- MODAL SOFT PAYWALL (LÍMITE ALCANZADO) -->
+  <div id="paywall-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+    <div class="bg-cortex-card border border-cortex-border max-w-md w-full rounded-2xl p-6 text-center shadow-2xl relative">
+      <div class="w-12 h-12 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center mx-auto text-xl mb-4">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      
+      <h3 class="text-lg font-bold text-white mb-2">Has completado tus 3 consultas gratuitas</h3>
+      <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+        Esperamos que Córtex te haya ahorrado tiempo de redacción y cálculo. Para continuar generando informes psicométricos y clínicos ilimitados, activa tu acceso.
+      </p>
+
+      <div class="space-y-2.5">
+        <a href="https://wa.me/51914484283?text=Hola,%20alcanc%C3%A9%20mis%203%20consultas%20de%20prueba%20y%20deseo%20activar%20el%20Plan%20Estudiante%20en%20Apuros%20(S/%204.90)" target="_blank" class="block w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold transition">
+          Pase de Emergencia (S/ 4.90 · 5 + 1 consultas)
+        </a>
+        <a href="https://wa.me/51914484283?text=Hola,%20alcanc%C3%A9%20mis%203%20consultas%20de%20prueba%20y%20deseo%20activar%20el%20Plan%20Estudiante%20Mensual%20(S/%2019.90)" target="_blank" class="block w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition border border-zinc-700">
+          Plan Estudiante Mensual (S/ 19.90 / mes)
+        </a>
+      </div>
+
+      <button onclick="closePaywallModal()" class="mt-4 text-[11px] text-zinc-500 hover:text-zinc-300 transition">
+        Volver a la página principal
+      </button>
+    </div>
   </div>
 
   <!-- Botón Flotante de WhatsApp -->
@@ -698,6 +721,40 @@
 
     let activeKey = 'valeria';
     let chatHistories = { valeria: [], mateo: [], andres: [] };
+
+    const FREE_LIMIT = 3;
+    let freeQueriesUsed = parseInt(localStorage.getItem('cortex_free_queries') || '0', 10);
+
+    function updateTrialUI() {
+      const badge = document.getElementById('trial-counter-badge');
+      const remaining = Math.max(0, FREE_LIMIT - freeQueriesUsed);
+      if (badge) {
+        if (remaining > 0) {
+          badge.innerText = `Consultas de prueba: ${remaining} restante${remaining === 1 ? '' : 's'}`;
+          badge.className = "font-mono text-violet-400";
+        } else {
+          badge.innerText = `Límite gratuito alcanzado (0 restantes)`;
+          badge.className = "font-mono text-amber-400 font-semibold";
+        }
+      }
+    }
+
+    function openPaywallModal() {
+      const modal = document.getElementById('paywall-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closePaywallModal() {
+      const modal = document.getElementById('paywall-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      showLobbyView();
+    }
 
     try {
       chatHistories = {
@@ -947,6 +1004,12 @@
       const val = input.value.trim();
       if (!val) return;
 
+      // Validación del Paywall suave
+      if (freeQueriesUsed >= FREE_LIMIT) {
+        openPaywallModal();
+        return;
+      }
+
       const btn = document.getElementById('send-btn');
       btn.disabled = true;
       input.disabled = true;
@@ -1013,6 +1076,12 @@
 
         chatHistories[activeKey].push({ role: 'assistant', text: fullText });
         saveToStorage();
+
+        // Descontar una consulta gratuita tras recibir respuesta
+        freeQueriesUsed++;
+        localStorage.setItem('cortex_free_queries', freeQueriesUsed.toString());
+        updateTrialUI();
+
       } catch (err) {
         targetContent.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${err.message}</span>`;
         chatHistories[activeKey].push({ role: 'assistant', text: `⚠️ ${err.message}` });
@@ -1033,6 +1102,7 @@
     });
 
     setSpecialist('valeria');
+    updateTrialUI();
   </script>
 </body>
 </html>
