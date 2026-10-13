@@ -1,498 +1,93 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Córtex · Workspace de Psicología</title>
+export const config = { maxDuration: 60 };
 
-  <!-- Google Fonts & Font Awesome -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif']
-          },
-          colors: {
-            cortex: {
-              bg: '#08080a',
-              card: '#121216',
-              border: '#23232a',
-              hover: '#181820',
-              accent: '#8b5cf6',
-              accentLight: '#a78bfa'
-            }
-          }
-        }
-      }
-    }
-  </script>
+const MODEL = 'claude-haiku-5-5';
 
-  <style>
-    html, body {
-      background-color: #08080a;
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-    }
-    
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #23232a; border-radius: 999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+const SYSTEM_PROMPTS = {
+  valeria: `Eres la Dra. Valeria, especialista en Psicología Clínica y diagnóstico bajo el DSM-5-TR.
+Estructura obligatoria del informe:
+# Formulación diagnóstica (DSM-5-TR)
+## 1. Diagnóstico Principal
+- Trastorno y código DSM-5-TR / CIE-10.
+- Justificación sucinta de criterios (A, B, C, D).
+## 2. Diagnósticos Diferenciales
+- Dos diagnósticos diferenciales con sus códigos y el motivo puntual de descarte.
+## 3. Recomendaciones de Evaluación
+- Pruebas complementarias sugeridas y supervisión docente.
+Concluye siempre todas las secciones completas.`,
 
-    .glow-purple {
-      background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16) 0%, transparent 65%);
-    }
-    .card-glow:hover {
-      box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25);
-    }
+  mateo: `Eres el Lic. Mateo, especialista en Psicometría y Evaluación Psicológica.
+Estructura obligatoria:
+# Informe Psicométrico
+## 1. Ficha Técnica
+## 2. Puntuaciones y Baremos (PD, PC, T)
+## 3. Conclusiones Técnicas
+Concluye siempre todas las secciones completas.`,
 
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-16px) rotate(4deg); }
-    }
-    @keyframes floatReverse {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(14px) rotate(-4deg); }
-    }
-    .float-item-1 { animation: floatSlow 7s ease-in-out infinite; }
-    .float-item-2 { animation: floatReverse 9s ease-in-out infinite; }
-    .float-item-3 { animation: floatSlow 8s ease-in-out infinite 1.5s; }
-  </style>
-</head>
+  andres: `Eres el Mg. Andrés, especialista en Metodología de la Investigación y APA 7ma edición.
+Estructura obligatoria:
+# Asistencia Metodológica / APA 7
+## 1. Estrategia o Ecuación de Búsqueda
+## 2. Formato APA 7ma Edición
+No inventes fuentes ni referencias. Concluye siempre todas las secciones completas.`
+};
 
-<body class="bg-cortex-bg text-zinc-100 font-sans antialiased flex flex-col min-h-screen selection:bg-violet-500/30 selection:text-violet-200">
+function buildMessages(history, message) {
+  const clean = (history || [])
+    .slice(-6)
+    .filter(m => m && (m.text || m.content))
+    .map(m => ({ 
+      role: m.role === 'user' ? 'user' : 'assistant', 
+      content: m.text || m.content 
+    }));
+  while (clean.length && clean[0].role !== 'user') clean.shift();
+  return [...clean, { role: 'user', content: message }];
+}
 
-  <!-- ==================== TOP NAVIGATION ==================== -->
-  <header class="h-16 border-b border-cortex-border bg-cortex-bg/90 backdrop-blur-md sticky top-0 z-50 shrink-0">
-    <div class="max-w-7xl mx-auto h-full px-6 flex items-center justify-between">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="showView('lobby')">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-violet-600/30">
-          Ψ
-        </div>
-        <div>
-          <span class="font-bold text-lg tracking-tight">Córtex</span>
-          <span class="text-[11px] text-zinc-400 block -mt-1 font-medium">Workspace de Psicología</span>
-        </div>
-      </div>
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
 
-      <div class="flex items-center gap-4">
-        <button id="nav-btn-lobby" onclick="showView('lobby')" class="text-sm font-medium px-4 py-2 rounded-lg bg-zinc-800 text-white transition">
-          Lobby
-        </button>
-        <button id="nav-btn-workspace" onclick="showView('workspace')" class="text-sm font-medium px-4 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition">
-          Workspace
-        </button>
-        <div class="h-5 w-px bg-cortex-border mx-1 hidden sm:block"></div>
-        <div class="hidden sm:flex items-center gap-2 text-xs bg-cortex-card border border-cortex-border px-3 py-1.5 rounded-full text-zinc-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>DSM-5-TR &amp; APA 7 Activos</span>
-        </div>
-      </div>
-    </div>
-  </header>
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY no configurada en Vercel.' });
+  }
 
-  <!-- ==================== VISTA 1: LOBBY ==================== -->
-  <main id="view-lobby" class="w-full flex-1 glow-purple block">
-    <div class="max-w-6xl mx-auto px-6 py-12 sm:py-16 flex flex-col items-center">
-      
-      <!-- Titular Principal con Elementos Flotantes -->
-      <div class="text-center max-w-3xl mb-16 relative w-full">
-        <div class="absolute -top-12 -left-8 text-violet-500/20 text-8xl select-none pointer-events-none float-item-1 blur-[0.5px]">
-          <i class="fa-solid fa-brain"></i>
-        </div>
-        <div class="absolute -top-8 -right-8 text-indigo-500/20 text-9xl font-serif select-none pointer-events-none float-item-2">
-          Ψ
-        </div>
-        <div class="absolute -bottom-10 -left-6 text-violet-400/15 text-7xl select-none pointer-events-none float-item-3">
-          <i class="fa-solid fa-diagram-project"></i>
-        </div>
-        <div class="absolute -bottom-8 -right-6 text-indigo-400/20 text-7xl select-none pointer-events-none float-item-1">
-          <i class="fa-solid fa-brain"></i>
-        </div>
+  const { specialist, message, history = [] } = req.body || {};
+  if (!message) {
+    return res.status(400).json({ error: 'El mensaje es requerido.' });
+  }
 
-        <div class="relative z-10">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/30 bg-violet-950/40 text-violet-300 text-xs font-semibold mb-6 shadow-inner">
-            <i class="fa-solid fa-sparkles text-xs"></i> Asistentes Especializados para Universitarios
-          </div>
-          <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-            El entorno técnico para <br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400">estudiantes de psicología</span>
-          </h1>
-          <p class="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-            Estructura informes clínicos, interpreta baremos psicométricos y redacta citas en APA 7ma edición con rigor y sin fuentes inventadas.
-          </p>
-        </div>
-      </div>
-
-      <!-- Tarjetas de Especialistas / Módulos -->
-      <div class="grid md:grid-cols-3 gap-6 w-full mb-12">
-        <div onclick="launchSpecialist('valeria')" class="card-glow cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/50 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200 group">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-xl mb-6 group-hover:scale-105 transition-transform">
-              <i class="fa-solid fa-notes-medical"></i>
-            </div>
-            <span class="text-xs font-semibold text-violet-400 uppercase tracking-wider">Módulo 01</span>
-            <h3 class="text-xl font-bold text-white mt-1 mb-3">Clínica &amp; DSM-5-TR</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Análisis funcional, criterios diagnósticos alfanuméricos y diagnósticos diferenciales detallados para casos clínicos.
-            </p>
-          </div>
-          <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
-            <span>Iniciar análisis de caso</span>
-            <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-          </div>
-        </div>
-
-        <div onclick="launchSpecialist('mateo')" class="card-glow cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/50 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200 group">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-xl mb-6 group-hover:scale-105 transition-transform">
-              <i class="fa-solid fa-chart-pie"></i>
-            </div>
-            <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Módulo 02</span>
-            <h3 class="text-xl font-bold text-white mt-1 mb-3">Psicometría &amp; Baremos</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Interpretación de puntajes directos (PD), conversión a percentiles (PC) y redacción técnica de informes de evaluación.
-            </p>
-          </div>
-          <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-indigo-300">
-            <span>Interpretar prueba</span>
-            <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-          </div>
-        </div>
-
-        <div onclick="launchSpecialist('andres')" class="card-glow cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/50 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200 group">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-xl mb-6 group-hover:scale-105 transition-transform">
-              <i class="fa-solid fa-book-bookmark"></i>
-            </div>
-            <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Módulo 03</span>
-            <h3 class="text-xl font-bold text-white mt-1 mb-3">Metodología &amp; APA 7</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Cero alucinaciones: diseño de búsquedas en SciELO/Scopus, estructuración de antecedentes y citas según APA 7ma edición.
-            </p>
-          </div>
-          <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-purple-300">
-            <span>Estructurar referencias</span>
-            <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full max-w-4xl bg-cortex-card border border-cortex-border rounded-xl p-5 flex items-center gap-4 text-xs text-zinc-400 mb-8">
-        <i class="fa-solid fa-shield-halved text-violet-400 text-lg shrink-0"></i>
-        <span>Diseñado como herramienta de formación y práctica académica. Todas las formulaciones y clasificaciones deben contrastarse con la supervisión de un docente o profesional colegiado.</span>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- ==================== VISTA 2: WORKSPACE ==================== -->
-  <main id="view-workspace" class="flex-1 flex overflow-hidden hidden" style="height: calc(100vh - 64px);">
-    <aside class="w-72 bg-cortex-card border-r border-cortex-border flex flex-col justify-between shrink-0">
-      <div class="p-4 space-y-4">
-        <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider px-2 block">
-          Especialistas Córtex
-        </span>
-
-        <div class="space-y-1.5">
-          <button id="side-btn-valeria" onclick="setSpecialist('valeria')" class="w-full flex items-center gap-3 p-3 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition">
-            <div class="w-9 h-9 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0">
-              CL
-            </div>
-            <div class="min-w-0">
-              <div class="font-bold text-sm text-white truncate">Dra. Valeria</div>
-              <div class="text-[11px] text-zinc-400 truncate">Clínica &amp; DSM-5-TR</div>
-            </div>
-          </button>
-
-          <button id="side-btn-mateo" onclick="setSpecialist('mateo')" class="w-full flex items-center gap-3 p-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <div class="w-9 h-9 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">
-              PS
-            </div>
-            <div class="min-w-0">
-              <div class="font-bold text-sm text-zinc-200 truncate">Lic. Mateo</div>
-              <div class="text-[11px] text-zinc-400 truncate">Psicometría &amp; Baremos</div>
-            </div>
-          </button>
-
-          <button id="side-btn-andres" onclick="setSpecialist('andres')" class="w-full flex items-center gap-3 p-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <div class="w-9 h-9 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">
-              AP
-            </div>
-            <div class="min-w-0">
-              <div class="font-bold text-sm text-zinc-200 truncate">Mg. Andrés</div>
-              <div class="text-[11px] text-zinc-400 truncate">Metodología &amp; APA 7</div>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <div class="p-4 border-t border-cortex-border/80 bg-cortex-bg/40 flex items-center justify-between text-xs text-zinc-400">
-        <span>Motor de IA</span>
-        <span class="text-violet-400 font-semibold">Claude Activo</span>
-      </div>
-    </aside>
-
-    <section class="flex-1 flex flex-col bg-cortex-bg overflow-hidden">
-      <div class="h-14 border-b border-cortex-border px-6 flex items-center justify-between bg-cortex-card/40 shrink-0">
-        <div class="flex items-center gap-3">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-          <span id="chat-header-title" class="font-bold text-sm text-white">Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)</span>
-        </div>
-        <button onclick="clearCurrentChat()" class="text-xs text-zinc-400 hover:text-zinc-200 flex items-center gap-1.5 transition">
-          <i class="fa-regular fa-trash-can"></i> Limpiar
-        </button>
-      </div>
-
-      <div id="chat-stream" class="flex-1 overflow-y-auto p-6 space-y-6"></div>
-
-      <div class="p-4 border-t border-cortex-border bg-cortex-card/30 shrink-0">
-        <div class="max-w-4xl mx-auto space-y-3">
-          <div id="prompt-chips" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs"></div>
-
-          <div class="flex items-end gap-3 bg-cortex-card border border-cortex-border focus-within:border-violet-500 rounded-2xl p-2.5 transition">
-            <textarea id="user-input" rows="2" placeholder="Escribe tu consulta, caso clínico o prueba psicométrica..." class="flex-1 bg-transparent text-sm text-white placeholder-zinc-500 resize-none px-3 py-1.5 focus:outline-none"></textarea>
-            <button onclick="handleSend()" class="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center transition shrink-0 shadow-lg shadow-violet-600/30">
-              <i class="fa-solid fa-arrow-up text-sm"></i>
-            </button>
-          </div>
-          
-          <div class="flex items-center justify-between text-[11px] text-zinc-500 px-1">
-            <span>Presiona Shift + Enter para saltar línea</span>
-            <span>Córtex v1.0 · Conectado con Claude API</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ==================== LÓGICA DE JAVASCRIPT ==================== -->
-  <script>
-    const SPECIALISTS = {
-      valeria: {
-        id: 'valeria',
-        name: 'Dra. Valeria',
-        title: 'Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)',
-        roleTag: 'CL',
-        welcome: 'Hola. Soy la Dra. Valeria. Ingresa los datos del caso, motivo de consulta o síntomas observados para contrastarlos contra los criterios diagnósticos del DSM-5-TR y formular diagnósticos diferenciales.',
-        chips: [
-          'Analizar caso TAG con síntomas físicos',
-          'Diferencial: Depresión Mayor vs. Distimia',
-          'Estructura de Formulación Cognitivo-Conductual'
-        ]
+  try {
+    const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
       },
-      mateo: {
-        id: 'mateo',
-        name: 'Lic. Mateo',
-        title: 'Lic. Mateo · Psicometría, Baremos y Evaluación',
-        roleTag: 'PS',
-        welcome: 'Hola. Soy el Lic. Mateo. Facilítame el nombre del instrumento aplicado (ej. BDI-II, BAI, Big Five, Millon), la población y los puntajes directos (PD) para calcular percentiles y redactar el informe técnico.',
-        chips: [
-          'Estructurar informe técnico de BDI-II',
-          'Conversión de Puntaje T a Percentil',
-          'Interpretar y reportar Alfa de Cronbach'
-        ]
-      },
-      andres: {
-        id: 'andres',
-        name: 'Mg. Andrés',
-        title: 'Mg. Andrés · Metodología de Investigación & APA 7',
-        roleTag: 'AP',
-        welcome: 'Hola. Soy el Mg. Andrés. Comparte tus variables de investigación para diseñar estrategias de búsqueda con operadores booleanos o pega referencias para formatearlas estrictamente en APA 7ma edición.',
-        chips: [
-          'Estrategia booleana para Scielo y Scopus',
-          'Citas parentéticas vs. narrativas con 3+ autores',
-          'Formato estricto de artículo con DOI'
-        ]
-      }
-    };
-
-    let activeSpecialistKey = 'valeria';
-    let chatHistories = { valeria: [], mateo: [], andres: [] };
-
-    function showView(viewName) {
-      const lobby = document.getElementById('view-lobby');
-      const workspace = document.getElementById('view-workspace');
-      const btnLobby = document.getElementById('nav-btn-lobby');
-      const btnWs = document.getElementById('nav-btn-workspace');
-
-      if (viewName === 'lobby') {
-        lobby.classList.remove('hidden');
-        workspace.classList.add('hidden');
-        btnLobby.className = "text-sm font-medium px-4 py-2 rounded-lg bg-zinc-800 text-white transition";
-        btnWs.className = "text-sm font-medium px-4 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition";
-      } else {
-        lobby.classList.add('hidden');
-        workspace.classList.remove('hidden');
-        btnWs.className = "text-sm font-medium px-4 py-2 rounded-lg bg-zinc-800 text-white transition";
-        btnLobby.className = "text-sm font-medium px-4 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition";
-      }
-    }
-
-    function launchSpecialist(key) {
-      setSpecialist(key);
-      showView('workspace');
-    }
-
-    function setSpecialist(key) {
-      activeSpecialistKey = key;
-      const spec = SPECIALISTS[key];
-
-      document.getElementById('chat-header-title').innerText = spec.title;
-
-      ['valeria', 'mateo', 'andres'].forEach(k => {
-        const btn = document.getElementById(`side-btn-${k}`);
-        if(k === key) {
-          btn.className = "w-full flex items-center gap-3 p-3 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition";
-          btn.querySelector('div:first-child').className = "w-9 h-9 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0";
-        } else {
-          btn.className = "w-full flex items-center gap-3 p-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition";
-          btn.querySelector('div:first-child').className = "w-9 h-9 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0";
-        }
-      });
-
-      const chipsBox = document.getElementById('prompt-chips');
-      chipsBox.innerHTML = spec.chips.map(chip => `
-        <button onclick="handleChipClick('${chip}')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-cortex-card hover:bg-zinc-800 border border-cortex-border text-zinc-300 transition">
-          ${chip}
-        </button>
-      `).join('');
-
-      renderChat();
-    }
-
-    function renderChat() {
-      const stream = document.getElementById('chat-stream');
-      const history = chatHistories[activeSpecialistKey];
-      const spec = SPECIALISTS[activeSpecialistKey];
-
-      if (history.length === 0) {
-        stream.innerHTML = `
-          <div class="flex items-start gap-3.5 max-w-3xl">
-            <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0">
-              ${spec.roleTag}
-            </div>
-            <div class="bg-cortex-card border border-cortex-border p-4 rounded-2xl rounded-tl-sm text-sm text-zinc-300 leading-relaxed shadow-sm">
-              ${spec.welcome}
-            </div>
-          </div>
-        `;
-      } else {
-        stream.innerHTML = history.map(msg => {
-          if (msg.role === 'user') {
-            return `
-              <div class="flex items-start gap-3 max-w-2xl ml-auto justify-end">
-                <div class="bg-violet-600 text-white p-3.5 rounded-2xl rounded-tr-sm text-sm leading-relaxed shadow-sm">
-                  ${msg.text}
-                </div>
-              </div>
-            `;
-          } else {
-            return `
-              <div class="flex items-start gap-3.5 max-w-3xl">
-                <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0">
-                  ${spec.roleTag}
-                </div>
-                <div class="bg-cortex-card border border-cortex-border p-5 rounded-2xl rounded-tl-sm text-sm text-zinc-200 leading-relaxed space-y-2 whitespace-pre-line shadow-sm">
-                  ${msg.text}
-                </div>
-              </div>
-            `;
-          }
-        }).join('');
-      }
-
-      stream.scrollTop = stream.scrollHeight;
-    }
-
-    async function handleSend() {
-      const input = document.getElementById('user-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      chatHistories[activeSpecialistKey].push({ role: 'user', text });
-      input.value = '';
-      renderChat();
-
-      const stream = document.getElementById('chat-stream');
-      const spec = SPECIALISTS[activeSpecialistKey];
-      const loadingId = 'loading-' + Date.now();
-      
-      const loadingEl = document.createElement('div');
-      loadingEl.id = loadingId;
-      loadingEl.className = 'flex items-start gap-3.5 max-w-3xl';
-      loadingEl.innerHTML = `
-        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0">
-          ${spec.roleTag}
-        </div>
-        <div class="bg-cortex-card border border-cortex-border p-4 rounded-2xl rounded-tl-sm text-sm text-zinc-400 italic flex items-center gap-2 shadow-sm">
-          <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span>
-          Generando respuesta especializada...
-        </div>
-      `;
-      stream.appendChild(loadingEl);
-      stream.scrollTop = stream.scrollHeight;
-
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            specialist: activeSpecialistKey,
-            message: text,
-            history: chatHistories[activeSpecialistKey]
-          })
-        });
-
-        const data = await response.json();
-        const loader = document.getElementById(loadingId);
-        if (loader) loader.remove();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Error en la respuesta del servidor');
-        }
-
-        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: data.reply });
-        renderChat();
-      } catch (err) {
-        const loader = document.getElementById(loadingId);
-        if (loader) loader.remove();
-
-        chatHistories[activeSpecialistKey].push({
-          role: 'assistant',
-          text: `⚠️ **Aviso:** ${err.message}`
-        });
-        renderChat();
-      }
-    }
-
-    function handleChipClick(chipText) {
-      document.getElementById('user-input').value = chipText;
-      handleSend();
-    }
-
-    function clearCurrentChat() {
-      chatHistories[activeSpecialistKey] = [];
-      renderChat();
-    }
-
-    document.getElementById('user-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 3500,
+        system: SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria,
+        messages: buildMessages(history, message)
+      })
     });
 
-    setSpecialist('valeria');
-  </script>
-</body>
-</html>
+    const data = await upstream.json();
+
+    if (!upstream.ok) {
+      return res.status(upstream.status).json({
+        error: data?.error?.message || 'Error en la API de Anthropic.'
+      });
+    }
+
+    const textBlock = (data.content || []).find(b => b.type === 'text');
+    const reply = textBlock ? textBlock.text : '';
+
+    return res.status(200).json({ reply });
+
+  } catch (err) {
+    return res.status(500).json({ error: 'Error interno: ' + err.message });
+  }
+}
