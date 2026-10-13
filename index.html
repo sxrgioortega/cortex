@@ -491,7 +491,50 @@
       handleSend();
     }
 
-    function clearCurrentChat() {
+    function copyCleanReport(button, rawMarkdown) {
+      // 1. Limpiar los caracteres Markdown para crear un texto académico impecable
+      const cleanText = rawMarkdown
+        .replace(/^#+\s*(.*?)$/gm, '$1')              // Quitar '#' de títulos
+        .replace(/\*\*(.*?)\*\*/g, '$1')             // Quitar negritas '**'
+        .replace(/\*(.*?)\*/g, '$1')                 // Quitar cursivas '*'
+        .replace(/`{1,3}(.*?)`{1,3}/g, '$1')         // Quitar bloques de código
+        .replace(/^\s*[-*]\s+/gm, '• ')              // Convertir guiones en viñetas limpias
+        .trim();
+
+      // 2. Escribir forzosamente texto plano puro en el portapapeles del sistema
+      // Al no incluir payload 'text/html', Word no puede heredar fondos ni colores morados
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cleanText).then(() => {
+          showCopySuccess(button);
+        }).catch(() => {
+          fallbackCopyText(cleanText, button);
+        });
+      } else {
+        fallbackCopyText(cleanText, button);
+      }
+    }
+
+    function fallbackCopyText(text, button) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showCopySuccess(button);
+      } catch (e) {
+        console.error('Error al copiar', e);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showCopySuccess(btn) {
+      const original = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copiado limpio';
+      setTimeout(() => { btn.innerHTML = original; }, 1800);
+    }
       chatHistories[activeSpecialistKey] = [];
       renderChat();
     }
