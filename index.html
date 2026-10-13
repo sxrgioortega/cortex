@@ -47,6 +47,10 @@
     ::-webkit-scrollbar-thumb { background: #23232a; border-radius: 999px; }
     ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
 
+    .glow-purple {
+      background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16) 0%, transparent 65%);
+    }
+
     .markdown-body h1 { font-size: 1.25rem; font-weight: 800; color: #f4f4f5; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #27272a; padding-bottom: 0.3rem; }
     .markdown-body h2 { font-size: 1.1rem; font-weight: 700; color: #e4e4e7; margin-top: 0.85rem; margin-bottom: 0.4rem; }
     .markdown-body h3 { font-size: 0.95rem; font-weight: 600; color: #c4b5fd; margin-top: 0.75rem; margin-bottom: 0.3rem; }
@@ -105,7 +109,7 @@
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 w-full max-w-5xl">
-        <!-- Tarjeta Valeria -->
+        <!-- Tarjeta 1: Valeria -->
         <div onclick="openSpecialist('valeria')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
           <div>
             <div class="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-lg mb-4">
@@ -123,7 +127,7 @@
           </div>
         </div>
 
-        <!-- Tarjeta Mateo -->
+        <!-- Tarjeta 2: Mateo -->
         <div onclick="openSpecialist('mateo')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
           <div>
             <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-lg mb-4">
@@ -141,8 +145,52 @@
           </div>
         </div>
 
-        <!-- Tarjeta Andrés -->
+        <!-- Tarjeta 3: Andrés -->
         <div onclick="openSpecialist('andres')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
           <div>
             <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-lg mb-4">
-              <i class="fa-solid fa-book-bookmark">
+              <i class="fa-solid fa-book-bookmark"></i>
+            </div>
+            <span class="text-[11px] font-semibold text-purple-400 uppercase tracking-wider">Módulo 03</span>
+            <h3 class="text-lg font-bold text-white mt-1 mb-2">Metodología &amp; APA 7</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Ecuaciones de búsqueda académica estructuradas y normativas de citación APA 7ma edición.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-purple-300">
+            <span>Iniciar con Mg. Andrés</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VISTA 2: WORKSPACE -->
+  <main id="view-workspace" class="flex-1 flex overflow-hidden hidden" style="height: calc(100vh - 64px);">
+    <!-- BARRA LATERAL -->
+    <aside class="w-64 bg-cortex-card border-r border-cortex-border flex flex-col justify-between shrink-0">
+      <div class="p-4 space-y-3">
+        <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider px-2 block">
+          Especialistas
+        </span>
+
+        <div class="space-y-1">
+          <button id="btn-tab-valeria" onclick="setSpecialist('valeria')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition">
+            <div id="badge-valeria" class="w-8 h-8 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0">CL</div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-white truncate">Dra. Valeria</div>
+              <div class="text-[10px] text-zinc-400 truncate">Clínica &amp; DSM-5-TR</div>
+            </div>
+          </button>
+
+          <button id="btn-tab-mateo" onclick="setSpecialist('mateo')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+            <div id="badge-mateo" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">PS</div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-zinc-300 truncate">Lic. Mateo</div>
+              <div class="text-[10px] text-zinc-400 truncate">Psicometría &amp; Baremos</div>
+            </div>
+          </button>
+
+          <button id="btn-tab-andres" onclick="setSpecialist('andres')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+            <div id="badge-andres" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400
