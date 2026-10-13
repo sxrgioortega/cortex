@@ -47,31 +47,27 @@
     ::-webkit-scrollbar-thumb { background: #23232a; border-radius: 999px; }
     ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
 
-    .glow-purple {
-      background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16) 0%, transparent 65%);
-    }
-
-    .markdown-body h1 { font-size: 1.35rem; font-weight: 800; color: #f4f4f5; margin-top: 1.25rem; margin-bottom: 0.75rem; border-bottom: 1px solid #27272a; padding-bottom: 0.35rem; }
-    .markdown-body h2 { font-size: 1.15rem; font-weight: 700; color: #e4e4e7; margin-top: 1rem; margin-bottom: 0.5rem; }
-    .markdown-body h3 { font-size: 1rem; font-weight: 600; color: #c4b5fd; margin-top: 0.85rem; margin-bottom: 0.35rem; }
-    .markdown-body p { margin-bottom: 0.75rem; line-height: 1.65; color: #d4d4d8; }
-    .markdown-body ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; color: #d4d4d8; }
-    .markdown-body ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.75rem; color: #d4d4d8; }
-    .markdown-body li { margin-bottom: 0.3rem; line-height: 1.5; }
+    .markdown-body h1 { font-size: 1.25rem; font-weight: 800; color: #f4f4f5; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #27272a; padding-bottom: 0.3rem; }
+    .markdown-body h2 { font-size: 1.1rem; font-weight: 700; color: #e4e4e7; margin-top: 0.85rem; margin-bottom: 0.4rem; }
+    .markdown-body h3 { font-size: 0.95rem; font-weight: 600; color: #c4b5fd; margin-top: 0.75rem; margin-bottom: 0.3rem; }
+    .markdown-body p { margin-bottom: 0.65rem; line-height: 1.6; color: #d4d4d8; }
+    .markdown-body ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.65rem; color: #d4d4d8; }
+    .markdown-body ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.65rem; color: #d4d4d8; }
+    .markdown-body li { margin-bottom: 0.25rem; }
     .markdown-body strong { color: #fafafa; font-weight: 700; }
-    .markdown-body blockquote { border-left: 3px solid #8b5cf6; padding-left: 0.85rem; color: #a1a1aa; font-style: italic; margin: 0.75rem 0; }
-    .markdown-body code { background: #18181b; padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.85rem; color: #ddd6fe; border: 1px solid #27272a; }
-    .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
-    .markdown-body th, .markdown-body td { border: 1px solid #27272a; padding: 0.5rem 0.75rem; text-align: left; }
+    .markdown-body blockquote { border-left: 3px solid #8b5cf6; padding-left: 0.75rem; color: #a1a1aa; margin: 0.65rem 0; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 0.85rem; font-size: 0.85rem; }
+    .markdown-body th, .markdown-body td { border: 1px solid #27272a; padding: 0.45rem 0.65rem; text-align: left; }
     .markdown-body th { background: #18181b; color: #f4f4f5; font-weight: 600; }
   </style>
 </head>
 
-<body class="bg-cortex-bg text-zinc-100 font-sans antialiased flex flex-col min-h-screen selection:bg-violet-500/30 selection:text-violet-200">
+<body class="bg-cortex-bg text-zinc-100 font-sans antialiased flex flex-col min-h-screen">
 
-  <header class="h-16 border-b border-cortex-border bg-cortex-bg/90 backdrop-blur-md sticky top-0 z-50 shrink-0">
+  <!-- NAVBAR -->
+  <header class="h-16 border-b border-cortex-border bg-cortex-bg/95 sticky top-0 z-50 shrink-0">
     <div class="max-w-7xl mx-auto h-full px-6 flex items-center justify-between">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="showView('lobby')">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('lobby')">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-violet-600/30">
           Ψ
         </div>
@@ -81,472 +77,72 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-4">
-        <button id="nav-btn-lobby" onclick="showView('lobby')" class="text-sm font-medium px-4 py-2 rounded-lg bg-zinc-800 text-white transition">
+      <div class="flex items-center gap-3">
+        <button id="nav-lobby" onclick="switchView('lobby')" class="text-xs font-semibold px-3.5 py-2 rounded-lg bg-zinc-800 text-white transition">
           Lobby
         </button>
-        <button id="nav-btn-workspace" onclick="showView('workspace')" class="text-sm font-medium px-4 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition">
+        <button id="nav-workspace" onclick="switchView('workspace')" class="text-xs font-semibold px-3.5 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition">
           Workspace
         </button>
-        <div class="h-5 w-px bg-cortex-border mx-1 hidden sm:block"></div>
-        <div class="hidden sm:flex items-center gap-2 text-xs bg-cortex-card border border-cortex-border px-3 py-1.5 rounded-full text-zinc-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>DSM-5-TR &amp; APA 7</span>
-        </div>
       </div>
     </div>
   </header>
 
-  <main id="view-lobby" class="w-full flex-1 glow-purple block">
-    <div class="max-w-6xl mx-auto px-6 py-12 sm:py-16 flex flex-col items-center">
-      <div class="text-center max-w-3xl mb-16 relative w-full">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/30 bg-violet-950/40 text-violet-300 text-xs font-semibold mb-6">
-          <i class="fa-solid fa-bolt text-xs"></i> Motor Claude con Streaming en Vivo
+  <!-- VISTA 1: LOBBY -->
+  <main id="view-lobby" class="w-full flex-1 block">
+    <div class="max-w-6xl mx-auto px-6 py-12 flex flex-col items-center">
+      <div class="text-center max-w-3xl mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-950/40 text-violet-300 text-xs font-semibold mb-6">
+          <i class="fa-solid fa-sparkles text-xs"></i> Asistencia Diagnóstica, Psicométrica y Científica
         </div>
-        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-          El entorno técnico para <br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400">estudiantes de psicología</span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+          Entorno clínico y metodológico para <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400">psicología</span>
         </h1>
-        <p class="text-base sm:lg text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-          Formulaciones de casos con DSM-5-TR, análisis cuantitativo psicométrico y citación metodológica sin cortes.
+        <p class="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto">
+          Elige un especialista para iniciar una formulación estructurada o evaluación psicométrica.
         </p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6 w-full mb-12">
-        <div onclick="launchSpecialist('valeria')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/50 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200 group">
+      <div class="grid md:grid-cols-3 gap-6 w-full max-w-5xl">
+        <!-- Tarjeta Valeria -->
+        <div onclick="openSpecialist('valeria')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-xl mb-6 group-hover:scale-105 transition-transform">
+            <div class="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-lg mb-4">
               <i class="fa-solid fa-notes-medical"></i>
             </div>
-            <span class="text-xs font-semibold text-violet-400 uppercase tracking-wider">Módulo 01</span>
-            <h3 class="text-xl font-bold text-white mt-1 mb-3">Clínica &amp; DSM-5-TR</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Formulaciones diagnósticas completas, códigos alfanuméricos y criterios diferenciales sustentados.
+            <span class="text-[11px] font-semibold text-violet-400 uppercase tracking-wider">Módulo 01</span>
+            <h3 class="text-lg font-bold text-white mt-1 mb-2">Clínica &amp; DSM-5-TR</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Formulaciones de casos clínicos, diagnósticos diferenciales y criterios estructurados.
             </p>
           </div>
-          <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
-            <span>Iniciar análisis</span>
+          <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
+            <span>Iniciar con Dra. Valeria</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
 
-        <div onclick="launchSpecialist('mateo')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/50 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200 group">
+        <!-- Tarjeta Mateo -->
+        <div onclick="openSpecialist('mateo')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-xl mb-6 group-hover:scale-105 transition-transform">
+            <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-lg mb-4">
               <i class="fa-solid fa-chart-pie"></i>
             </div>
-            <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Módulo 02</span>
-            <h3 class="text-xl font-bold text-white mt-1 mb-3">Psicometría &amp; Baremos</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Conversión de PD a percentiles/T, propiedades psicométricas y redacción técnica de informes.
+            <span class="text-[11px] font-semibold text-indigo-400 uppercase tracking-wider">Módulo 02</span>
+            <h3 class="text-lg font-bold text-white mt-1 mb-2">Psicometría &amp; Baremos</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Conversión de PD a percentiles y puntajes T, análisis de baremos y redacción técnica.
             </p>
           </div>
-          <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-indigo-300">
-            <span>Interpretar baremos</span>
+          <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-indigo-300">
+            <span>Iniciar con Lic. Mateo</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
 
-        <div onclick="launchSpecialist('andres')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/50 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200 group">
+        <!-- Tarjeta Andrés -->
+        <div onclick="openSpecialist('andres')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-xl mb-6 group-hover:scale-105 transition-transform">
-              <i class="fa-solid fa-book-bookmark"></i>
-            </div>
-            <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Módulo 03</span>
-            <h3 class="text-xl font-bold text-white mt-1 mb-3">Metodología &amp; APA 7</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-              Diseño de ecuaciones SciELO/Scopus y citas parentéticas o narrativas estrictas en APA 7.
-            </p>
-          </div>
-          <div class="pt-4 border-t border-cortex-border/60 flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-purple-300">
-            <span>Estructurar citas</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <main id="view-workspace" class="flex-1 flex overflow-hidden hidden" style="height: calc(100vh - 64px);">
-    <aside class="w-72 bg-cortex-card border-r border-cortex-border flex flex-col justify-between shrink-0">
-      <div class="p-4 space-y-4">
-        <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider px-2 block">
-          Especialistas Córtex
-        </span>
-
-        <div class="space-y-1.5">
-          <button id="side-btn-valeria" onclick="setSpecialist('valeria')" class="w-full flex items-center gap-3 p-3 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition">
-            <div class="w-9 h-9 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0">CL</div>
-            <div class="min-w-0">
-              <div class="font-bold text-sm text-white truncate">Dra. Valeria</div>
-              <div class="text-[11px] text-zinc-400 truncate">Clínica &amp; DSM-5-TR</div>
-            </div>
-          </button>
-
-          <button id="side-btn-mateo" onclick="setSpecialist('mateo')" class="w-full flex items-center gap-3 p-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <div class="w-9 h-9 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">PS</div>
-            <div class="min-w-0">
-              <div class="font-bold text-sm text-zinc-200 truncate">Lic. Mateo</div>
-              <div class="text-[11px] text-zinc-400 truncate">Psicometría &amp; Baremos</div>
-            </div>
-          </button>
-
-          <button id="side-btn-andres" onclick="setSpecialist('andres')" class="w-full flex items-center gap-3 p-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <div class="w-9 h-9 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">AP</div>
-            <div class="min-w-0">
-              <div class="font-bold text-sm text-zinc-200 truncate">Mg. Andrés</div>
-              <div class="text-[11px] text-zinc-400 truncate">Metodología &amp; APA 7</div>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <div class="p-4 border-t border-cortex-border/80 bg-cortex-bg/40 flex items-center justify-between text-xs text-zinc-400">
-        <span>Motor de IA</span>
-        <span class="text-violet-400 font-semibold flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Streaming Activo
-        </span>
-      </div>
-    </aside>
-
-    <section class="flex-1 flex flex-col bg-cortex-bg overflow-hidden">
-      <div class="h-14 border-b border-cortex-border px-6 flex items-center justify-between bg-cortex-card/40 shrink-0">
-        <div class="flex items-center gap-3">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-          <span id="chat-header-title" class="font-bold text-sm text-white">Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)</span>
-        </div>
-        <button onclick="clearCurrentChat()" class="text-xs text-zinc-400 hover:text-zinc-200 flex items-center gap-1.5 transition">
-          <i class="fa-regular fa-trash-can"></i> Limpiar
-        </button>
-      </div>
-
-      <div id="chat-stream" class="flex-1 overflow-y-auto p-6 space-y-6"></div>
-
-      <div class="p-4 border-t border-cortex-border bg-cortex-card/30 shrink-0">
-        <div class="max-w-4xl mx-auto space-y-3">
-          <div id="prompt-chips" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs"></div>
-
-          <div class="flex items-end gap-3 bg-cortex-card border border-cortex-border focus-within:border-violet-500 rounded-2xl p-2.5 transition">
-            <textarea id="user-input" rows="2" placeholder="Escribe tu consulta o caso clínico..." class="flex-1 bg-transparent text-sm text-white placeholder-zinc-500 resize-none px-3 py-1.5 focus:outline-none"></textarea>
-            <button id="send-btn" onclick="handleSend()" class="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center transition shrink-0 shadow-lg shadow-violet-600/30">
-              <i class="fa-solid fa-arrow-up text-sm"></i>
-            </button>
-          </div>
-          
-          <div class="flex items-center justify-between text-[11px] text-zinc-500 px-1">
-            <span>Shift + Enter para salto de línea</span>
-            <span>Córtex v1.1 · Claude Haiku Streaming</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    const SPECIALISTS = {
-      valeria: {
-        id: 'valeria',
-        name: 'Dra. Valeria',
-        title: 'Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)',
-        roleTag: 'CL',
-        welcome: 'Hola. Soy la Dra. Valeria. Comparte los signos, síntomas o motivo de consulta para estructurar la formulación clínica bajo el DSM-5-TR, calcular diagnósticos diferenciales y sustentar criterios.',
-        chips: [
-          'Caso de Crisis de Pánico con Agorafobia',
-          'Diferencial: Depresión Mayor vs. Distimia',
-          'Formulación de caso en TAG'
-        ]
-      },
-      mateo: {
-        id: 'mateo',
-        name: 'Lic. Mateo',
-        title: 'Lic. Mateo · Psicometría, Baremos y Evaluación',
-        roleTag: 'PS',
-        welcome: 'Hola. Soy el Lic. Mateo. Facilítame el instrumento de evaluación (ej. BDI-II, BAI, MCMI) y las puntuaciones directas (PD) para calcular percentiles y redactar el informe técnico.',
-        chips: [
-          'Informe técnico para BDI-II (PD 29)',
-          'Conversión de Puntaje T a Percentil',
-          'Interpretación de Confiabilidad (Alfa y Omega)'
-        ]
-      },
-      andres: {
-        id: 'andres',
-        name: 'Mg. Andrés',
-        title: 'Mg. Andrés · Metodología de Investigación & APA 7',
-        roleTag: 'AP',
-        welcome: 'Hola. Soy el Mg. Andrés. Diseñemos ecuaciones de búsqueda científica para Scopus/SciELO o formateemos citas y referencias rigurosamente según APA 7ma edición.',
-        chips: [
-          'Ecuación booleana para Procrastinación y Estrés',
-          'Citas con 3 o más autores en APA 7',
-          'Estructura metodológica cuantitativa'
-        ]
-      }
-    };
-
-    let activeSpecialistKey = 'valeria';
-    let chatHistories = { valeria: [], mateo: [], andres: [] };
-
-    function showView(viewName) {
-      const lobby = document.getElementById('view-lobby');
-      const workspace = document.getElementById('view-workspace');
-      const btnLobby = document.getElementById('nav-btn-lobby');
-      const btnWs = document.getElementById('nav-btn-workspace');
-
-      if (viewName === 'lobby') {
-        lobby.classList.remove('hidden');
-        workspace.classList.add('hidden');
-        btnLobby.className = "text-sm font-medium px-4 py-2 rounded-lg bg-zinc-800 text-white transition";
-        btnWs.className = "text-sm font-medium px-4 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition";
-      } else {
-        lobby.classList.add('hidden');
-        workspace.classList.remove('hidden');
-        btnWs.className = "text-sm font-medium px-4 py-2 rounded-lg bg-zinc-800 text-white transition";
-        btnLobby.className = "text-sm font-medium px-4 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition";
-      }
-    }
-
-    function launchSpecialist(key) {
-      setSpecialist(key);
-      showView('workspace');
-    }
-
-    function setSpecialist(key) {
-      activeSpecialistKey = key;
-      const spec = SPECIALISTS[key];
-      document.getElementById('chat-header-title').innerText = spec.title;
-
-      ['valeria', 'mateo', 'andres'].forEach(k => {
-        const btn = document.getElementById(`side-btn-${k}`);
-        if(k === key) {
-          btn.className = "w-full flex items-center gap-3 p-3 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition";
-          btn.querySelector('div:first-child').className = "w-9 h-9 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0";
-        } else {
-          btn.className = "w-full flex items-center gap-3 p-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition";
-          btn.querySelector('div:first-child').className = "w-9 h-9 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0";
-        }
-      });
-
-      const chipsBox = document.getElementById('prompt-chips');
-      chipsBox.innerHTML = spec.chips.map(chip => `
-        <button onclick="handleChipClick('${chip}')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-cortex-card hover:bg-zinc-800 border border-cortex-border text-zinc-300 transition">
-          ${chip}
-        </button>
-      `).join('');
-
-      renderChat();
-    }
-
-    function copyToClipboard(button, rawText) {
-      navigator.clipboard.writeText(rawText).then(() => {
-        const original = button.innerHTML;
-        button.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copiado';
-        setTimeout(() => { button.innerHTML = original; }, 2000);
-      });
-    }
-
-    function renderChat() {
-      const stream = document.getElementById('chat-stream');
-      const history = chatHistories[activeSpecialistKey];
-      const spec = SPECIALISTS[activeSpecialistKey];
-
-      if (history.length === 0) {
-        stream.innerHTML = `
-          <div class="flex items-start gap-3.5 max-w-3xl">
-            <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0">
-              ${spec.roleTag}
-            </div>
-            <div class="bg-cortex-card border border-cortex-border p-5 rounded-2xl rounded-tl-sm text-sm text-zinc-300 leading-relaxed shadow-sm">
-              ${spec.welcome}
-            </div>
-          </div>
-        `;
-      } else {
-        stream.innerHTML = history.map((msg, idx) => {
-          if (msg.role === 'user') {
-            return `
-              <div class="flex items-start gap-3 max-w-2xl ml-auto justify-end">
-                <div class="bg-violet-600 text-white p-4 rounded-2xl rounded-tr-sm text-sm leading-relaxed shadow-md whitespace-pre-wrap">
-                  ${msg.text}
-                </div>
-              </div>
-            `;
-          } else {
-            const parsed = marked.parse(msg.text);
-            return `
-              <div class="flex items-start gap-3.5 max-w-3xl group">
-                <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
-                  ${spec.roleTag}
-                </div>
-                <div class="bg-cortex-card border border-cortex-border p-6 rounded-2xl rounded-tl-sm text-sm leading-relaxed shadow-sm w-full relative">
-                  <div class="flex justify-end mb-2">
-                    <button id="copy-btn-${idx}" class="text-xs text-zinc-400 hover:text-white bg-zinc-800/80 hover:bg-zinc-700 px-2.5 py-1 rounded-md transition flex items-center gap-1.5 border border-zinc-700/60">
-                      <i class="fa-regular fa-copy"></i> Copiar informe
-                    </button>
-                  </div>
-                  <div id="content-box-${idx}" class="markdown-body text-zinc-200">
-                    ${parsed}
-                  </div>
-                </div>
-              </div>
-            `;
-          }
-        }).join('');
-
-        // Vincular eventos de copiado
-        history.forEach((msg, idx) => {
-          if (msg.role !== 'user') {
-            const btn = document.getElementById(`copy-btn-${idx}`);
-            if (btn) btn.onclick = () => copyToClipboard(btn, msg.text);
-          }
-        });
-      }
-
-      stream.scrollTop = stream.scrollHeight;
-    }
-
-    async function handleSend() {
-      const input = document.getElementById('user-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const sendBtn = document.getElementById('send-btn');
-      sendBtn.disabled = true;
-      input.disabled = true;
-
-      chatHistories[activeSpecialistKey].push({ role: 'user', text });
-      input.value = '';
-      renderChat();
-
-      const stream = document.getElementById('chat-stream');
-      const spec = SPECIALISTS[activeSpecialistKey];
-      const assistantIdx = chatHistories[activeSpecialistKey].length;
-
-      // Crear tarjeta para recibir el streaming en vivo
-      const msgWrapper = document.createElement('div');
-      msgWrapper.className = 'flex items-start gap-3.5 max-w-3xl group';
-      msgWrapper.innerHTML = `
-        <div class="w-8 h-8 rounded-lg bg-violet-600/30 border border-violet-500/30 text-violet-300 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
-          ${spec.roleTag}
-        </div>
-        <div class="bg-cortex-card border border-cortex-border p-6 rounded-2xl rounded-tl-sm text-sm leading-relaxed shadow-sm w-full relative">
-          <div class="flex justify-end mb-2">
-            <button id="live-copy-btn" class="text-xs text-zinc-400 hover:text-white bg-zinc-800/80 hover:bg-zinc-700 px-2.5 py-1 rounded-md transition flex items-center gap-1.5 border border-zinc-700/60">
-              <i class="fa-regular fa-copy"></i> Copiar informe
-            </button>
-          </div>
-          <div id="live-content-box" class="markdown-body text-zinc-200">
-            <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span> Escribiendo análisis...
-          </div>
-        </div>
-      `;
-      stream.appendChild(msgWrapper);
-      stream.scrollTop = stream.scrollHeight;
-
-      let fullAccumulatedText = '';
-      const liveBox = document.getElementById('live-content-box');
-      const liveCopy = document.getElementById('live-copy-btn');
-
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            specialist: activeSpecialistKey,
-            message: text,
-            history: chatHistories[activeSpecialistKey].slice(0, -1)
-          })
-        });
-
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.error || 'Error en la respuesta del servidor');
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          fullAccumulatedText += chunk;
-          liveBox.innerHTML = marked.parse(fullAccumulatedText);
-          stream.scrollTop = stream.scrollHeight;
-        }
-
-        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: fullAccumulatedText });
-        liveCopy.onclick = () => copyToClipboard(liveCopy, fullAccumulatedText);
-
-      } catch (err) {
-        liveBox.innerHTML = `<span class="text-rose-400 font-semibold">⚠️ ${err.message}</span>`;
-        chatHistories[activeSpecialistKey].push({ role: 'assistant', text: `⚠️ Error: ${err.message}` });
-      } finally {
-        sendBtn.disabled = false;
-        input.disabled = false;
-        input.focus();
-      }
-    }
-
-    function handleChipClick(chipText) {
-      document.getElementById('user-input').value = chipText;
-      handleSend();
-    }
-
-    function copyCleanReport(button, rawMarkdown) {
-      // 1. Limpiar los caracteres Markdown para crear un texto académico impecable
-      const cleanText = rawMarkdown
-        .replace(/^#+\s*(.*?)$/gm, '$1')              // Quitar '#' de títulos
-        .replace(/\*\*(.*?)\*\*/g, '$1')             // Quitar negritas '**'
-        .replace(/\*(.*?)\*/g, '$1')                 // Quitar cursivas '*'
-        .replace(/`{1,3}(.*?)`{1,3}/g, '$1')         // Quitar bloques de código
-        .replace(/^\s*[-*]\s+/gm, '• ')              // Convertir guiones en viñetas limpias
-        .trim();
-
-      // 2. Escribir forzosamente texto plano puro en el portapapeles del sistema
-      // Al no incluir payload 'text/html', Word no puede heredar fondos ni colores morados
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(cleanText).then(() => {
-          showCopySuccess(button);
-        }).catch(() => {
-          fallbackCopyText(cleanText, button);
-        });
-      } else {
-        fallbackCopyText(cleanText, button);
-      }
-    }
-
-    function fallbackCopyText(text, button) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showCopySuccess(button);
-      } catch (e) {
-        console.error('Error al copiar', e);
-      }
-      document.body.removeChild(textarea);
-    }
-
-    function showCopySuccess(btn) {
-      const original = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copiado limpio';
-      setTimeout(() => { btn.innerHTML = original; }, 1800);
-    }
-      chatHistories[activeSpecialistKey] = [];
-      renderChat();
-    }
-
-    document.getElementById('user-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
-    });
-
-    setSpecialist('valeria');
-  </script>
-</body>
-</html>
+            <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-lg mb-4">
+              <i class="fa-solid fa-book-bookmark">
