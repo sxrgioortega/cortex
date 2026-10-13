@@ -475,6 +475,14 @@
           </div>
         </div>
       </section>
+
+      <!-- Cierre de satisfacción antes de la línea divisoria -->
+        <div class="text-center mt-10">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-950/30 text-emerald-300 text-xs font-semibold shadow-sm">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span>Y nuestros usuarios entregan a tiempo, aprueban sus informes y están satisfechos con los resultados.</span>
+          </div>
+        </div>
       
       <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ ACORDEÓN) -->
       <section id="faq" class="max-w-4xl mx-auto px-6 py-14 border-t border-cortex-border">
@@ -542,71 +550,6 @@
         </div>
       </section>
 
-      <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ ACORDEÓN) -->
-      <section id="faq" class="max-w-4xl mx-auto px-6 py-14 border-t border-cortex-border">
-        <div class="text-center mb-10">
-          <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Dudas Habituales</span>
-          <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Preguntas frecuentes</h2>
-          <p class="text-xs text-zinc-400 mt-2">Todo lo que necesitas saber antes de utilizar Córtex en tus casos académicos o clínicos.</p>
-        </div>
-
-        <div class="space-y-3">
-          <!-- FAQ 1 -->
-          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
-            <button onclick="toggleFaq(1)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
-              <span>¿La IA puede inventar baremos o percentiles?</span>
-              <i id="faq-icon-1" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
-            </button>
-            <div id="faq-ans-1" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              No. El Dr. Mateo está instruido para no inventar tablas normativas. Si ingresas una puntuación directa sin especificar el grupo etario o baremo, te indicará el rango esperado y solicitará el grupo normativo en vez de generar percentiles ficticios.
-            </div>
-          </div>
-
-          <!-- FAQ 2 -->
-          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
-            <button onclick="toggleFaq(2)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
-              <span>¿En qué se diferencia de usar ChatGPT o Claude directamente?</span>
-              <i id="faq-icon-2" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
-            </button>
-            <div id="faq-ans-2" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              ChatGPT es un modelo general que suele mezclar normas de otros países, no estructura informes según el DSM-5-TR ni calcula discrepancias inter-índices. Córtex cuenta con prompts técnicos específicos y genera informes limpios que se descargan directamente a Word en tablas ordenadas.
-            </div>
-          </div>
-
-          <!-- FAQ 3 -->
-          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
-            <button onclick="toggleFaq(3)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
-              <span>¿Córtex reemplaza el criterio del evaluador o psicólogo?</span>
-              <i id="faq-icon-3" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
-            </button>
-            <div id="faq-ans-3" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              Bajo ningún concepto. Córtex es un asistente de apoyo técnico y redacción. El juicio clínico, la contrastación de hipótesis y la firma final del informe siempre corresponden al estudiante bajo supervisión docente o al psicólogo colegiado.
-            </div>
-          </div>
-
-          <!-- FAQ 4 -->
-          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
-            <button onclick="toggleFaq(4)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
-              <span>¿Los formatos sirven para las facultades de psicología en Perú?</span>
-              <i id="faq-icon-4" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
-            </button>
-            <div id="faq-ans-4" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              Sí. Los especialistas siguen el esquema estándar universitario e institucional: Ficha técnica, puntuaciones directas, tipificación cualitativa, análisis de áreas (cognitiva, afectiva, conductual) y recomendaciones aplicadas.
-            </div>
-          </div>
-
-          <!-- FAQ 5 -->
-          <div class="bg-cortex-card border border-cortex-border rounded-xl overflow-hidden transition">
-            <button onclick="toggleFaq(5)" class="w-full p-4 text-left flex items-center justify-between gap-4 text-xs font-bold text-zinc-200 hover:text-white transition">
-              <span>¿Cómo recibo mi acceso tras realizar el pago?</span>
-              <i id="faq-icon-5" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition duration-200"></i>
-            </button>
-            <div id="faq-ans-5" class="hidden px-4 pb-4 text-xs text-zinc-400 leading-relaxed border-t border-cortex-border/50 pt-3">
-              Al hacer clic en el botón de tu plan serás redirigido a nuestro WhatsApp oficial (+51 914 484 283). Envías la constancia de Yape o Plin y recibirás la activación inmediata.
-            </div>
-          </div>
-        </div>
-      </section> 
       <!-- SECCIÓN: PRIVACIDAD Y ÉTICA PROFESIONAL -->
       <section id="seguridad" class="max-w-5xl mx-auto px-6 py-12 border-t border-cortex-border">
         <div class="bg-cortex-card/40 border border-cortex-border rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8">
