@@ -396,7 +396,7 @@
                   <i class="fa-solid fa-check text-emerald-400 text-xs"></i> <strong>Consultas continuas durante el mes</strong>
                 </li>
                 <li class="flex items-center gap-2">
-                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Pruebas Psicométricas &amp; WISC/WAI
+                  <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Pruebas Psicométricas &amp; WISC/WAIS
                 </li>
                 <li class="flex items-center gap-2">
                   <i class="fa-solid fa-check text-emerald-400 text-xs"></i> Diagnósticos clínicos DSM-5-TR
@@ -639,27 +639,36 @@
   
   <!-- PANTALLA 2: WORKSPACE (CHATS) -->
   <div id="view-workspace" style="display: none;" class="w-full h-full flex flex-col md:flex-row overflow-hidden">
-    <!-- SIDEBAR -->
+    <!-- BARRA SUPERIOR / LATERAL DE ESPECIALISTAS -->
     <aside class="w-full md:w-64 bg-cortex-card border-b md:border-b-0 md:border-r border-cortex-border flex flex-col justify-between shrink-0">
       <div class="p-2 md:p-4">
         <span class="hidden md:block text-[10px] font-bold text-zinc-400 uppercase tracking-wider px-2 mb-2">Especialistas</span>
         <div class="flex flex-row md:flex-col gap-2 overflow-x-auto pb-1 md:pb-0">
           <!-- Valeria -->
-          <button id="tab-valeria" onclick="setSpecialist('valeria')" class="shrink-0 flex items-center gap-2 p-1.5 px-3 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition">
-            <img src="./valeria.jpg" alt="Dra. Valeria" class="w-7 h-7 rounded-lg object-cover border border-violet-500/40 shrink-0" />
-            <div class="font-bold text-xs text-white whitespace-nowrap">Dra. Valeria</div>
+          <button id="tab-valeria" onclick="setSpecialist('valeria')" class="shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-violet-500/50 bg-violet-950/30 text-left transition">
+            <img src="./valeria.jpg" alt="Dra. Valeria" class="w-8 h-8 rounded-lg object-cover border border-violet-500/50 shrink-0" />
+            <div class="min-w-0">
+              <div class="tab-title font-bold text-xs text-white whitespace-nowrap">Dra. Valeria</div>
+              <div class="tab-subtitle text-[10px] text-violet-300/80 whitespace-nowrap">Clínica &amp; DSM-5-TR</div>
+            </div>
           </button>
 
           <!-- Mateo -->
-          <button id="tab-mateo" onclick="setSpecialist('mateo')" class="shrink-0 flex items-center gap-2 p-1.5 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <img src="./mateo.jpg" alt="Dr. Mateo" class="w-7 h-7 rounded-lg object-cover border border-zinc-700 shrink-0" />
-            <div class="font-bold text-xs text-zinc-400 whitespace-nowrap">Dr. Mateo</div>
+          <button id="tab-mateo" onclick="setSpecialist('mateo')" class="shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+            <img src="./mateo.jpg" alt="Dr. Mateo" class="w-8 h-8 rounded-lg object-cover border border-zinc-700 shrink-0" />
+            <div class="min-w-0">
+              <div class="tab-title font-bold text-xs text-zinc-400 whitespace-nowrap">Dr. Mateo</div>
+              <div class="tab-subtitle text-[10px] text-zinc-500 whitespace-nowrap">Psicometría &amp; Baremos</div>
+            </div>
           </button>
 
           <!-- Andrés -->
-          <button id="tab-andres" onclick="setSpecialist('andres')" class="shrink-0 flex items-center gap-2 p-1.5 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <img src="./andres.jpg" alt="Mg. Andrés" class="w-7 h-7 rounded-lg object-cover border border-zinc-700 shrink-0" />
-            <div class="font-bold text-xs text-zinc-400 whitespace-nowrap">Mg. Andrés</div>
+          <button id="tab-andres" onclick="setSpecialist('andres')" class="shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+            <img src="./andres.jpg" alt="Mg. Andrés" class="w-8 h-8 rounded-lg object-cover border border-zinc-700 shrink-0" />
+            <div class="min-w-0">
+              <div class="tab-title font-bold text-xs text-zinc-400 whitespace-nowrap">Mg. Andrés</div>
+              <div class="tab-subtitle text-[10px] text-zinc-500 whitespace-nowrap">Metodología &amp; APA 7</div>
+            </div>
           </button>
         </div>
       </div>
@@ -672,20 +681,23 @@
       </div>
     </aside>
 
-    <!-- CHAT VIEW -->
+    <!-- AREA DE CONVERSACION -->
     <section class="flex-1 min-w-0 flex flex-col bg-cortex-bg overflow-hidden h-full">
-      <div class="h-12 border-b border-cortex-border px-6 flex items-center justify-between bg-cortex-card/40 shrink-0">
-        <span id="chat-header-title" class="font-bold text-xs text-white">Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)</span>
-        <button onclick="clearHistory()" class="text-[11px] text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition">
-          <i class="fa-regular fa-trash-can"></i> Limpiar chat
-        </button>
-      </div>
+      <!-- Mensajes -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4"></div>
 
-      <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-
-      <div class="p-4 border-t border-cortex-border bg-cortex-card/30 shrink-0">
+      <!-- Barra de entrada de texto e interacciones -->
+      <div class="p-3 md:p-4 border-t border-cortex-border bg-cortex-card/30 shrink-0">
         <div class="max-w-4xl mx-auto space-y-2">
-          <div id="chips-container" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs"></div>
+          
+          <!-- Chips de preguntas sugeridas y botón Limpiar Chat unificados -->
+          <div class="flex items-center justify-between gap-2">
+            <div id="chips-container" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs flex-1"></div>
+            <button onclick="clearHistory()" title="Limpiar conversación actual" class="shrink-0 text-[10px] text-zinc-400 hover:text-rose-400 bg-cortex-card hover:bg-zinc-800 border border-cortex-border px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+              <i class="fa-regular fa-trash-can text-[10px]"></i>
+              <span class="hidden sm:inline">Limpiar chat</span>
+            </button>
+          </div>
 
           <div class="flex items-end gap-2 bg-cortex-card border border-cortex-border focus-within:border-violet-500 rounded-xl p-2 transition">
             <textarea id="user-input" rows="2" placeholder="Escribe tu consulta o caso clínico..." class="flex-1 bg-transparent text-xs text-white placeholder-zinc-500 resize-none px-2 py-1 focus:outline-none"></textarea>
@@ -693,6 +705,7 @@
               <i class="fa-solid fa-arrow-up text-xs"></i>
             </button>
           </div>
+
           <div class="flex items-center justify-between text-[10px] text-zinc-500">
             <span id="trial-counter-badge" class="font-mono text-violet-400">Consultas de prueba: 3 restantes</span>
             <span class="hidden sm:inline">Shift + Enter para salto de línea · Formato Word</span>
@@ -738,6 +751,7 @@
     const CONFIG = {
       valeria: {
         title: 'Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)',
+        subtitle: 'Clínica & DSM-5-TR',
         avatar: './valeria.jpg',
         welcome: 'Hola. Soy la Dra. Valeria. Comparte los signos, síntomas o motivo de consulta para estructurar la formulación clínica bajo el DSM-5-TR, calcular diagnósticos diferenciales y sustentar criterios.',
         chips: [
@@ -749,6 +763,7 @@
       },
       mateo: {
         title: 'Dr. Mateo · Psicometría, Baremos y Evaluación',
+        subtitle: 'Psicometría & Baremos',
         avatar: './mateo.jpg',
         welcome: 'Hola. Soy el Dr. Mateo. Facilítame el instrumento y las puntuaciones directas (PD) o baremos para calcular percentiles y redactar el informe técnico.',
         chips: [
@@ -760,6 +775,7 @@
       },
       andres: {
         title: 'Mg. Andrés · Metodología de Investigación & APA 7',
+        subtitle: 'Metodología & APA 7',
         avatar: './andres.jpg',
         welcome: 'Hola. Soy el Mg. Andrés. Diseñemos ecuaciones de búsqueda científica o formateemos citas según APA 7ma edición.',
         chips: [
@@ -907,28 +923,25 @@
     function setSpecialist(key) {
       activeKey = key;
 
-      // 1. Alternar estilos activos/inactivos en los botones superiores
+      // Actualizar el estado visual de los chips superiores
       ['valeria', 'mateo', 'andres'].forEach(k => {
         const tab = document.getElementById(`tab-${k}`);
         if (!tab) return;
-        const titleDiv = tab.querySelector('div');
+        const titleEl = tab.querySelector('.tab-title');
+        const subtitleEl = tab.querySelector('.tab-subtitle');
 
         if (k === key) {
-          tab.className = "shrink-0 flex items-center gap-2 p-1.5 px-3 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition";
-          if (titleDiv) titleDiv.className = "font-bold text-xs text-white whitespace-nowrap";
+          tab.className = "shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-violet-500/50 bg-violet-950/30 text-left transition";
+          if (titleEl) titleEl.className = "tab-title font-bold text-xs text-white whitespace-nowrap";
+          if (subtitleEl) subtitleEl.className = "tab-subtitle text-[10px] text-violet-300/80 whitespace-nowrap";
         } else {
-          tab.className = "shrink-0 flex items-center gap-2 p-1.5 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition";
-          if (titleDiv) titleDiv.className = "font-bold text-xs text-zinc-400 whitespace-nowrap";
+          tab.className = "shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition";
+          if (titleEl) titleEl.className = "tab-title font-bold text-xs text-zinc-400 whitespace-nowrap";
+          if (subtitleEl) subtitleEl.className = "tab-subtitle text-[10px] text-zinc-500 whitespace-nowrap";
         }
       });
 
-      // 2. Actualizar título de la cabecera
-      const headerTitle = document.getElementById('chat-header-title');
-      if (headerTitle) {
-        headerTitle.textContent = CONFIG[key].title;
-      }
-
-      // 3. Actualizar los chips sugeridos
+      // Actualizar los chips sugeridos
       const chipsBox = document.getElementById('chips-container');
       if (chipsBox) {
         chipsBox.innerHTML = CONFIG[key].chips.map(chip => `
@@ -938,7 +951,6 @@
         `).join('');
       }
 
-      // 4. Renderizar mensajes con la foto correspondiente
       renderChat();
     }
 
@@ -1098,7 +1110,7 @@
 
       const isAdminUser = localStorage.getItem('cortex_admin_key') === 'adminortega09';
 
-      // Validación del Paywall suave (se ignora si eres admin)
+      // Validación del Paywall suave
       if (!isAdminUser && freeQueriesUsed >= FREE_LIMIT) {
         openPaywallModal();
         return;
@@ -1181,7 +1193,6 @@
         chatHistories[activeKey].push({ role: 'assistant', text: fullText });
         saveToStorage();
 
-        // Descontar una consulta gratuita tras recibir respuesta
         freeQueriesUsed++;
         localStorage.setItem('cortex_free_queries', freeQueriesUsed.toString());
         updateTrialUI();
