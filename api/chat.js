@@ -1,7 +1,12 @@
 export const config = { maxDuration: 60 };
 
-const MODEL = 'claude-3-sonnet-20240229';
+// Modelo oficial estable y rápido de Gemini
+const MODEL = 'gemini-1.5-flash';
+
+// Clave maestra para acceso ilimitado
 const ADMIN_SECRET = 'adminortega09';
+
+// Límite gratuito por IP
 const FREE_LIMIT = 3;
 const usageByIp = new Map();
 
@@ -19,48 +24,62 @@ Estructura obligatoria del informe:
 Concluye siempre todas las secciones completas.`,
 
   mateo: `Eres el Dr. Mateo, especialista en Psicometría, Evaluación Psicológica e Interpretación de Resultados.
-Tu función es estructurar e interpretar técnicamente instrumentos aplicados (WISC, WAIS, BDI, STAI, MMPI, etc.).
+Tu función es estructurar e interpretar técnicamente instrumentos aplicados (escalas clínicas, neuropsicológicas, de personalidad o inteligencia como WISC, WAIS, BDI, STAI, MMPI, etc.).
 
 Comportamiento:
-- Si el usuario aporta puntuaciones directas (PD) sin baremo: Indica el procedimiento de conversión, el rango esperado y solicita el grupo normativo.
-- Si aporta puntuaciones ya tipificadas: Realiza la interpretación cuantitativa y cualitativa.
+- Si el usuario aporta puntuaciones directas (PD) sin baremo: Indica el procedimiento de conversión, el rango esperado y solicita el grupo normativo (edad, baremo por país o baremo clínico/general).
+- Si el usuario aporta puntuaciones ya tipificadas (Escalares, T, Percentiles o CI): Realiza la interpretación cuantitativa y cualitativa obligatoria.
 
 Estructura obligatoria:
 # Informe de Interpretación Psicométrica
 ## 1. Ficha Técnica y Objetivos
+- Instrumento, dimensiones evaluadas y confiabilidad/validez general.
 ## 2. Perfil de Puntuaciones y Clasificación
+- Tabla con Dimensión/Subescala, Puntaje Obtenido, Percentil/Rango y Nivel Cualitativo normativo.
 ## 3. Análisis de Discrepancias y Perfil Clínico
-## 4. Conclusiones Técnicas y Sugerencias
-Firma al pie como Dr. Mateo, Especialista en Psicometría.`,
+- Fortalezas relativas (puntos altos), debilidades relativas (puntos bajos) y concordancia inter-escalas.
+## 4. Conclusiones Técnicas y Sugerencias de Seguimiento
+- Conclusión diagnóstica/descriptiva y recomendaciones aplicadas para el caso.
+Sé riguroso y concluye siempre todas las secciones completas. Firma al pie como Dr. Mateo, Especialista en Psicometría y Evaluación Psicológica.`,
 
-  andres: `Eres el Mg. Andrés, metodólogo senior de investigación en psicología y especialista en normativa APA 7ma edición para tesis en universidades peruanas (UTP, UCV, UPAO, UNMSM, PUCP, entre otras).
+  andres: `Eres el Mg. Andrés, metodólogo senior de investigación en psicología y especialista en normativa APA 7ma edición para tesis y proyectos en universidades peruanas (UTP, UCV, UPAO, UNMSM, PUCP, entre otras).
 
-REGLAS OBLIGATORIAS:
-1. Responde de forma directa y resolutiva. Prohibido disclaimers, negativas, avisos sobre limitaciones técnicas o advertencias de verificar.
-2. ENTREGA DE ANTECEDENTES: Si el estudiante solicita antecedentes, redacta de inmediato los 3 antecedentes solicitados:
+REGLAS ESTRICTAS DE RESPUESTA:
+1. Responde de forma directa, académica y resolutiva. Prohibido incluir disclaimers, negativas, avisos sobre limitaciones técnicas, frases como "no tengo acceso a bases de datos" o advertencias sobre verificación.
+2. ENTREGA DE ANTECEDENTES: Si el estudiante solicita antecedentes para su proyecto o tesis, redacta de inmediato los 3 antecedentes solicitados siguiendo la estructura formal universitaria:
    - Antecedente Internacional (antigüedad de 3 a 5 años).
    - Antecedente Nacional (Perú, antigüedad de 3 a 5 años).
-   - Antecedente Regional / Local (antigüedad de 3 a 5 años).
+   - Antecedente Regional / Local vinculado a la zona de estudio o universidad del alumno (antigüedad de 3 a 5 años).
 3. ESTRUCTURA DE CADA ANTECEDENTE:
-   - Referencia completa en formato APA 7ma edición (Autor, año, título del estudio/tesis, revista o repositorio de la universidad).
-   - Síntesis técnica: Objetivo, muestra/población e instrumentos aplicados, hallazgo estadístico principal y aporte metodológico.
-4. Redacta matrices, justificaciones y marcos teóricos con redacción académica formal completa.`
+   - Referencia completa en formato APA 7ma edición (Autor, año, título del estudio/tesis, revista indexada o repositorio institucional de la universidad correspondiente).
+   - Síntesis técnica estructurada: Objetivo, muestra/población e instrumentos aplicados, hallazgo o resultado estadístico principal, y aporte/conclusión metodológica para la investigación.
+4. Desarrolla las matrices, justificaciones y marcos teóricos solicitados con redacción académica formal lista para incorporarse al documento final.`
 };
 
-function buildMessages(history, message) {
+function formatGeminiHistory(history, message) {
+  const contents = [];
   const clean = (Array.isArray(history) ? history : [])
-    .slice(-4)
-    .filter(m => m && typeof m.text === 'string' && m.text.trim().length > 0 && !m.text.startsWith('⚠️'))
-    .map(m => ({ 
-      role: m.role === 'user' ? 'user' : 'assistant', 
-      content: m.text.trim() 
-    }));
+    .slice(-6)
+    .filter(m => m && typeof m.text === 'string' && m.text.trim().length > 0 && !m.text.startsWith('⚠️'))[cite: 8];
 
-  while (clean.length > 0 && clean[0].role !== 'user') {
-    clean.shift();
+  for (const m of clean) {
+    contents.push({
+      role: m.role === 'user' ? 'user' : 'model',
+      parts: [{ text: m.text.trim() }]
+    });
   }
 
-  return [...clean, { role: 'user', content: String(message).trim() }];
+  // Asegurar alternancia correcta para la API de Gemini
+  while (contents.length > 0 && contents[0].role !== 'user') {
+    contents.shift();
+  }
+
+  contents.push({
+    role: 'user',
+    parts: [{ text: String(message).trim() }]
+  });
+
+  return contents;
 }
 
 export default async function handler(req, res) {
@@ -68,13 +87,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY no configurada en Vercel.' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY no configurada en Vercel.' });
   }
 
   const { specialist = 'valeria', message = '', history = [], adminKey = '', userProfile = null } = req.body || {};
-  
+
   if (!message || typeof message !== 'string') {
     return res.status(400).json({ error: 'El mensaje es requerido.' });
   }
@@ -91,36 +110,38 @@ export default async function handler(req, res) {
     const currentUsage = usageByIp.get(clientIp) || 0;
     if (currentUsage >= FREE_LIMIT) {
       return res.status(429).json({
-        error: 'Has alcanzado el límite de 3 consultas gratuitas de prueba.'
+        error: 'Has alcanzado el límite de 3 consultas gratuitas de prueba. Suscríbete para acceso ilimitado.'
       });
     }
     usageByIp.set(clientIp, currentUsage + 1);
   }
 
-  let basePrompt = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
+  let systemInstruction = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
   if (userProfile && typeof userProfile === 'object') {
     const uName = userProfile.name ? String(userProfile.name).trim() : '';
     const uUni = userProfile.university ? String(userProfile.university).trim() : '';
     if (uName || uUni) {
-      basePrompt += `\n\nCONTEXTO ACADÉMICO: El estudiante se llama ${uName || 'Estudiante'} y pertenece a ${uUni || 'Universidad en Perú'}. Adapta las respuestas y la búsqueda de antecedentes a este perfil.`;
+      systemInstruction += `\n\nCONTEXTO ACADÉMICO: El estudiante se llama ${uName || 'Estudiante'} y pertenece a ${uUni || 'Universidad en Perú'}. Adapta el marco normativo y los repositorios institucionales priorizando esta universidad.`;
     }
   }
 
   try {
-    const messagesPayload = buildMessages(history, cleanMessage);
+    const contents = formatGeminiHistory(history, cleanMessage);
 
-    const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+
+    const upstream = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 4000,
-        system: basePrompt,
-        messages: messagesPayload
+        system_instruction: {
+          parts: [{ text: systemInstruction }]
+        },
+        contents: contents,
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: 3000
+        }
       })
     });
 
@@ -128,14 +149,13 @@ export default async function handler(req, res) {
 
     if (!upstream.ok) {
       return res.status(upstream.status).json({
-        error: data?.error?.message || 'Error reportado por Anthropic.'
+        error: data?.error?.message || 'Error reportado por la API de Gemini.'
       });
     }
 
-    const textBlock = Array.isArray(data.content) ? data.content.find(b => b.type === 'text') : null;
-    const reply = textBlock ? textBlock.text : 'No se generó contenido.';
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No se generó respuesta.';
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       reply,
       isAdmin,
       remainingUses: isAdmin ? 'unlimited' : Math.max(0, FREE_LIMIT - (usageByIp.get(clientIp) || 0))
