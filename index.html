@@ -119,62 +119,6 @@
   </div>
 </header>
       
-      <!-- LOGO CÓRTEX IDENTIDAD -->
-      <div class="flex items-center gap-3.5 cursor-pointer select-none" onclick="showLobbyView()">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-700 via-indigo-600 to-violet-500 p-[1px] shadow-lg shadow-violet-600/30 flex items-center justify-center">
-          <div class="w-full h-full bg-[#0d0d12] rounded-[11px] flex items-center justify-center relative overflow-hidden group">
-            <!-- Resplandor interno -->
-            <div class="absolute inset-0 bg-violet-600/20 rounded-[11px] blur-sm group-hover:bg-violet-600/40 transition"></div>
-            <!-- Isotipo SVG: Fusión Córtex & Psique -->
-            <svg class="w-5 h-5 text-violet-300 relative z-10 transition transform group-hover:scale-105" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <!-- Eje central del tridente / tallo cerebral -->
-              <path d="M12 2v20" stroke="url(#cortex-grad)" stroke-width="2.2" />
-              <!-- Hemisferio / Brazo izquierdo -->
-              <path d="M5 4.5C3.5 7 3.5 10 5.5 12.5C7.5 15 9.5 15.5 12 15.5" stroke="currentColor" />
-              <!-- Hemisferio / Brazo derecho -->
-              <path d="M19 4.5C20.5 7 20.5 10 18.5 12.5C16.5 15 14.5 15.5 12 15.5" stroke="currentColor" />
-              <!-- Nodo de conexión cognitiva -->
-              <circle cx="12" cy="8.5" r="1.5" fill="#c4b5fd" />
-              <defs>
-                <linearGradient id="cortex-grad" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#c4b5fd" />
-                  <stop offset="1" stop-color="#7c3aed" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <div class="flex items-center gap-1.5">
-            <span class="font-extrabold text-base tracking-tight text-white">Córtex</span>
-            <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-violet-950/80 text-violet-300 border border-violet-800/40 tracking-wider">AI</span>
-          </div>
-          <span class="text-[9px] text-zinc-400 font-mono tracking-wider -mt-0.5">CLINICAL SUITE</span>
-        </div>
-      </div>
-
-      <!-- ENLACES DE NAVEGACIÓN CON ESTADO MORADO ACTIVO -->
-      <nav id="landing-nav" class="hidden md:flex items-center gap-7 text-xs font-medium">
-        <a href="#especialistas" onclick="handleNavClick(this, 'especialistas')" class="nav-link text-zinc-400 hover:text-violet-300 transition-colors">Especialistas</a>
-        <a href="#comparativa" onclick="handleNavClick(this, 'comparativa')" class="nav-link text-zinc-400 hover:text-violet-300 transition-colors">Por qué Córtex</a>
-        <a href="#pasos" onclick="handleNavClick(this, 'pasos')" class="nav-link text-zinc-400 hover:text-violet-300 transition-colors">Cómo Empezar</a>
-        <a href="#precios" onclick="handleNavClick(this, 'precios')" class="nav-link text-zinc-400 hover:text-violet-300 transition-colors">Planes</a>
-        <a href="#testimonios" onclick="handleNavClick(this, 'testimonios')" class="nav-link text-zinc-400 hover:text-violet-300 transition-colors">Testimonios</a>
-        <a href="#faq" onclick="handleNavClick(this, 'faq')" class="nav-link text-zinc-400 hover:text-violet-300 transition-colors">FAQ</a>
-        <a href="#seguridad" onclick="handleNavClick(this, 'seguridad')" class="nav-link text-zinc-400 hover:text-violet-300 transition-colors">Ética &amp; CPsP</a>
-      </nav>
-
-      <div class="flex items-center gap-2.5">
-        <button id="nav-lobby-btn" onclick="showLobbyView()" class="text-xs font-semibold px-4 py-2 rounded-xl bg-violet-600/20 text-violet-300 border border-violet-500/40 transition hover:bg-violet-600 hover:text-white">
-          Lobby
-        </button>
-        <button id="nav-workspace-btn" onclick="showWorkspaceView()" class="text-xs font-semibold px-4 py-2 rounded-xl text-zinc-400 border border-transparent transition hover:bg-violet-600/20 hover:text-violet-300 hover:border-violet-500/30">
-          Workspace
-        </button>
-      </div>
-    </div>
-  </header>
-  
   <!-- CONTENEDOR DE PANTALLAS -->
   <div class="flex-1 flex overflow-hidden relative">
 
