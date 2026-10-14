@@ -1,6 +1,6 @@
 export const config = { maxDuration: 60 };
 
-const MODEL = 'claude-3-5-sonnet-20241022';
+const MODEL = 'claude-3-sonnet-20240229';
 const ADMIN_SECRET = 'adminortega09';
 const FREE_LIMIT = 3;
 const usageByIp = new Map();
