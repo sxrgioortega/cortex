@@ -119,17 +119,21 @@
   </div>
 </header>
       
-  <!-- CONTENEDOR PRINCIPAL -->
-  <div id="view-lobby" style="display: block;" class="w-full h-full overflow-y-auto">
+  <!-- CONTENEDOR PRINCIPAL CON RESPLANDOR AMBIENTAL MORADO -->
+  <div id="view-lobby" style="display: block;" class="w-full h-full overflow-y-auto glow-purple relative">
     
+    <!-- ESFERAS DE LUZ / DESTELLOS MORADOS DE FONDO -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-gradient-to-b from-purple-700/25 via-violet-600/15 to-transparent blur-[120px] pointer-events-none -z-10"></div>
+    <div class="absolute top-28 left-1/2 -translate-x-1/2 w-[450px] h-[220px] bg-violet-600/20 blur-[90px] rounded-full pointer-events-none -z-10"></div>
+
     <!-- HERO SECTION -->
-    <section class="pt-20 pb-16 px-6 text-center max-w-5xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/60 border border-violet-800/40 text-violet-300 text-xs font-semibold mb-6">
+    <section class="pt-20 pb-16 px-6 text-center max-w-5xl mx-auto relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/70 border border-violet-700/40 text-violet-300 text-xs font-semibold mb-6 shadow-sm shadow-purple-950/50">
         <span class="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
         Workspace Clínico & Psicométrico 2026
       </div>
       
-      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight drop-shadow-sm">
         El criterio clínico es tuyo.<br>
         <span class="bg-gradient-to-r from-violet-400 via-purple-300 to-indigo-300 bg-clip-text text-transparent">
           La redacción técnica y los baremos déjaselos a Córtex.
@@ -141,7 +145,7 @@
       </p>
 
       <div class="flex items-center justify-center gap-4">
-        <button onclick="showWorkspaceView()" class="px-6 py-3 text-sm font-bold rounded-xl bg-violet-600 text-white hover:bg-violet-500 shadow-lg shadow-violet-900/40 transition">
+        <button onclick="showWorkspaceView()" class="px-6 py-3 text-sm font-bold rounded-xl bg-violet-600 text-white hover:bg-violet-500 shadow-xl shadow-violet-900/50 transition">
           ABRIR WORKSPACE GRATUITO &rarr;
         </button>
         <a href="#planes" onclick="handleNavClick(this, 'planes')" class="px-6 py-3 text-sm font-semibold rounded-xl bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 hover:bg-zinc-800 transition">
@@ -149,32 +153,63 @@
         </a>
       </div>
 
-      <!-- 4 Tarjetas de Respaldo Técnico -->
+      <!-- 4 Tarjetas con Acentos Cromáticos -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
-        <div class="p-4 rounded-xl bg-cortex-card/60 border border-cortex-border text-left">
+        <div class="p-4 rounded-xl bg-cortex-card/70 border border-violet-500/20 text-left hover:border-violet-500/40 transition">
           <div class="text-violet-400 font-bold text-sm mb-1">DSM-5-TR</div>
           <div class="text-zinc-400 text-xs">Criterios nosológicos oficiales y diagnósticos diferenciales.</div>
         </div>
-        <div class="p-4 rounded-xl bg-cortex-card/60 border border-cortex-border text-left">
-          <div class="text-violet-400 font-bold text-sm mb-1">Psicometría</div>
+        <div class="p-4 rounded-xl bg-cortex-card/70 border border-cyan-500/20 text-left hover:border-cyan-500/40 transition">
+          <div class="text-cyan-400 font-bold text-sm mb-1">Psicometría</div>
           <div class="text-zinc-400 text-xs">Baremos normativos de WISC-V, WAIS-IV, BDI-II y STAI.</div>
         </div>
-        <div class="p-4 rounded-xl bg-cortex-card/60 border border-cortex-border text-left">
-          <div class="text-violet-400 font-bold text-sm mb-1">Informe Psicológico</div>
+        <div class="p-4 rounded-xl bg-cortex-card/70 border border-amber-500/20 text-left hover:border-amber-500/40 transition">
+          <div class="text-amber-400 font-bold text-sm mb-1">Informe Psicológico</div>
           <div class="text-zinc-400 text-xs">Estructura formal con áreas, tablas y recomendaciones.</div>
         </div>
-        <div class="p-4 rounded-xl bg-cortex-card/60 border border-cortex-border text-left">
-          <div class="text-violet-400 font-bold text-sm mb-1">Privacidad Total</div>
+        <div class="p-4 rounded-xl bg-cortex-card/70 border border-emerald-500/20 text-left hover:border-emerald-500/40 transition">
+          <div class="text-emerald-400 font-bold text-sm mb-1">Privacidad Total</div>
           <div class="text-zinc-400 text-xs">Casos anónimos. Tus datos clínicos no entrenan IA pública.</div>
         </div>
       </div>
+    </section>
+
+    <!-- ENVOLTORIO CONTENEDOR PARA LAS DEMÁS SECCIONES -->
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- 4 Tarjetas con Acentos Cromáticos Diferenciados -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
+          <!-- DSM-5-TR: Violeta Clínico -->
+          <div class="p-4 rounded-xl bg-cortex-card/70 border border-violet-500/20 text-left hover:border-violet-500/40 transition">
+            <div class="text-violet-400 font-bold text-sm mb-1">DSM-5-TR</div>
+            <div class="text-zinc-400 text-xs">Criterios nosológicos oficiales y diagnósticos diferenciales.</div>
+          </div>
+
+          <!-- Psicometría: Azul Cian / Índigo -->
+          <div class="p-4 rounded-xl bg-cortex-card/70 border border-cyan-500/20 text-left hover:border-cyan-500/40 transition">
+            <div class="text-cyan-400 font-bold text-sm mb-1">Psicometría</div>
+            <div class="text-zinc-400 text-xs">Baremos normativos de WISC-V, WAIS-IV, BDI-II y STAI.</div>
+          </div>
+
+          <!-- Informe Psicológico: Ámbar / Dorado -->
+          <div class="p-4 rounded-xl bg-cortex-card/70 border border-amber-500/20 text-left hover:border-amber-500/40 transition">
+            <div class="text-amber-400 font-bold text-sm mb-1">Informe Psicológico</div>
+            <div class="text-zinc-400 text-xs">Estructura formal con áreas, tablas y recomendaciones.</div>
+          </div>
+
+          <!-- Privacidad Total: Verde Esmeralda -->
+          <div class="p-4 rounded-xl bg-cortex-card/70 border border-emerald-500/20 text-left hover:border-emerald-500/40 transition">
+            <div class="text-emerald-400 font-bold text-sm mb-1">Privacidad Total</div>
+            <div class="text-zinc-400 text-xs">Casos anónimos. Tus datos clínicos no entrenan IA pública.</div>
+          </div>
+        </div>
     </section>
 
     <!-- ENVOLTORIO PARA QUE NO SE ENSANCHEN LAS SECCIONES -->
     <div class="max-w-6xl mx-auto px-6">
 
       <!-- SECCIÓN: COMPARATIVA -->
-      <section id="comparativa" class="py-16 border-t border-cortex-border bg-cortex-card/30">
+      <section id="comparativa" class="py-16 border-t border-cortex-border">
         <div class="text-center mb-8">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Eficiencia Real</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-white">El problema no es tu vocación. Es tabular a mano a las 2 AM.</h2>
@@ -443,7 +478,7 @@
       </section>
 
       <!-- SECCIÓN: PRUEBA SOCIAL / TESTIMONIOS WHATSAPP -->
-      <section id="testimonios" class="py-16 border-t border-cortex-border bg-cortex-card/30">
+      <section id="testimonios" class="py-16 border-t border-cortex-border">
         <div class="text-center mb-10">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Resultados Reales</span>
           <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Lo que dicen estudiantes e internos que ya usan Córtex</h2>
