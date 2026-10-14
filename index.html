@@ -89,7 +89,6 @@
 
   <!-- Header con Marca Limpia y Enlaces Calibrados -->
   <header class="border-b border-cortex-border bg-cortex-bg/90 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-    <!-- LOGO CORTEX -->
     <a href="#" onclick="showLobbyView(); window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex items-center gap-3 cursor-pointer select-none">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-900 via-indigo-800 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/40">
         <svg class="w-6 h-6 text-violet-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -152,7 +151,6 @@
         </a>
       </div>
 
-      <!-- 4 Tarjetas con Acentos Cromáticos Diferenciados -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
         <div class="p-4 rounded-xl bg-cortex-card/70 border border-violet-500/20 text-left hover:border-violet-500/40 transition">
           <div class="text-violet-400 font-bold text-sm mb-1">DSM-5-TR</div>
@@ -683,14 +681,12 @@
 
     <!-- AREA DE CONVERSACION -->
     <section class="flex-1 min-w-0 flex flex-col bg-cortex-bg overflow-hidden h-full">
-      <!-- Mensajes -->
       <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4"></div>
 
       <!-- Barra de entrada de texto e interacciones -->
       <div class="p-3 md:p-4 border-t border-cortex-border bg-cortex-card/30 shrink-0">
         <div class="max-w-4xl mx-auto space-y-2">
           
-          <!-- Chips de preguntas sugeridas y botón Limpiar Chat unificados -->
           <div class="flex items-center justify-between gap-2">
             <div id="chips-container" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs flex-1"></div>
             <button onclick="clearHistory()" title="Limpiar conversación actual" class="shrink-0 text-[10px] text-zinc-400 hover:text-rose-400 bg-cortex-card hover:bg-zinc-800 border border-cortex-border px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
@@ -923,7 +919,6 @@
     function setSpecialist(key) {
       activeKey = key;
 
-      // Actualizar el estado visual de los chips superiores
       ['valeria', 'mateo', 'andres'].forEach(k => {
         const tab = document.getElementById(`tab-${k}`);
         if (!tab) return;
@@ -941,7 +936,6 @@
         }
       });
 
-      // Actualizar los chips sugeridos
       const chipsBox = document.getElementById('chips-container');
       if (chipsBox) {
         chipsBox.innerHTML = CONFIG[key].chips.map(chip => `
@@ -1049,8 +1043,8 @@
       box.innerHTML = list.map((item, idx) => {
         if (item.role === 'user') {
           return `
-            <div class="flex items-start gap-3 max-w-xl ml-auto justify-end">
-              <div class="bg-violet-600 text-white p-3 rounded-xl text-xs leading-relaxed whitespace-pre-wrap">
+            <div class="flex justify-end my-2">
+              <div class="max-w-[85%] sm:max-w-[75%] bg-violet-600/90 hover:bg-violet-600 text-white p-3.5 px-4 rounded-2xl rounded-tr-sm text-xs leading-relaxed shadow-md shadow-violet-950/20 whitespace-pre-wrap border border-violet-400/20">
                 ${item.text}
               </div>
             </div>
@@ -1059,16 +1053,16 @@
           const parsed = marked.parse(item.text);
           const wordCount = item.text.trim().split(/\s+/).filter(Boolean).length;
           return `
-            <div class="flex items-start gap-3 max-w-3xl">
-              <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0" />
-              <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
+            <div class="flex items-start gap-3 max-w-3xl my-2">
+              <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0 mt-0.5" />
+              <div class="bg-cortex-card border border-cortex-border p-5 rounded-2xl rounded-tl-sm text-xs text-zinc-200 leading-relaxed w-full shadow-lg">
                 <div class="flex items-center justify-between mb-3 border-b border-zinc-800 pb-2">
                   <span class="text-[10px] text-zinc-500 font-mono">${wordCount} palabras</span>
                   <div class="flex items-center gap-1.5">
-                    <button id="copy-btn-${idx}" class="text-[10px] text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 rounded transition flex items-center gap-1.5 border border-zinc-700/60">
+                    <button id="copy-btn-${idx}" class="text-[10px] text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5 border border-zinc-700/60">
                       <i class="fa-regular fa-copy"></i> Copiar informe
                     </button>
-                    <button id="word-btn-${idx}" class="text-[10px] text-indigo-300 hover:text-white bg-indigo-950/50 hover:bg-indigo-900/60 px-2.5 py-1 rounded transition flex items-center gap-1.5 border border-indigo-700/50">
+                    <button id="word-btn-${idx}" class="text-[10px] text-indigo-300 hover:text-white bg-indigo-950/50 hover:bg-indigo-900/60 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5 border border-indigo-700/50">
                       <i class="fa-regular fa-file-word"></i> Descargar Word
                     </button>
                   </div>
@@ -1098,7 +1092,6 @@
       const val = input.value.trim();
       if (!val) return;
 
-      // Atajo de Administrador en el chat
       if (val.startsWith('/admin ')) {
         const key = val.replace('/admin ', '').trim();
         localStorage.setItem('cortex_admin_key', key);
@@ -1110,7 +1103,6 @@
 
       const isAdminUser = localStorage.getItem('cortex_admin_key') === 'adminortega09';
 
-      // Validación del Paywall suave
       if (!isAdminUser && freeQueriesUsed >= FREE_LIMIT) {
         openPaywallModal();
         return;
@@ -1129,12 +1121,18 @@
       const data = CONFIG[activeKey];
 
       const liveDiv = document.createElement('div');
-      liveDiv.className = 'flex items-start gap-3 max-w-3xl';
+      liveDiv.className = 'flex items-start gap-3 max-w-3xl my-2';
       liveDiv.innerHTML = `
-        <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0 mt-1" />
-        <div class="bg-cortex-card border border-cortex-border p-5 rounded-xl text-xs text-zinc-200 leading-relaxed w-full">
+        <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0 mt-0.5" />
+        <div class="bg-cortex-card border border-cortex-border p-4 sm:p-5 rounded-2xl rounded-tl-sm text-xs text-zinc-300 leading-relaxed w-full shadow-lg">
           <div id="live-stream-content" class="markdown-body">
-            <span class="inline-block w-2 h-2 rounded-full bg-violet-400 animate-ping"></span> Procesando según criterios clínicos...
+            <span class="inline-flex items-center gap-2.5 text-violet-300 font-medium">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-500"></span>
+              </span>
+              Procesando según criterios clínicos...
+            </span>
           </div>
         </div>
       `;
