@@ -1,6 +1,7 @@
 export const config = { maxDuration: 60 };
 
-const MODEL = 'claude-3-5-haiku-20241022';
+// Modelo estándar de Haiku con acceso universal garantizado
+const MODEL = 'claude-3-haiku-20240307';
 
 // CLAVE MAESTRA
 const ADMIN_SECRET = 'adminortega09';
@@ -65,7 +66,7 @@ function buildMessages(history, message) {
     .map(m => ({ 
       role: m.role === 'user' ? 'user' : 'assistant', 
       content: m.text || m.content 
-    }));
+    }))[cite: 7];
   while (clean.length && clean[0].role !== 'user') clean.shift();
   return [...clean, { role: 'user', content: message }];
 }
