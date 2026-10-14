@@ -78,23 +78,12 @@
     .markdown-body ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.65rem; color: #d4d4d8; }
     .markdown-body li { margin-bottom: 0.25rem; }
     .markdown-body strong { color: #fafafa; font-weight: 700; }
-   .markdown-body blockquote { 
-      border-left: 2px solid #8b5cf6; 
-      padding-left: 0.75rem; 
-      color: #d4d4d8; 
-      margin: 0.5rem 0; 
-      background: transparent; 
-    }
-    .markdown-body pre {
-      background: #0d0d11 !important;
-      border: 1px solid #23232a;
-      border-radius: 0.75rem;
-      padding: 0.75rem 1rem;
-      overflow-x: auto;
-    }
-    .markdown-body code {
-      font-family: inherit;
-    }
+    .markdown-body blockquote { border-left: 2px solid #8b5cf6; padding-left: 0.75rem; color: #d4d4d8; margin: 0.5rem 0; background: transparent; }
+    .markdown-body pre { background: #0d0d11 !important; border: 1px solid #23232a; border-radius: 0.75rem; padding: 0.75rem 1rem; overflow-x: auto; }
+    .markdown-body code { font-family: inherit; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 0.85rem; font-size: 0.85rem; }
+    .markdown-body th, .markdown-body td { border: 1px solid #27272a; padding: 0.45rem 0.65rem; text-align: left; }
+    .markdown-body th { background: #18181b; color: #f4f4f5; font-weight: 600; }
   </style>
 </head>
 
@@ -127,7 +116,7 @@
     <!-- BOTONES VISTA -->
     <div class="flex items-center gap-2">
       <button id="btn-nav-lobby" onclick="showLobbyView()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition">Lobby</button>
-      <button id="btn-nav-workspace" onclick="showWorkspaceView()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition">Workspace</button>
+      <button id="btn-nav-workspace" onclick="handleWorkspaceNavClick()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition">Workspace</button>
     </div>
   </header>
       
@@ -156,7 +145,7 @@
       </p>
 
       <div class="flex items-center justify-center gap-4">
-        <button onclick="showWorkspaceView()" class="px-6 py-3 text-sm font-bold rounded-xl bg-violet-600 text-white hover:bg-violet-500 shadow-xl shadow-violet-900/50 transition">
+        <button onclick="handleWorkspaceNavClick()" class="px-6 py-3 text-sm font-bold rounded-xl bg-violet-600 text-white hover:bg-violet-500 shadow-xl shadow-violet-900/50 transition">
           ABRIR WORKSPACE GRATUITO &rarr;
         </button>
         <a href="#planes" onclick="handleNavClick(this, 'planes')" class="px-6 py-3 text-sm font-semibold rounded-xl bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 hover:bg-zinc-800 transition">
@@ -339,7 +328,7 @@
         </div>
 
         <div class="text-center mt-10">
-          <button onclick="showWorkspaceView()" class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-violet-600/30 transition inline-flex items-center gap-2">
+          <button onclick="handleWorkspaceNavClick()" class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-violet-600/30 transition inline-flex items-center gap-2">
             <span>Comenzar ahora mismo</span>
             <i class="fa-solid fa-arrow-right text-xs"></i>
           </button>
@@ -641,7 +630,7 @@
           <a href="#especialistas" class="hover:text-zinc-300 transition">Especialistas</a>
           <a href="#planes" class="hover:text-zinc-300 transition">Planes</a>
           <a href="#faq" class="hover:text-zinc-300 transition">FAQ</a>
-          <button onclick="showWorkspaceView()" class="text-violet-400 hover:underline">Abrir Workspace</button>
+          <button onclick="handleWorkspaceNavClick()" class="text-violet-400 hover:underline">Abrir Workspace</button>
         </div>
       </footer>
 
@@ -653,7 +642,14 @@
     <!-- BARRA SUPERIOR / LATERAL DE ESPECIALISTAS -->
     <aside class="w-full md:w-64 bg-cortex-card border-b md:border-b-0 md:border-r border-cortex-border flex flex-col justify-between shrink-0">
       <div class="p-2 md:p-4">
-        <span class="hidden md:block text-[10px] font-bold text-zinc-400 uppercase tracking-wider px-2 mb-2">Especialistas</span>
+        <div class="flex items-center justify-between px-2 mb-2">
+          <span class="hidden md:block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Especialistas</span>
+          <!-- Botón Perfil Estudiante -->
+          <button onclick="openProfileModal()" class="text-[10px] text-violet-400 hover:text-violet-300 flex items-center gap-1 transition">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span id="user-profile-badge" class="font-medium truncate max-w-[100px]">Mi Perfil</span>
+          </button>
+        </div>
         <div class="flex flex-row md:flex-col gap-2 overflow-x-auto pb-1 md:pb-0">
           <!-- Valeria -->
           <button id="tab-valeria" onclick="setSpecialist('valeria')" class="shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-violet-500/50 bg-violet-950/30 text-left transition">
@@ -724,6 +720,60 @@
     </section>
   </div>
 
+  <!-- MODAL DE PERFIL / UNIVERSIDAD DEL ESTUDIANTE -->
+  <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
+    <div class="bg-cortex-card border border-cortex-border max-w-md w-full rounded-2xl p-6 shadow-2xl relative">
+      <div class="w-12 h-12 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center mx-auto text-xl mb-4">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      
+      <h3 class="text-base font-bold text-white mb-1 text-center">Configura tu Perfil Académico</h3>
+      <p class="text-xs text-zinc-400 leading-relaxed mb-5 text-center">
+        Tus especialistas adaptarán las formulaciones clínicas, los baremos y la búsqueda de antecedentes al repositorio de tu universidad en Perú.
+      </p>
+
+      <form onsubmit="saveUserProfile(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Tu Nombre de Pila</label>
+          <input type="text" id="profile-name-input" required placeholder="Ej. Sergio" class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Universidad (Perú)</label>
+          <select id="profile-uni-select" required class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+            <option value="" disabled selected>Selecciona tu universidad...</option>
+            <option value="Universidad Tecnológica del Perú (UTP)">Universidad Tecnológica del Perú (UTP)</option>
+            <option value="Universidad César Vallejo (UCV)">Universidad César Vallejo (UCV)</option>
+            <option value="Universidad Privada Antenor Orrego (UPAO)">Universidad Privada Antenor Orrego (UPAO)</option>
+            <option value="Universidad Nacional Mayor de San Marcos (UNMSM)">Universidad Nacional Mayor de San Marcos (UNMSM)</option>
+            <option value="Pontificia Universidad Católica del Perú (PUCP)">Pontificia Universidad Católica del Perú (PUCP)</option>
+            <option value="Universidad Peruana Cayetano Heredia (UPCH)">Universidad Peruana Cayetano Heredia (UPCH)</option>
+            <option value="Universidad de San Martín de Porres (USMP)">Universidad de San Martín de Porres (USMP)</option>
+            <option value="Universidad Católica de Santa María (UCSM)">Universidad Católica de Santa María (UCSM)</option>
+            <option value="Universidad Nacional de Piura (UNP)">Universidad Nacional de Piura (UNP)</option>
+            <option value="Universidad Privada del Norte (UPN)">Universidad Privada del Norte (UPN)</option>
+            <option value="Universidad Continental (UC)">Universidad Continental</option>
+            <option value="Universidad Peruana de Ciencias Aplicadas (UPC)">Universidad Peruana de Ciencias Aplicadas (UPC)</option>
+            <option value="Universidad Ricardo Palma (URP)">Universidad Ricardo Palma (URP)</option>
+            <option value="Universidad Nacional de Trujillo (UNT)">Universidad Nacional de Trujillo (UNT)</option>
+            <option value="Universidad Nacional de San Agustín (UNSA)">Universidad Nacional de San Agustín (UNSA)</option>
+            <option value="Universidad Científica del Sur (UCSUR)">Universidad Científica del Sur</option>
+            <option value="Otra Universidad del Perú">Otra Universidad del Perú</option>
+          </select>
+        </div>
+
+        <div class="pt-2 flex gap-3">
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs text-center transition shadow-lg shadow-violet-950/40">
+            Guardar y Entrar al Workspace
+          </button>
+          <button type="button" onclick="closeProfileModal()" class="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-xs transition">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL SOFT PAYWALL (LÍMITE ALCANZADO) -->
   <div id="paywall-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
     <div class="bg-cortex-card border border-cortex-border max-w-md w-full rounded-2xl p-6 text-center shadow-2xl relative">
@@ -762,7 +812,11 @@
         title: 'Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)',
         subtitle: 'Clínica & DSM-5-TR',
         avatar: './valeria.jpg',
-        welcome: 'Hola. Soy la Dra. Valeria. Comparte los signos, síntomas o motivo de consulta para estructurar la formulación clínica bajo el DSM-5-TR, calcular diagnósticos diferenciales y sustentar criterios.',
+        getWelcome: (name, uni) => {
+          const greet = name ? `Hola, ${name}.` : 'Hola.';
+          const uniRef = uni ? ` Tomaré en cuenta los criterios evaluativos de tu facultad en ${uni}.` : '';
+          return `${greet} Soy la Dra. Valeria. Comparte los signos, síntomas o viñeta de consulta para estructurar la formulación clínica bajo el DSM-5-TR, calcular diagnósticos diferenciales y sustentar criterios.${uniRef}`;
+        },
         chips: [
           'Caso de Ansiedad Generalizada vs Pánico',
           'Diferencial: Depresión Mayor vs Distimia',
@@ -774,7 +828,11 @@
         title: 'Dr. Mateo · Psicometría, Baremos y Evaluación',
         subtitle: 'Psicometría & Baremos',
         avatar: './mateo.jpg',
-        welcome: 'Hola. Soy el Dr. Mateo. Facilítame el instrumento y las puntuaciones directas (PD) o baremos para calcular percentiles y redactar el informe técnico.',
+        getWelcome: (name, uni) => {
+          const greet = name ? `Hola, ${name}.` : 'Hola.';
+          const uniRef = uni ? ` Si tu práctica para ${uni} requiere baremos peruanos específicos, indícalo directamente.` : '';
+          return `${greet} Soy el Dr. Mateo. Facilítame el instrumento y las puntuaciones directas (PD) o baremos para calcular percentiles y redactar el informe técnico.${uniRef}`;
+        },
         chips: [
           'Informe para BDI-II (PD 23, adulto)',
           'Interpretación WISC-V (Discrepancias)',
@@ -786,12 +844,16 @@
         title: 'Mg. Andrés · Metodología de Investigación & APA 7',
         subtitle: 'Metodología & APA 7',
         avatar: './andres.jpg',
-        welcome: 'Hola. Soy el Mg. Andrés. Diseñemos ecuaciones de búsqueda científica o formateemos citas según APA 7ma edición.',
+        getWelcome: (name, uni) => {
+          const greet = name ? `Hola, ${name}.` : 'Hola.';
+          const uniRef = uni ? ` Diseñemos antecedentes priorizando el repositorio de ${uni} y la regla de 1 internacional, 1 nacional y 1 regional.` : '';
+          return `${greet} Soy el Mg. Andrés. Diseñemos antecedentes, ecuaciones de búsqueda científica o matrices metodológicas según APA 7ma edición.${uniRef}`;
+        },
         chips: [
-          'Ecuación Scopus / SciELO para Tesis',
-          'Criterios PRISMA para Revisión',
-          'Citas con 3 o más autores en APA 7',
-          'Matriz de Consistencia Metodológica'
+          '3 Antecedentes (Int/Nac/Reg) para mi Tesis',
+          'Ecuación Scopus / SciELO para Psicología',
+          'Matriz de Consistencia Metodológica',
+          'Citas con 3 o más autores en APA 7'
         ]
       }
     };
@@ -801,6 +863,70 @@
 
     const FREE_LIMIT = 3;
     let freeQueriesUsed = parseInt(localStorage.getItem('cortex_free_queries') || '0', 10);
+
+    // Manejo de Perfil del Estudiante
+    let userProfile = null;
+    try {
+      userProfile = JSON.parse(localStorage.getItem('cortex_user_profile') || 'null');
+    } catch(e) {
+      userProfile = null;
+    }
+
+    function updateUserProfileUI() {
+      const badge = document.getElementById('user-profile-badge');
+      if (!badge) return;
+      if (userProfile && userProfile.name) {
+        badge.textContent = userProfile.name;
+        badge.title = `${userProfile.name} · ${userProfile.university || 'Perú'}`;
+      } else {
+        badge.textContent = 'Mi Perfil';
+        badge.title = 'Configura tu nombre y universidad';
+      }
+    }
+
+    function openProfileModal() {
+      const modal = document.getElementById('profile-modal');
+      const nameInput = document.getElementById('profile-name-input');
+      const uniSelect = document.getElementById('profile-uni-select');
+      if (userProfile) {
+        if (nameInput) nameInput.value = userProfile.name || '';
+        if (uniSelect) uniSelect.value = userProfile.university || '';
+      }
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeProfileModal() {
+      const modal = document.getElementById('profile-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function saveUserProfile(e) {
+      e.preventDefault();
+      const name = document.getElementById('profile-name-input').value.trim();
+      const uni = document.getElementById('profile-uni-select').value;
+      if (!name || !uni) return;
+
+      userProfile = { name, university: uni };
+      localStorage.setItem('cortex_user_profile', JSON.stringify(userProfile));
+      updateUserProfileUI();
+      closeProfileModal();
+      showWorkspaceView();
+      renderChat();
+    }
+
+    function handleWorkspaceNavClick() {
+      if (!userProfile) {
+        openProfileModal();
+      } else {
+        showWorkspaceView();
+      }
+    }
 
     function updateTrialUI() {
       const badge = document.getElementById('trial-counter-badge');
@@ -926,7 +1052,7 @@
 
     function openSpecialist(key) {
       setSpecialist(key);
-      showWorkspaceView();
+      handleWorkspaceNavClick();
     }
 
     function setSpecialist(key) {
@@ -1041,12 +1167,16 @@
       const list = chatHistories[activeKey];
       const data = CONFIG[activeKey];
 
+      const uName = userProfile ? userProfile.name : '';
+      const uUni = userProfile ? userProfile.university : '';
+      const welcomeText = typeof data.getWelcome === 'function' ? data.getWelcome(uName, uUni) : data.welcome;
+
       if (list.length === 0) {
         box.innerHTML = `
           <div class="flex items-start gap-3 max-w-2xl">
             <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0" />
             <div class="bg-cortex-card border border-cortex-border p-4 rounded-xl text-xs text-zinc-300 leading-relaxed">
-              ${data.welcome}
+              ${welcomeText}
             </div>
           </div>
         `;
@@ -1144,7 +1274,7 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-500"></span>
               </span>
-              Procesando según criterios clínicos...
+              Procesando según criterios de tu universidad...
             </span>
           </div>
         </div>
@@ -1164,7 +1294,8 @@
             specialist: activeKey,
             message: val,
             history: chatHistories[activeKey].slice(0, -1),
-            adminKey: storedAdminKey
+            adminKey: storedAdminKey,
+            userProfile: userProfile || null
           })
         });
 
@@ -1273,6 +1404,7 @@
 
     setSpecialist('valeria');
     updateTrialUI();
+    updateUserProfileUI();
   </script>
 </body>
 </html>
