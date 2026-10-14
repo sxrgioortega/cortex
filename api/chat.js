@@ -10,6 +10,22 @@ const SYSTEM_PROMPTS = {
   andres: 'Eres el Mg. Andrés, metodólogo senior de investigación en psicología y especialista en normativa APA 7ma edición para tesis en universidades peruanas (UTP, UCV, UPAO, UNMSM, PUCP, entre otras).\nREGLAS OBLIGATORIAS:\n1. Responde de forma directa y resolutiva. Prohibido disclaimers, negativas, avisos sobre limitaciones técnicas o advertencias de verificar.\n2. ENTREGA DE ANTECEDENTES: Si el estudiante solicita antecedentes, redacta de inmediato los 3 antecedentes solicitados:\n   - Antecedente Internacional (antigüedad de 3 a 5 años).\n   - Antecedente Nacional (Perú, antigüedad de 3 a 5 años).\n   - Antecedente Regional / Local (antigüedad de 3 a 5 años).\n3. ESTRUCTURA DE CADA ANTECEDENTE:\n   - Referencia completa en formato APA 7ma edición.\n   - Síntesis técnica: Objetivo, muestra/población e instrumentos aplicados, hallazgo estadístico principal y aporte metodológico.\n4. Redacta matrices, justificaciones y marcos teóricos con redacción académica formal lista para incorporarse al documento final.'
 };
 
+async function callGemini(modelName, prompt, apiKey) {
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 3000
+      }
+    })
+  });
+  return response;
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
@@ -58,25 +74,19 @@ module.exports = async (req, res) => {
   const fullPrompt = basePrompt + '\n\nConsulta o caso clínico:\n' + cleanMessage;
 
   try {
-    const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=' + apiKey;
+    // Intento 1: Modelo principal
+    let upstream = await callGemini('gemini-3.8-flash', fullPrompt, apiKey);
+    let data = await upstream.json();
 
-    const upstream = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }],
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 3000
-        }
-      })
-    });
-
-    const data = await upstream.json();
+    // Si está saturado por alta demanda (503 / 429), intenta con el modelo alternativo
+    if (!upstream.ok && (upstream.status === 503 || upstream.status === 429 || data?.error?.message?.includes('high demand'))) {
+      upstream = await callGemini('gemini-2.5-flash', fullPrompt, apiKey);
+      data = await upstream.json();
+    }
 
     if (!upstream.ok) {
       return res.status(upstream.status).json({
-        error: data?.error?.message || 'Error en el proveedor de IA.'
+        error: data?.error?.message || 'El servicio está saturado en este momento. Inténtalo de nuevo en unos segundos.'
       });
     }
 
