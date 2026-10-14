@@ -230,60 +230,57 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-6">
-          <div onclick="openSpecialist('valeria')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-lg mb-4">
-                <i class="fa-solid fa-notes-medical"></i>
-              </div>
-              <span class="text-[11px] font-semibold text-violet-400 uppercase tracking-wider">Módulo 01</span>
-              <h3 class="text-lg font-bold text-white mt-1 mb-2">Dra. Valeria</h3>
-              <p class="text-[11px] text-zinc-400 font-mono mb-2">Clínica · DSM-5-TR / CIE-10</p>
-              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
-                Estructura formulaciones clínicas, establece diagnósticos diferenciales sustentados en criterios A-D y orienta el plan de evaluación.
-              </p>
-            </div>
-            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
-              <span>Consultar caso</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </div>
+        <!-- MÓDULO 01: Dra. Valeria -->
+        <div onclick="openSpecialist('valeria')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition">
+          <div>
+            <img src="./valeria.jpg" alt="Dra. Valeria" class="w-14 h-14 rounded-full object-cover border-2 border-violet-500/40 shadow-lg shadow-violet-950/50 mb-3" />
+            <span class="text-[11px] font-semibold text-violet-400 uppercase tracking-wider">Módulo 01</span>
+            <h3 class="text-lg font-bold text-white mt-1 mb-2">Dra. Valeria</h3>
+            <p class="text-[11px] text-zinc-400 font-mono mb-2">Clínica · DSM-5-TR / CIE-10</p>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Estructura formulaciones clínicas, establece diagnósticos diferenciales sustentados en criterios A-D y orienta el plan de evaluación.
+            </p>
           </div>
-
-          <div onclick="openSpecialist('mateo')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-lg mb-4">
-                <i class="fa-solid fa-chart-pie"></i>
-              </div>
-              <span class="text-[11px] font-semibold text-indigo-400 uppercase tracking-wider">Módulo 02</span>
-              <h3 class="text-lg font-bold text-white mt-1 mb-2">Dr. Mateo</h3>
-              <p class="text-[11px] text-indigo-400 font-mono mb-2">Psicometría · Baremos &amp; Tests</p>
-              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
-                Convierte puntuaciones directas (PD), detecta discrepancias inter-índices (WISC/WAIS/BDI) y redacta la tabla de resultados para informe.
-              </p>
-            </div>
-            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-indigo-300">
-              <span>Interpretar prueba</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </div>
-          </div>
-
-          <div onclick="openSpecialist('andres')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition group">
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-lg mb-4">
-                <i class="fa-solid fa-book-bookmark"></i>
-              </div>
-              <span class="text-[11px] font-semibold text-purple-400 uppercase tracking-wider">Módulo 03</span>
-              <h3 class="text-lg font-bold text-white mt-1 mb-2">Mg. Andrés</h3>
-              <p class="text-[11px] text-purple-400 font-mono mb-2">Metodología · APA 7 &amp; Tesis</p>
-              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
-                Genera operadores booleanos precisos para Scopus/SciELO, alinea matrices de consistencia y formatea citas según APA 7ma edición.
-              </p>
-            </div>
-            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-purple-300">
-              <span>Formatear marco</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </div>
+          <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
+            <span>Consultar caso</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
+
+        <!-- MÓDULO 02: Dr. Mateo -->
+        <div onclick="openSpecialist('mateo')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-cyan-500/60 rounded-2xl p-6 flex flex-col justify-between transition">
+          <div>
+            <img src="./mateo.jpg" alt="Dr. Mateo" class="w-14 h-14 rounded-full object-cover border-2 border-cyan-500/40 shadow-lg shadow-cyan-950/50 mb-3" />
+            <span class="text-[11px] font-semibold text-cyan-400 uppercase tracking-wider">Módulo 02</span>
+            <h3 class="text-lg font-bold text-white mt-1 mb-2">Dr. Mateo</h3>
+            <p class="text-[11px] text-zinc-400 font-mono mb-2">Psicometría · Baremos & Tests</p>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Convierte puntuaciones directas (PD), detecta discrepancias inter-índices (WISC/WAIS/BDI) y redacta la tabla de resultados para informe.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-cyan-300">
+            <span>Interpretar prueba</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+
+        <!-- MÓDULO 03: Mg. Andrés -->
+        <div onclick="openSpecialist('andres')" class="cursor-pointer bg-cortex-card border border-cortex-border hover:border-amber-500/60 rounded-2xl p-6 flex flex-col justify-between transition">
+          <div>
+            <img src="./andres.jpg" alt="Mg. Andrés" class="w-14 h-14 rounded-full object-cover border-2 border-amber-500/40 shadow-lg shadow-amber-950/50 mb-3" />
+            <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">Módulo 03</span>
+            <h3 class="text-lg font-bold text-white mt-1 mb-2">Mg. Andrés</h3>
+            <p class="text-[11px] text-zinc-400 font-mono mb-2">Metodología · APA 7 & Tesis</p>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Genera operadores booleanos precisos para Scopus/SciELO, alinea matrices de consistencia y formatea citas según APA 7ma edición.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-amber-300">
+            <span>Formatear marco</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
       </section>
 
       <!-- SECCIÓN: CÓMO EMPEZAR EN 3 PASOS -->
