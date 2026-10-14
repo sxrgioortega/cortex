@@ -2,6 +2,15 @@ export const config = { maxDuration: 60 };
 
 const MODEL = 'claude-haiku-5-5';
 
+// CLAVE MAESTRA PARA TI: Cámbiala por la contraseña que quieras
+const ADMIN_SECRET = 'adminortega09';
+
+// Límite de consultas gratuitas por IP
+const FREE_LIMIT = 3;
+
+// Registro en memoria de consultas por IP (resiste modo incógnito)
+const usageByIp = new Map();
+
 const SYSTEM_PROMPTS = {
   valeria: `Eres la Dra. Valeria, especialista en Psicología Clínica y diagnóstico bajo el DSM-5-TR.
 Estructura obligatoria del informe:
@@ -65,9 +74,29 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'ANTHROPIC_API_KEY no configurada en Vercel.' });
   }
 
-  const { specialist, message, history = [] } = req.body || {};
+  const { specialist, message, history = [], adminKey } = req.body || {};
   if (!message) {
     return res.status(400).json({ error: 'El mensaje es requerido.' });
+  }
+
+  // Detectar IP del cliente
+  const clientIp = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown')
+    .toString()
+    .split(',')[0]
+    .trim();
+
+  // Verificación de Admin (no gasta cuota)
+  const isAdmin = adminKey === ADMIN_SECRET || message.includes(`--admin=${ADMIN_SECRET}`);
+  const cleanMessage = message.replace(`--admin=${ADMIN_SECRET}`, '').trim();
+
+  if (!isAdmin) {
+    const currentUsage = usageByIp.get(clientIp) || 0;
+    if (currentUsage >= FREE_LIMIT) {
+      return res.status(429).json({
+        error: 'Has alcanzado el límite de 3 consultas gratuitas de prueba. Suscríbete a un plan para acceso ilimitado.'
+      });
+    }
+    usageByIp.set(clientIp, currentUsage + 1);
   }
 
   try {
@@ -82,7 +111,7 @@ export default async function handler(req, res) {
         model: MODEL,
         max_tokens: 8000,
         system: SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria,
-        messages: buildMessages(history, message)
+        messages: buildMessages(history, cleanMessage)
       })
     });
 
@@ -97,7 +126,11 @@ export default async function handler(req, res) {
     const textBlock = (data.content || []).find(b => b.type === 'text');
     const reply = textBlock ? textBlock.text : '';
 
-    return res.status(200).json({ reply });
+    return res.status(200).json({ 
+      reply,
+      isAdmin,
+      remainingUses: isAdmin ? 'unlimited' : Math.max(0, FREE_LIMIT - (usageByIp.get(clientIp) || 0))
+    });
 
   } catch (err) {
     return res.status(500).json({ error: 'Error interno: ' + err.message });
