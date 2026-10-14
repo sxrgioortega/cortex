@@ -1102,12 +1102,22 @@
       const val = input.value.trim();
       if (!val) return;
 
-      // Validación del Paywall suave
-      if (freeQueriesUsed >= FREE_LIMIT) {
-        openPaywallModal();
-        return;
-      }
+     // Atajo de Administrador en el chat
+  if (val.startsWith('/admin ')) {
+    const key = val.replace('/admin ', '').trim();
+    localStorage.setItem('cortex_admin_key', key);
+    alert('🔑 Modo Administrador activado: consultas ilimitadas configuradas.');
+    input.value = '';
+    return;
+  }
 
+  const isAdminUser = localStorage.getItem('cortex_admin_key') === 'adminortega09';
+
+  // Validación del Paywall suave (se ignora si eres admin)
+  if (!isAdminUser && freeQueriesUsed >= FREE_LIMIT) {
+    openPaywallModal();
+    return;
+  }
       const btn = document.getElementById('send-btn');
       btn.disabled = true;
       input.disabled = true;
@@ -1138,25 +1148,37 @@
       const targetContent = document.getElementById('live-stream-content');
 
       try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            specialist: activeKey,
-            message: val,
-            history: chatHistories[activeKey].slice(0, -1)
-          })
-        });
+      const storedAdminKey = localStorage.getItem('cortex_admin_key') || '';
 
-        const contentType = res.headers.get('content-type') || '';
-        let fullText = '';
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          specialist: activeKey,
+          message: val,
+          history: chatHistories[activeKey].slice(0, -1),
+          adminKey: storedAdminKey
+        })
+      });
 
-        if (contentType.includes('application/json')) {
-          const dataRes = await res.json();
-          if (!res.ok) throw new Error(dataRes.error || 'Error al comunicarse con el servidor');
-          fullText = dataRes.reply || '';
-          targetContent.innerHTML = marked.parse(fullText);
-        } else {
+      const contentType = res.headers.get('content-type') || '';
+      let fullText = '';
+
+      if (contentType.includes('application/json')) {
+        const dataRes = await res.json();
+        if (!res.ok) {
+          if (res.status === 429) {
+            targetContent.innerHTML = '<p class="text-amber-400 font-medium">⚠️ Has alcanzado el límite de 3 consultas gratuitas de prueba. Suscríbete a un plan para continuar redactando sin límites.</p>';
+            if (typeof openPaywallModal === 'function') {
+              openPaywallModal();
+            }
+            return;
+          }
+          throw new Error(dataRes.error || 'Error al comunicarse con el servidor');
+        }
+        fullText = dataRes.reply || '';
+        targetContent.innerHTML = marked.parse(fullText);
+      } else {
           if (!res.ok) {
             const errObj = await res.json().catch(() => ({}));
             throw new Error(errObj.error || 'Error en la respuesta del servidor');
