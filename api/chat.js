@@ -2,13 +2,13 @@ export const config = { maxDuration: 60 };
 
 const MODEL = 'claude-haiku-5-5';
 
-// CLAVE MAESTRA PARA TI: Cámbiala por la contraseña que quieras
+// CLAVE MAESTRA
 const ADMIN_SECRET = 'adminortega09';
 
 // Límite de consultas gratuitas por IP
 const FREE_LIMIT = 3;
 
-// Registro en memoria de consultas por IP (resiste modo incógnito)
+// Registro en memoria de consultas por IP
 const usageByIp = new Map();
 
 const SYSTEM_PROMPTS = {
@@ -44,14 +44,20 @@ Estructura obligatoria de respuesta:
 
 Sé riguroso, técnico y concluye siempre todas las secciones de manera completa hasta el final. Firma al pie como Dr. Mateo, Especialista en Psicometría y Evaluación Psicológica.`,
 
-  andres: Eres el Mg. Andrés, metodólogo senior de investigación en psicología y especialista en normativa APA 7ma edición para tesis y artículos en universidades peruanas (UTP, UCV, UPAO, UNMSM, PUCP).
+  andres: `Eres el Mg. Andrés, metodólogo senior de investigación en psicología y especialista en normativa APA 7ma edición para tesis y proyectos en universidades peruanas (UTP, UCV, UPAO, UNMSM, PUCP, Cayetano Heredia, UCSM, USMP, entre otras).
 
 INSTRUCCIONES CLAVE DE COMPORTAMIENTO:
 1. NUNCA coloques notas de advertencia, disclaimers, avisos de limitación técnica ni la etiqueta "[VERIFICAR]".
 2. Prohibido decir frases como "Nota previa de rigor", "No puedo acceder a bases de datos" o "Debes verificar en el repositorio". 
 3. ENTREGA EL TRABAJO DIRECTAMENTE: Redacta las referencias completas, reales y operativas en formato APA 7ma edición con estructura impecable (Autores, Año, Título en cursiva, Revista/Editorial/Repositorio, y enlace handle o DOI verosímil y formal según los repositorios universitarios peruanos).
-4. Si el estudiante pide el marco, los objetivos, la justificación o los antecedentes, redáctalos con tono académico formal listo para copiar al documento de Word.
-5. No te limites a dar fórmulas o ecuaciones si el usuario pide el contenido desarrollado; redacta el contenido técnico solicitado.
+4. REGLA DE ANTECEDENTES DE INVESTIGACIÓN: Si el estudiante solicita antecedentes para su proyecto de tesis o marco teórico, organízalos según el estándar académico universitario peruano:
+   - Antecedente Internacional (antigüedad máxima de 3 a 5 años).
+   - Antecedente Nacional (antigüedad máxima de 3 a 5 años).
+   - Antecedente Regional / Local de su zona universitaria (antigüedad máxima de 3 a 5 años).
+   Cada antecedente debe resumir autor, año, objetivo, muestra/instrumento, resultado principal y conclusión relevante.
+5. Prioriza los repositorios institucionales de la universidad del estudiante cuando esté disponible en su perfil.
+6. Si el estudiante pide el marco, los objetivos, la justificación o los antecedentes, redáctalos con tono académico formal listo para copiar al documento de Word.
+7. No te limites a dar fórmulas o ecuaciones si el usuario pide el contenido desarrollado; redacta el trabajo completo solicitado.`
 };
 
 function buildMessages(history, message) {
@@ -76,7 +82,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'ANTHROPIC_API_KEY no configurada en Vercel.' });
   }
 
-  const { specialist, message, history = [], adminKey } = req.body || {};
+  const { specialist, message, history = [], adminKey, userProfile } = req.body || {};
   if (!message) {
     return res.status(400).json({ error: 'El mensaje es requerido.' });
   }
@@ -101,6 +107,15 @@ export default async function handler(req, res) {
     usageByIp.set(clientIp, currentUsage + 1);
   }
 
+  // Incorporar perfil del usuario al contexto del especialista
+  let basePrompt = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
+  if (userProfile && (userProfile.name || userProfile.university)) {
+    const contextUser = `\n\nDATOS DEL ESTUDIANTE:\n` +
+      (userProfile.name ? `- Nombre del estudiante: ${userProfile.name}\n` : '') +
+      (userProfile.university ? `- Universidad: ${userProfile.university} (Perú). Aplica criterios y líneas de investigación priorizando las exigencias y el repositorio de esta casa de estudios.\n` : '');
+    basePrompt += contextUser;
+  }
+
   try {
     const upstream = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -112,7 +127,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: 8000,
-        system: SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria,
+        system: basePrompt,
         messages: buildMessages(history, cleanMessage)
       })
     });
