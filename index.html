@@ -661,9 +661,9 @@
 </div>
   
     <!-- PANTALLA 2: WORKSPACE (CHATS) -->
-    <div id="view-workspace" style="display: none;" class="w-full h-full overflow-hidden">
+    <div id="view-workspace" style="display: none;" class="w-full h-full flex flex-col md:flex-row overflow-hidden">
       <!-- SIDEBAR -->
-      <aside class="w-64 bg-cortex-card border-r border-cortex-border flex flex-col justify-between shrink-0">
+      <aside class="w-full md:w-64 bg-cortex-card border-b md:border-b-0 md:border-r border-cortex-border flex flex-col justify-between shrink-0 max-h-48 md:max-h-full overflow-y-auto">
         <div class="p-4 space-y-3">
           <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider px-2 block">
             Especialistas
@@ -705,7 +705,7 @@
       </aside>
 
       <!-- CHAT VIEW -->
-      <section class="flex-1 flex flex-col bg-cortex-bg overflow-hidden">
+      <section class="flex-1 min-w-0 flex flex-col bg-cortex-bg overflow-hidden h-full">
         <div class="h-12 border-b border-cortex-border px-6 flex items-center justify-between bg-cortex-card/40 shrink-0">
           <span id="chat-header-title" class="font-bold text-xs text-white">Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)</span>
           <button onclick="clearHistory()" class="text-[11px] text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition">
