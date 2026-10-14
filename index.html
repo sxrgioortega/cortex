@@ -663,36 +663,33 @@
     <!-- PANTALLA 2: WORKSPACE (CHATS) -->
     <div id="view-workspace" style="display: none;" class="w-full h-full flex flex-col md:flex-row overflow-hidden">
       <!-- SIDEBAR -->
-      <aside class="w-full md:w-64 bg-cortex-card border-b md:border-b-0 md:border-r border-cortex-border flex flex-col justify-between shrink-0 max-h-48 md:max-h-full overflow-y-auto">
-        <div class="p-4 space-y-3">
-          <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider px-2 block">
-            Especialistas
-          </span>
+      <aside class="w-full md:w-64 bg-cortex-card border-b md:border-b-0 md:border-r border-cortex-border flex flex-col justify-between shrink-0">
+        <div class="p-2 md:p-4">
+          <span class="hidden md:block text-[10px] font-bold text-zinc-400 uppercase tracking-wider px-2 mb-2">Especialistas</span>
+          <div class="flex flex-row md:flex-col gap-2 overflow-x-auto pb-1 md:pb-0">
+            <button id="tab-valeria" onclick="setSpecialist('valeria')" class="shrink-0 md:w-full flex items-center gap-2 md:gap-3 p-2 md:p-2.5 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition">
+            <div id="badge-valeria" class="w-8 h-8 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0">CL</div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-white truncate">Dra. Valeria</div>
+              <div class="text-[10px] text-zinc-400 truncate">Clínica &amp; DSM-5-TR</div>
+            </div>
+          </button>
 
-          <div class="space-y-1">
-            <button id="tab-valeria" onclick="setSpecialist('valeria')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-violet-500/50 bg-violet-950/20 text-left transition">
-              <div id="badge-valeria" class="w-8 h-8 rounded-lg bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center font-bold text-xs shrink-0">CL</div>
-              <div class="min-w-0">
-                <div class="font-bold text-xs text-white truncate">Dra. Valeria</div>
-                <div class="text-[10px] text-zinc-400 truncate">Clínica &amp; DSM-5-TR</div>
-              </div>
-            </button>
+          <button id="tab-mateo" onclick="setSpecialist('mateo')" class="shrink-0 md:w-full flex items-center gap-2 md:gap-3 p-2 md:p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+            <div id="badge-mateo" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">PS</div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-zinc-300 truncate">Dr. Mateo</div>
+              <div class="text-[10px] text-zinc-400 truncate">Psicometría &amp; Baremos</div>
+            </div>
+          </button>
 
-            <button id="tab-mateo" onclick="setSpecialist('mateo')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-              <div id="badge-mateo" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">PS</div>
-              <div class="min-w-0">
-                <div class="font-bold text-xs text-zinc-300 truncate">Dr. Mateo</div>
-                <div class="text-[10px] text-zinc-400 truncate">Psicometría &amp; Baremos</div>
-              </div>
-            </button>
-
-            <button id="tab-andres" onclick="setSpecialist('andres')" class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-              <div id="badge-andres" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">AP</div>
-              <div class="min-w-0">
-                <div class="font-bold text-xs text-zinc-300 truncate">Mg. Andrés</div>
-                <div class="text-[10px] text-zinc-400 truncate">Metodología &amp; APA 7</div>
-              </div>
-            </button>
+          <button id="tab-andres" onclick="setSpecialist('andres')" class="shrink-0 md:w-full flex items-center gap-2 md:gap-3 p-2 md:p-2.5 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
+            <div id="badge-andres" class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs shrink-0">AP</div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-zinc-300 truncate">Mg. Andrés</div>
+              <div class="text-[10px] text-zinc-400 truncate">Metodología &amp; APA 7</div>
+            </div>
+          </button>
           </div>
         </div>
 
