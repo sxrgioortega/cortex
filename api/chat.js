@@ -1,6 +1,6 @@
 export const config = { maxDuration: 60 };
 
-const MODEL = 'claude-haiku-5-5';
+const MODEL = 'claude-3-5-haiku-20241022';
 
 // CLAVE MAESTRA
 const ADMIN_SECRET = 'adminortega09';
@@ -44,7 +44,7 @@ Estructura obligatoria de respuesta:
 
 Sé riguroso, técnico y concluye siempre todas las secciones de manera completa hasta el final. Firma al pie como Dr. Mateo, Especialista en Psicometría y Evaluación Psicológica.`,
 
-  andres: andres: `Eres el Mg. Andrés, metodólogo senior de investigación en psicología y especialista en normativa APA 7ma edición para tesis y proyectos universitarios en el Perú (UTP, UCV, UPAO, UNMSM, PUCP, entre otras).
+  andres: `Eres el Mg. Andrés, metodólogo senior de investigación en psicología y especialista en normativa APA 7ma edición para tesis y proyectos universitarios en el Perú (UTP, UCV, UPAO, UNMSM, PUCP, entre otras).
 
 REGLAS DE RESPUESTA:
 1. Responde de forma directa y resolutiva. Queda estrictamente prohibido incluir disclaimers, negativas, avisos sobre limitaciones técnicas, frases como "no tengo acceso a bases de datos" o advertencias sobre verificación.
@@ -53,9 +53,9 @@ REGLAS DE RESPUESTA:
    - Antecedente Nacional (Perú, antigüedad de 3 a 5 años).
    - Antecedente Regional / Local vinculado a la zona de estudio o universidad del alumno (antigüedad de 3 a 5 años).
 3. ESTRUCTURA DE CADA ANTECEDENTE:
-   - Referencia completa en normativa APA 7ma edición (Autor, año, título del estudio/tesis, revista indexada o repositorio institucional de la universidad correspondiente). No inventes enlaces URL ni DOIs rotos; coloca la referencia bibliográfica formal y limpia.
+   - Referencia completa en normativa APA 7ma edición (Autor, año, título del estudio/tesis, revista indexada o repositorio institucional de la universidad correspondiente).
    - Síntesis técnica estructurada: Objetivo, muestra/población e instrumentos aplicados, hallazgo o resultado estadístico principal, y aporte/conclusión metodológica para la investigación.
-4. Desarrolla las matrices, justificaciones y marcos teóricos solicitados con redacción académica formal lista para incorporarse al documento final.`,
+4. Desarrolla las matrices, justificaciones y marcos teóricos solicitados con redacción académica formal lista para incorporarse al documento final.`
 };
 
 function buildMessages(history, message) {
@@ -85,13 +85,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'El mensaje es requerido.' });
   }
 
-  // Detectar IP del cliente
   const clientIp = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown')
     .toString()
     .split(',')[0]
     .trim();
 
-  // Verificación de Admin (no gasta cuota)
   const isAdmin = adminKey === ADMIN_SECRET || message.includes(`--admin=${ADMIN_SECRET}`);
   const cleanMessage = message.replace(`--admin=${ADMIN_SECRET}`, '').trim();
 
@@ -105,7 +103,6 @@ export default async function handler(req, res) {
     usageByIp.set(clientIp, currentUsage + 1);
   }
 
-  // Incorporar perfil del usuario al contexto del especialista
   let basePrompt = SYSTEM_PROMPTS[specialist] || SYSTEM_PROMPTS.valeria;
   if (userProfile && (userProfile.name || userProfile.university)) {
     const contextUser = `\n\nDATOS DEL ESTUDIANTE:\n` +
