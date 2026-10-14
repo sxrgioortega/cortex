@@ -89,34 +89,35 @@
 
   <!-- Header con Marca Limpia y Enlaces Calibrados -->
 <header class="border-b border-cortex-border bg-cortex-bg/90 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
- <a href="#" onclick="showLobbyView(); window.scrollTo({top: 0, behavior: 'smooth'}); setActiveNav(null); return false;" class="flex items-center gap-3 cursor-pointer select-none">
-      <!-- Logo SVG Cortex -->
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-900 via-indigo-800 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/40">
-        <svg class="w-6 h-6 text-violet-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-3 3.5 4 4 0 0 0 1 3.5 4 4 0 0 0-1 3.5 4 4 0 0 0 4 4v.5a4 4 0 0 0 8 0v-.5a4 4 0 0 0 4-4 4 4 0 0 0-1-3.5 4 4 0 0 0 1-3.5 4 4 0 0 0-3-3.5V6a4 4 0 0 0-4-4z"/>
-          <path d="M9 12h6"/>
-          <path d="M12 9v6"/>
-        </svg>
-      </div>
-      <span class="text-xl font-bold tracking-tight text-white">Córtex</span>
-    </a>
-
-<!-- Navegación con IDs exactos -->
-    <nav id="landing-nav" class="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
-      <a href="#especialistas" onclick="handleNavClick(this, 'especialistas')" class="nav-item hover:text-white transition">Especialistas</a>
-      <a href="#comparativa" onclick="handleNavClick(this, 'comparativa')" class="nav-item hover:text-white transition">Por qué Córtex</a>
-      <a href="#flujo" onclick="handleNavClick(this, 'flujo')" class="nav-item hover:text-white transition">Cómo empezar</a>
-      <a href="#planes" onclick="handleNavClick(this, 'planes')" class="nav-item hover:text-white transition">Planes</a>
-      <a href="#testimonios" onclick="handleNavClick(this, 'testimonios')" class="nav-item hover:text-white transition">Testimonios</a>
-      <a href="#faq" onclick="handleNavClick(this, 'faq')" class="nav-item hover:text-white transition">FAQ</a>
-      <a href="#privacidad" onclick="handleNavClick(this, 'privacidad')" class="nav-item hover:text-white transition">Privacidad</a>
-    </nav>
-
-    <!-- Botones Lobby y Workspace con IDs -->
-    <div class="flex items-center gap-2">
-      <button id="btn-nav-lobby" onclick="showLobbyView()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition">Lobby</button>
-      <button id="btn-nav-workspace" onclick="showWorkspaceView()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition">Workspace</button>
+  <!-- LOGO CORTEX -->
+  <a href="#" onclick="showLobbyView(); window.scrollTo({top: 0, behavior: 'smooth'}); setActiveNav(null); return false;" class="flex items-center gap-3 cursor-pointer select-none">
+    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-900 via-indigo-800 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/40">
+      <svg class="w-6 h-6 text-violet-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-3 3.5 4 4 0 0 0 1 3.5 4 4 0 0 0-1 3.5 4 4 0 0 0 4 4v.5a4 4 0 0 0 8 0v-.5a4 4 0 0 0 4-4 4 4 0 0 0-1-3.5 4 4 0 0 0 1-3.5 4 4 0 0 0-3-3.5V6a4 4 0 0 0-4-4z"/>
+        <path d="M9 12h6"/>
+        <path d="M12 9v6"/>
+      </svg>
     </div>
+    <span class="text-xl font-bold tracking-tight text-white">Córtex</span>
+  </a>
+
+  <!-- MENU NAVEGACION -->
+  <nav id="landing-nav" class="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
+    <a href="#especialistas" onclick="handleNavClick(this, 'especialistas')" class="nav-item hover:text-white transition">Especialistas</a>
+    <a href="#comparativa" onclick="handleNavClick(this, 'comparativa')" class="nav-item hover:text-white transition">Por qué Córtex</a>
+    <a href="#flujo" onclick="handleNavClick(this, 'flujo')" class="nav-item hover:text-white transition">Cómo empezar</a>
+    <a href="#planes" onclick="handleNavClick(this, 'planes')" class="nav-item hover:text-white transition">Planes</a>
+    <a href="#testimonios" onclick="handleNavClick(this, 'testimonios')" class="nav-item hover:text-white transition">Testimonios</a>
+    <a href="#faq" onclick="handleNavClick(this, 'faq')" class="nav-item hover:text-white transition">FAQ</a>
+    <a href="#privacidad" onclick="handleNavClick(this, 'privacidad')" class="nav-item hover:text-white transition">Privacidad</a>
+  </nav>
+
+  <!-- BOTONES VISTA -->
+  <div class="flex items-center gap-2">
+    <button id="btn-nav-lobby" onclick="showLobbyView()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition">Lobby</button>
+    <button id="btn-nav-workspace" onclick="showWorkspaceView()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition">Workspace</button>
+  </div>
+</header>
       
   <!-- CONTENEDOR PRINCIPAL CON RESPLANDOR AMBIENTAL MORADO -->
   <div id="view-lobby" style="display: block;" class="w-full h-full overflow-y-auto glow-purple relative">
