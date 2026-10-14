@@ -761,7 +761,7 @@
   </div>
 
   <!-- Botón Flotante de WhatsApp -->
-  <a href="https://wa.me/51914484283?text=Hola,%20tengo%20una%20consulta%20sobre%20C%C3%B3rtex" target="_blank" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition hover:scale-105 z-50">
+ <a id="wa-floating-btn" href="https://wa.me/51914484283?text=Hola,%20tengo%20una%20consulta%20sobre%20C%C3%B3rtex" target="_blank" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition hover:scale-105 z-50">
     <i class="fa-brands fa-whatsapp text-2xl"></i>
   </a>
 
@@ -809,18 +809,23 @@
     let freeQueriesUsed = parseInt(localStorage.getItem('cortex_free_queries') || '0', 10);
 
     function updateTrialUI() {
-      const badge = document.getElementById('trial-counter-badge');
-      const remaining = Math.max(0, FREE_LIMIT - freeQueriesUsed);
-      if (badge) {
-        if (remaining > 0) {
-          badge.innerText = `Consultas de prueba: ${remaining} restante${remaining === 1 ? '' : 's'}`;
-          badge.className = "font-mono text-violet-400";
-        } else {
-          badge.innerText = `Límite gratuito alcanzado (0 restantes)`;
-          badge.className = "font-mono text-amber-400 font-semibold";
-        }
-      }
+  const badge = document.getElementById('trial-counter-badge');
+  const isAdmin = localStorage.getItem('cortex_admin_key');
+
+  if (isAdmin) {
+    if (badge) {
+      badge.textContent = 'Acceso Admin: Ilimitado ⚡';
+      badge.className = 'font-mono text-emerald-400 font-semibold';
     }
+    return;
+  }
+
+  const remaining = Math.max(0, FREE_LIMIT - freeQueriesUsed);
+  if (badge) {
+    badge.textContent = `Consultas de prueba: ${remaining} restantes`;
+    badge.className = 'font-mono text-violet-400';
+  }
+}
 
     function openPaywallModal() {
       const modal = document.getElementById('paywall-modal');
@@ -904,9 +909,13 @@
       lobby.classList.add('view-smooth');
     }
     updateNavStyles('lobby');
+    const wa = document.getElementById('wa-floating-btn');
+  if (wa) wa.style.display = 'flex';
   }
 
     function showWorkspaceView() {
+      const wa = document.getElementById('wa-floating-btn');
+  if (wa) wa.style.display = 'none';
       const lobby = document.getElementById('view-lobby');
       const workspace = document.getElementById('view-workspace');
       lobby.style.display = 'none';
