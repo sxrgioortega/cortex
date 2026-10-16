@@ -2,8 +2,27 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Córtex · Workspace de Psicología</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Córtex · Workspace de Psicología, Psicometría y Metodología</title>
+  <meta name="description" content="Córtex: Workspace inteligente de psicología para estudiantes y profesionales en Perú. Diagnósticos DSM-5-TR, baremos psicométricos WISC/WAIS y metodología APA 7 en segundos.">
+  <meta name="keywords" content="psicologia, psicometria, DSM-5-TR, WISC-V, baremos, tesis psicologia, APA 7, informes psicologicos, Peru">
+  <meta name="author" content="Córtex">
+  <meta name="theme-color" content="#08080a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Open Graph / Redes Sociales (WhatsApp, Facebook, Twitter, LinkedIn) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Córtex · Workspace de Psicología, Psicometría y Metodología">
+  <meta property="og:description" content="El criterio clínico es tuyo. La redacción técnica, los baremos WISC-V y las normas APA 7 déjaselos a Córtex. Listo para entregar en Word.">
+  <meta property="og:image" content="./valeria.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Córtex · Workspace de Psicología">
+  <meta name="twitter:description" content="Formulaciones diagnósticas DSM-5-TR, percentiles psicométricos y citación APA 7 al instante.">
+
+  <!-- Favicon SVG & ICO -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='8' fill='%2308080a'/%3E%3Cpath d='M16 4a5 5 0 0 0-5 5v1.2a5 5 0 0 0-3.8 4.4 5 5 0 0 0 1.2 4.4 5 5 0 0 0-1.2 4.4 5 5 0 0 0 5 5v.6a5 5 0 0 0 10 0v-.6a5 5 0 0 0 5-5 5 5 0 0 0-1.2-4.4 5 5 0 0 0 1.2-4.4 5 5 0 0 0-3.8-4.4V9a5 5 0 0 0-5-5z' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M12 16h8' stroke='%23a78bfa' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M16 12v8' stroke='%23a78bfa' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="alternate icon" href="./favicon.ico">
 
   <!-- Fuentes e Iconos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,9 +30,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
+  <!-- Supresión de advertencia de Tailwind CDN en consola de producción -->
+  <script>
+    (function() {
+      const origWarn = console.warn;
+      console.warn = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+        origWarn.apply(console, args);
+      };
+    })();
+  </script>
+
   <!-- Tailwind CSS & Marked.js -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Google Identity Services (Google Sign-In / OAuth 2.0) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   
   <script>
     tailwind.config = {
@@ -25,9 +58,9 @@
           colors: {
             cortex: {
               bg: '#08080a',
-              card: '#121216',
-              border: '#23232a',
-              hover: '#181820',
+              card: '#121217',
+              border: '#23232c',
+              hover: '#191922',
               accent: '#8b5cf6',
               gold: '#f59e0b'
             }
@@ -41,15 +74,24 @@
     html, body {
       background-color: #08080a;
       min-height: 100vh;
+      min-height: 100dvh;
       margin: 0;
       padding: 0;
       scroll-behavior: smooth;
     }
     
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #23232a; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb { background: #23232c; border-radius: 999px; }
     ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
 
     .glow-purple {
       background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16) 0%, transparent 60%);
@@ -70,46 +112,175 @@
       animation: smoothFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .markdown-body h1 { font-size: 1.25rem; font-weight: 800; color: #f4f4f5; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #27272a; padding-bottom: 0.3rem; }
+    /* ========================================================= */
+    /* BURBUJA DE USUARIO ESTILO WHATSAPP (COMPACTA Y ERGONÓMICA) */
+    /* ========================================================= */
+    .user-msg-container {
+      display: flex !important;
+      justify-content: flex-end !important;
+      width: 100% !important;
+      max-width: 48rem !important;
+      margin: 2px auto !important;
+      padding: 0 4px !important;
+    }
+
+    .user-msg {
+      display: inline-flex !important;
+      flex-direction: column !important;
+      width: fit-content !important;
+      max-width: min(85%, 440px) !important;
+      min-width: 64px !important;
+      padding: 7px 12px 5px 14px !important;
+      border-radius: 18px 18px 3px 18px !important;
+      word-break: break-word !important;
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+      color: #ffffff !important;
+      font-size: 0.84rem !important;
+      line-height: 1.42 !important;
+      box-shadow: 0 2px 8px rgba(109, 40, 217, 0.28) !important;
+      border: 1px solid rgba(167, 139, 250, 0.22) !important;
+      margin-left: auto !important;
+      position: relative !important;
+      align-self: flex-end !important;
+    }
+
+    .user-msg-text {
+      display: block !important;
+      width: fit-content !important;
+      color: #ffffff !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      font-size: 0.84rem !important;
+      line-height: 1.4 !important;
+    }
+
+    .user-msg-meta {
+      font-size: 9.5px !important;
+      color: rgba(237, 233, 254, 0.75) !important;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      gap: 3px !important;
+      margin-top: 2px !important;
+      align-self: flex-end !important;
+      white-space: nowrap !important;
+    }
+
+    @media (min-width: 768px) {
+      .user-msg {
+        max-width: min(65%, 450px) !important;
+        padding: 8px 14px 6px 15px !important;
+        font-size: 0.85rem !important;
+      }
+    }
+
+    /* ========================================================= */
+    /* ESTILOS DE CUERPO MARKDOWN & TABLAS RESPONSIVAS          */
+    /* ========================================================= */
+    .markdown-body h1 { font-size: 1.25rem; font-weight: 800; color: #f4f4f5; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #272733; padding-bottom: 0.35rem; }
     .markdown-body h2 { font-size: 1.1rem; font-weight: 700; color: #e4e4e7; margin-top: 0.85rem; margin-bottom: 0.4rem; }
     .markdown-body h3 { font-size: 0.95rem; font-weight: 600; color: #c4b5fd; margin-top: 0.75rem; margin-bottom: 0.3rem; }
     .markdown-body p { margin-bottom: 0.65rem; line-height: 1.6; color: #d4d4d8; }
     .markdown-body ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.65rem; color: #d4d4d8; }
     .markdown-body ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.65rem; color: #d4d4d8; }
-    /* Ajuste de burbuja de usuario */
-.user-msg, .msg-user, [class*="user"] {
-  max-width: 65% !important;
-  width: fit-content !important;
-  margin-left: auto !important;
-  word-break: break-word !important;
-}
     .markdown-body li { margin-bottom: 0.25rem; }
     .markdown-body strong { color: #fafafa; font-weight: 700; }
-    .markdown-body blockquote { border-left: 2px solid #8b5cf6; padding-left: 0.75rem; color: #d4d4d8; margin: 0.5rem 0; background: transparent; }
-    .markdown-body pre { background: #0d0d11 !important; border: 1px solid #23232a; border-radius: 0.75rem; padding: 0.75rem 1rem; overflow-x: auto; }
-    .markdown-body code { font-family: inherit; }
-    .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 0.85rem; font-size: 0.85rem; }
-    .markdown-body th, .markdown-body td { border: 1px solid #27272a; padding: 0.45rem 0.65rem; text-align: left; }
-    .markdown-body th { background: #18181b; color: #f4f4f5; font-weight: 600; }
+    .markdown-body blockquote {
+      border-left: 3px solid #8b5cf6;
+      background: rgba(139, 92, 246, 0.05);
+      padding: 0.5rem 0.85rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      color: #d4d4d8;
+      margin: 0.65rem 0;
+    }
+    .markdown-body pre {
+      background: #0d0d12 !important;
+      border: 1px solid #23232c;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      overflow-x: auto;
+    }
+    .markdown-body code { font-family: monospace; font-size: 0.85em; }
+
+    /* Envoltura y estilos de tablas con contraste y desplazamiento */
+    .table-responsive-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0.85rem 0;
+      border-radius: 0.75rem;
+      border: 1px solid #272733;
+    }
+    .markdown-body table {
+      width: 100%;
+      min-width: 480px;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      background: #0d0d12;
+      margin: 0;
+    }
+    .markdown-body th, .markdown-body td {
+      border: 1px solid #272733;
+      padding: 0.55rem 0.8rem;
+      text-align: left;
+    }
+    .markdown-body th {
+      background: #181822;
+      color: #f4f4f6;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .markdown-body td {
+      color: #d4d4d8;
+      background: #0d0d12;
+    }
+    .markdown-body tr:nth-child(even) td {
+      background: #121219;
+    }
+    .markdown-body tr:hover td {
+      background: #181824;
+    }
+
+    /* Botón de reintento inline */
+    .retry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.5rem;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: #fda4af;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .retry-btn:hover {
+      background: rgba(244, 63, 94, 0.25);
+      border-color: rgba(244, 63, 94, 0.6);
+      color: #ffffff;
+    }
   </style>
 </head>
 
-<body class="bg-cortex-bg text-zinc-100 font-sans antialiased flex flex-col h-screen overflow-hidden">
+<body class="bg-cortex-bg text-zinc-100 font-sans antialiased flex flex-col h-screen h-[100dvh] overflow-hidden">
 
   <!-- Header con Marca Limpia y Enlaces Calibrados -->
-  <header class="border-b border-cortex-border bg-cortex-bg/90 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-    <a href="#" onclick="showLobbyView(); window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex items-center gap-3 cursor-pointer select-none">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-900 via-indigo-800 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/40">
-        <svg class="w-6 h-6 text-violet-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <header class="border-b border-cortex-border bg-cortex-bg/95 backdrop-blur sticky top-0 z-50 px-3 sm:px-6 py-3 flex items-center justify-between shrink-0">
+    <a href="#" onclick="showLobbyView(); window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex items-center gap-2.5 sm:gap-3 cursor-pointer select-none">
+      <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-violet-900 via-indigo-800 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/40">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-violet-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-3 3.5 4 4 0 0 0 1 3.5 4 4 0 0 0-1 3.5 4 4 0 0 0 4 4v.5a4 4 0 0 0 8 0v-.5a4 4 0 0 0 4-4 4 4 0 0 0-1-3.5 4 4 0 0 0 1-3.5 4 4 0 0 0-3-3.5V6a4 4 0 0 0-4-4z"/>
           <path d="M9 12h6"/>
           <path d="M12 9v6"/>
         </svg>
       </div>
-      <span class="text-xl font-bold tracking-tight text-white">Córtex</span>
+      <span class="text-lg sm:text-xl font-bold tracking-tight text-white">Córtex</span>
     </a>
 
-    <!-- MENU NAVEGACION -->
+    <!-- MENU NAVEGACION (Desktop) -->
     <nav id="landing-nav" class="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
       <a href="#especialistas" onclick="handleNavClick(this, 'especialistas')" class="nav-item hover:text-white transition">Especialistas</a>
       <a href="#comparativa" onclick="handleNavClick(this, 'comparativa')" class="nav-item hover:text-white transition">Por qué Córtex</a>
@@ -120,63 +291,137 @@
       <a href="#seguridad" onclick="handleNavClick(this, 'seguridad')" class="nav-item hover:text-white transition">Privacidad</a>
     </nav>
 
-    <!-- BOTONES VISTA -->
-    <div class="flex items-center gap-2">
-      <button id="btn-nav-lobby" onclick="showLobbyView()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition">Lobby</button>
-      <button id="btn-nav-workspace" onclick="handleWorkspaceNavClick()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition">Workspace</button>
+    <!-- BOTONES VISTA & AUTENTICACIÓN GOOGLE (Mobile & Desktop) -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <button id="btn-nav-lobby" onclick="showLobbyView()" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition active:scale-95">Lobby</button>
+      <button id="btn-nav-workspace" onclick="handleWorkspaceNavClick()" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition active:scale-95">Workspace</button>
+      
+      <!-- BOTÓN PANEL DE LICENCIAS (VISIBLE SOLO PARA EL DUEÑO) -->
+      <button id="btn-admin-panel" onclick="openAdminLicensesModal()" class="hidden items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-950/60 hover:bg-amber-900/60 text-amber-300 border border-amber-600/50 text-xs font-bold transition active:scale-95 shadow-sm">
+        <i class="fa-solid fa-crown text-[11px] text-amber-400"></i>
+        <span class="hidden sm:inline">Admin Licencias</span>
+      </button>
+
+      <!-- BOTÓN PANEL DE AUDITORÍA Y MONITOREO DE IPS (ACCESO SEGURO) -->
+      <a id="btn-admin-analytics" href="/admin" target="_blank" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-violet-950/70 hover:bg-violet-900/90 text-violet-200 hover:text-white border border-violet-600/60 text-xs font-bold transition active:scale-95 shadow-sm" title="Panel de Seguridad y Monitoreo de IPs">
+        <i class="fa-solid fa-shield-halved text-[11px] text-violet-400"></i>
+        <span>Monitoreo IPs</span>
+      </a>
+      
+      <!-- PERFIL & GOOGLE LOGIN -->
+      <div id="auth-nav-container" class="relative ml-1 sm:ml-1.5">
+        <!-- Botón Iniciar Sesión con Google (No autenticado) -->
+        <button id="btn-google-login" onclick="openGoogleAuthModal()" class="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 hover:border-violet-500/50 text-xs font-semibold transition active:scale-95 shadow-sm">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span class="hidden md:inline">Gmail</span>
+          <span class="md:hidden">Acceder</span>
+        </button>
+
+        <!-- Avatar Usuario Autenticado con Dropdown -->
+        <div id="user-logged-badge" class="hidden items-center gap-1.5 sm:gap-2 cursor-pointer p-1 sm:px-2 sm:py-1 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 hover:border-violet-500/50 transition active:scale-95" onclick="toggleUserDropdown(event)">
+          <img id="nav-user-avatar" src="" alt="Google User" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover border border-violet-500 shadow-sm" />
+          <span id="nav-user-name" class="hidden sm:inline text-xs font-semibold text-zinc-200 truncate max-w-[85px]">Usuario</span>
+          <i class="fa-solid fa-chevron-down text-[9px] text-zinc-400"></i>
+        </div>
+
+        <!-- Menú Dropdown de Usuario -->
+        <div id="user-dropdown-menu" class="hidden absolute right-0 top-full mt-2 w-64 bg-[#111118] border border-[#262638] rounded-2xl p-3.5 shadow-2xl z-[120] text-left">
+          <div class="flex items-center gap-3 pb-3 border-b border-zinc-800/80">
+            <img id="dropdown-user-avatar" src="" alt="Google User" class="w-10 h-10 rounded-full object-cover border-2 border-violet-500 shrink-0" />
+            <div class="min-w-0 flex-1">
+              <div id="dropdown-user-name" class="font-bold text-xs text-white truncate">Usuario</div>
+              <div id="dropdown-user-email" class="text-[10px] text-zinc-400 truncate font-mono">correo@gmail.com</div>
+              <div class="text-[9px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
+                <i class="fa-brands fa-google text-[8px]"></i> Cuenta Gmail Activa
+              </div>
+            </div>
+          </div>
+
+          <div class="py-2 space-y-1">
+            <div class="px-2.5 py-1.5 rounded-lg bg-zinc-900/70 text-[11px] text-zinc-300 flex items-center justify-between">
+              <span class="text-zinc-500">Universidad:</span>
+              <span id="dropdown-user-uni" class="font-semibold text-violet-300 truncate max-w-[120px]">UTP</span>
+            </div>
+            <button onclick="openProfileModal(); toggleUserDropdown();" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-zinc-800/80 text-xs text-zinc-300 hover:text-white transition flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-violet-400 text-xs"></i>
+              <span>Cambiar Universidad</span>
+            </button>
+            <a id="menu-btn-admin-analytics" href="/admin" target="_blank" onclick="toggleUserDropdown();" class="flex w-full text-left px-2.5 py-1.5 rounded-lg bg-violet-950/40 hover:bg-violet-900/60 border border-violet-800/40 text-xs text-violet-200 hover:text-white transition items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-violet-400 text-xs"></i>
+              <span>Monitoreo de Accesos & IPs</span>
+            </a>
+            <button id="menu-btn-admin-panel" onclick="openAdminLicensesModal(); toggleUserDropdown();" class="hidden w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-amber-950/40 text-xs text-amber-300 hover:text-amber-200 transition items-center gap-2">
+              <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
+              <span>Generar Códigos para Clientes</span>
+            </button>
+          </div>
+
+          <div class="pt-2 border-t border-zinc-800/80">
+            <button onclick="logoutGoogle()" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-rose-950/40 text-xs text-rose-400 hover:text-rose-300 transition flex items-center gap-2">
+              <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+              <span>Cerrar sesión</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
       
   <!-- CONTENEDOR PRINCIPAL CON RESPLANDOR AMBIENTAL MORADO -->
-  <div id="view-lobby" style="display: block;" class="w-full h-full overflow-y-auto glow-purple relative">
+  <div id="view-lobby" style="display: block;" class="w-full flex-1 min-h-0 overflow-y-auto glow-purple relative">
     
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-gradient-to-b from-purple-700/25 via-violet-600/15 to-transparent blur-[120px] pointer-events-none -z-10"></div>
     <div class="absolute top-28 left-1/2 -translate-x-1/2 w-[450px] h-[220px] bg-violet-600/20 blur-[90px] rounded-full pointer-events-none -z-10"></div>
 
     <!-- HERO SECTION -->
-    <section class="pt-20 pb-16 px-6 text-center max-w-5xl mx-auto relative z-10">
+    <section class="pt-14 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6 text-center max-w-5xl mx-auto relative z-10">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/70 border border-violet-700/40 text-violet-300 text-xs font-semibold mb-6 shadow-sm shadow-purple-950/50">
         <span class="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
-        Workspace Clínico & Psicométrico 2026
+        Workspace Clínico &amp; Psicométrico 2026
       </div>
       
-      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight drop-shadow-sm">
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-5 sm:mb-6 leading-tight drop-shadow-sm">
         El criterio clínico es tuyo.<br>
         <span class="bg-gradient-to-r from-violet-400 via-purple-300 to-indigo-300 bg-clip-text text-transparent">
           La redacción técnica y los baremos déjaselos a Córtex.
         </span>
       </h1>
       
-      <p class="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto mb-8 font-normal">
+      <p class="text-zinc-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-7 sm:mb-8 font-normal leading-relaxed">
         Formulaciones bajo DSM-5-TR, conversión de puntuaciones directas a percentiles con análisis de discrepancias y citación APA 7ma edición en segundos.
       </p>
 
-      <div class="flex items-center justify-center gap-4">
-        <button onclick="handleWorkspaceNavClick()" class="px-6 py-3 text-sm font-bold rounded-xl bg-violet-600 text-white hover:bg-violet-500 shadow-xl shadow-violet-900/50 transition">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md sm:max-w-none mx-auto">
+        <button onclick="handleWorkspaceNavClick()" class="w-full sm:w-auto px-6 py-3 text-xs sm:text-sm font-bold rounded-xl bg-violet-600 text-white hover:bg-violet-500 shadow-xl shadow-violet-900/50 transition active:scale-95">
           ABRIR WORKSPACE GRATUITO &rarr;
         </button>
-        <a href="#planes" onclick="handleNavClick(this, 'planes')" class="px-6 py-3 text-sm font-semibold rounded-xl bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 hover:bg-zinc-800 transition">
-          Ver Planes & Precios
+        <a href="#planes" onclick="handleNavClick(this, 'planes')" class="w-full sm:w-auto px-6 py-3 text-xs sm:text-sm font-semibold rounded-xl bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 hover:bg-zinc-800 transition text-center active:scale-95">
+          Ver Planes &amp; Precios
         </a>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
-        <div class="p-4 rounded-xl bg-cortex-card/70 border border-violet-500/20 text-left hover:border-violet-500/40 transition">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-10 sm:mt-12 max-w-4xl mx-auto">
+        <div class="p-3.5 sm:p-4 rounded-xl bg-cortex-card/70 border border-violet-500/20 text-left hover:border-violet-500/40 transition">
           <div class="text-violet-400 font-bold text-sm mb-1">DSM-5-TR</div>
           <div class="text-zinc-400 text-xs">Criterios nosológicos oficiales y diagnósticos diferenciales.</div>
         </div>
 
-        <div class="p-4 rounded-xl bg-cortex-card/70 border border-cyan-500/20 text-left hover:border-cyan-500/40 transition">
+        <div class="p-3.5 sm:p-4 rounded-xl bg-cortex-card/70 border border-cyan-500/20 text-left hover:border-cyan-500/40 transition">
           <div class="text-cyan-400 font-bold text-sm mb-1">Psicometría</div>
           <div class="text-zinc-400 text-xs">Baremos normativos de WISC-V, WAIS-IV, BDI-II y STAI.</div>
         </div>
 
-        <div class="p-4 rounded-xl bg-cortex-card/70 border border-amber-500/20 text-left hover:border-amber-500/40 transition">
+        <div class="p-3.5 sm:p-4 rounded-xl bg-cortex-card/70 border border-amber-500/20 text-left hover:border-amber-500/40 transition">
           <div class="text-amber-400 font-bold text-sm mb-1">Informe Psicológico</div>
           <div class="text-zinc-400 text-xs">Estructura formal con áreas, tablas y recomendaciones.</div>
         </div>
 
-        <div class="p-4 rounded-xl bg-cortex-card/70 border border-emerald-500/20 text-left hover:border-emerald-500/40 transition">
+        <div class="p-3.5 sm:p-4 rounded-xl bg-cortex-card/70 border border-emerald-500/20 text-left hover:border-emerald-500/40 transition">
           <div class="text-emerald-400 font-bold text-sm mb-1">Privacidad Total</div>
           <div class="text-zinc-400 text-xs">Casos anónimos. Tus datos clínicos no entrenan IA pública.</div>
         </div>
@@ -184,17 +429,109 @@
     </section>
 
     <!-- ENVOLTORIO PARA QUE NO SE ENSANCHEN LAS SECCIONES -->
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
-      <!-- SECCIÓN: COMPARATIVA -->
-      <section id="comparativa" class="py-16 border-t border-cortex-border">
+      <!-- SECCIÓN 1: ESPECIALISTAS (AHORA EN PRIMER LUGAR) -->
+      <section id="especialistas" class="py-12 sm:py-16 border-t border-cortex-border">
+        <div class="text-center mb-8 sm:mb-10">
+          <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Módulos Activos</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Especialistas entrenados en normativa técnica</h2>
+          <p class="text-xs text-zinc-400 mt-2">Cada agente trabaja con manuales de evaluación y lineamientos metodológicos oficiales.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          <!-- MÓDULO 01: Dra. Valeria -->
+          <div onclick="openSpecialist('valeria')" class="group cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-violet-950/30 active:scale-[0.99]">
+            <div>
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <span class="text-[11px] font-semibold text-violet-400 uppercase tracking-wider block mb-1">Módulo 01</span>
+                  <h3 class="text-xl font-bold text-white tracking-tight">Dra. Valeria</h3>
+                  <p class="text-[11px] text-zinc-400 font-mono mt-0.5">Clínica · DSM-5-TR / CIE-10</p>
+                </div>
+                <img src="./valeria.jpg" alt="Dra. Valeria" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-violet-500/50 shadow-lg shadow-violet-900/40 flex-shrink-0 group-hover:scale-105 transition-transform duration-300" />
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed mb-5">
+                Estructura formulaciones clínicas, establece diagnósticos diferenciales sustentados en criterios A-D y orienta el plan de evaluación diagnóstica.
+              </p>
+            </div>
+            <!-- Botón de Acción Prominente (Dra. Valeria) -->
+            <div class="pt-4 mt-auto border-t border-cortex-border/80">
+              <div class="w-full py-2.5 px-4 rounded-xl bg-violet-600 hover:bg-violet-500 border border-violet-400/30 text-white font-bold text-xs flex items-center justify-between transition-all duration-200 shadow-md shadow-violet-950/40 group-hover:shadow-violet-900/60">
+                <span class="flex items-center gap-2">
+                  <i class="fa-solid fa-stethoscope text-violet-200"></i>
+                  <span>Consultar con Dra. Valeria</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- MÓDULO 02: Dr. Mateo -->
+          <div onclick="openSpecialist('mateo')" class="group cursor-pointer bg-cortex-card border border-cortex-border hover:border-cyan-500/60 rounded-2xl p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/30 active:scale-[0.99]">
+            <div>
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <span class="text-[11px] font-semibold text-cyan-400 uppercase tracking-wider block mb-1">Módulo 02</span>
+                  <h3 class="text-xl font-bold text-white tracking-tight">Dr. Mateo</h3>
+                  <p class="text-[11px] text-zinc-400 font-mono mt-0.5">Psicometría · Baremos &amp; Tests</p>
+                </div>
+                <img src="./mateo.jpg" alt="Dr. Mateo" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-cyan-500/50 shadow-lg shadow-cyan-900/40 flex-shrink-0 group-hover:scale-105 transition-transform duration-300" />
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed mb-5">
+                Convierte puntuaciones directas (PD), detecta discrepancias inter-índices (WISC/WAIS/BDI) y redacta la tabla de resultados estandarizada.
+              </p>
+            </div>
+            <!-- Botón de Acción Prominente (Dr. Mateo) -->
+            <div class="pt-4 mt-auto border-t border-cortex-border/80">
+              <div class="w-full py-2.5 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 border border-cyan-400/30 text-white font-bold text-xs flex items-center justify-between transition-all duration-200 shadow-md shadow-cyan-950/40 group-hover:shadow-cyan-900/60">
+                <span class="flex items-center gap-2">
+                  <i class="fa-solid fa-chart-line text-cyan-200"></i>
+                  <span>Interpretar con Dr. Mateo</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- MÓDULO 03: Mg. Andrés -->
+          <div onclick="openSpecialist('andres')" class="group cursor-pointer bg-cortex-card border border-cortex-border hover:border-amber-500/60 rounded-2xl p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-amber-950/30 active:scale-[0.99]">
+            <div>
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block mb-1">Módulo 03</span>
+                  <h3 class="text-xl font-bold text-white tracking-tight">Mg. Andrés</h3>
+                  <p class="text-[11px] text-zinc-400 font-mono mt-0.5">Metodología · APA 7 &amp; Tesis</p>
+                </div>
+                <img src="./andres.jpg" alt="Mg. Andrés" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-amber-500/50 shadow-lg shadow-amber-900/40 flex-shrink-0 group-hover:scale-105 transition-transform duration-300" />
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed mb-5">
+                Genera operadores booleanos precisos para Scopus/SciELO, alinea matrices de consistencia y redacta antecedentes según APA 7ma edición.
+              </p>
+            </div>
+            <!-- Botón de Acción Prominente (Mg. Andrés) -->
+            <div class="pt-4 mt-auto border-t border-cortex-border/80">
+              <div class="w-full py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 border border-amber-400/30 text-white font-bold text-xs flex items-center justify-between transition-all duration-200 shadow-md shadow-amber-950/40 group-hover:shadow-amber-900/60">
+                <span class="flex items-center gap-2">
+                  <i class="fa-solid fa-book-bookmark text-amber-200"></i>
+                  <span>Redactar con Mg. Andrés</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: COMPARATIVA (POR QUÉ CÓRTEX) -->
+      <section id="comparativa" class="py-12 sm:py-16 border-t border-cortex-border">
         <div class="text-center mb-8">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Eficiencia Real</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-white">El problema no es tu vocación. Es tabular a mano a las 2 AM.</h2>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-cortex-card/80 border border-rose-950/60 rounded-2xl p-6 relative overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          <div class="bg-cortex-card/80 border border-rose-950/60 rounded-2xl p-5 sm:p-6 relative overflow-hidden">
             <div class="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider mb-3">
               <i class="fa-regular fa-circle-xmark"></i> Tu entrega sin Córtex
             </div>
@@ -206,7 +543,7 @@
             </div>
           </div>
 
-          <div class="bg-cortex-card/80 border border-emerald-950/60 rounded-2xl p-6 relative overflow-hidden">
+          <div class="bg-cortex-card/80 border border-emerald-950/60 rounded-2xl p-5 sm:p-6 relative overflow-hidden">
             <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-3">
               <i class="fa-regular fa-circle-check"></i> Tu entrega con Córtex
             </div>
@@ -220,90 +557,16 @@
         </div>
       </section>
 
-      <!-- SECCIÓN: ESPECIALISTAS -->
-      <section id="especialistas" class="py-16 border-t border-cortex-border">
-        <div class="text-center mb-10">
-          <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Módulos Activos</span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Especialistas entrenados en normativa técnica</h2>
-          <p class="text-xs text-zinc-400 mt-2">Cada agente trabaja con manuales de evaluación y lineamientos metodológicos.</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6">
-          <!-- MÓDULO 01: Dra. Valeria -->
-          <div onclick="openSpecialist('valeria')" class="group cursor-pointer bg-cortex-card border border-cortex-border hover:border-violet-500/60 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-violet-950/30">
-            <div>
-              <div class="flex items-start justify-between gap-4 mb-4">
-                <div>
-                  <span class="text-[11px] font-semibold text-violet-400 uppercase tracking-wider block mb-1">Módulo 01</span>
-                  <h3 class="text-xl font-bold text-white tracking-tight">Dra. Valeria</h3>
-                  <p class="text-[11px] text-zinc-400 font-mono mt-0.5">Clínica · DSM-5-TR / CIE-10</p>
-                </div>
-                <img src="./valeria.jpg" alt="Dra. Valeria" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-violet-500/50 shadow-lg shadow-violet-900/40 flex-shrink-0 group-hover:scale-105 transition-transform duration-300" />
-              </div>
-              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
-                Estructura formulaciones clínicas, establece diagnósticos diferenciales sustentados en criterios A-D y orienta el plan de evaluación.
-              </p>
-            </div>
-            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-violet-300">
-              <span>Consultar caso</span>
-              <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-            </div>
-          </div>
-
-          <!-- MÓDULO 02: Dr. Mateo -->
-          <div onclick="openSpecialist('mateo')" class="group cursor-pointer bg-cortex-card border border-cortex-border hover:border-cyan-500/60 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/30">
-            <div>
-              <div class="flex items-start justify-between gap-4 mb-4">
-                <div>
-                  <span class="text-[11px] font-semibold text-cyan-400 uppercase tracking-wider block mb-1">Módulo 02</span>
-                  <h3 class="text-xl font-bold text-white tracking-tight">Dr. Mateo</h3>
-                  <p class="text-[11px] text-zinc-400 font-mono mt-0.5">Psicometría · Baremos & Tests</p>
-                </div>
-                <img src="./mateo.jpg" alt="Dr. Mateo" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-cyan-500/50 shadow-lg shadow-cyan-900/40 flex-shrink-0 group-hover:scale-105 transition-transform duration-300" />
-              </div>
-              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
-                Convierte puntuaciones directas (PD), detecta discrepancias inter-índices (WISC/WAIS/BDI) y redacta la tabla de resultados para informe.
-              </p>
-            </div>
-            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-cyan-300">
-              <span>Interpretar prueba</span>
-              <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-            </div>
-          </div>
-
-          <!-- MÓDULO 03: Mg. Andrés -->
-          <div onclick="openSpecialist('andres')" class="group cursor-pointer bg-cortex-card border border-cortex-border hover:border-amber-500/60 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-amber-950/30">
-            <div>
-              <div class="flex items-start justify-between gap-4 mb-4">
-                <div>
-                  <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block mb-1">Módulo 03</span>
-                  <h3 class="text-xl font-bold text-white tracking-tight">Mg. Andrés</h3>
-                  <p class="text-[11px] text-zinc-400 font-mono mt-0.5">Metodología · APA 7 & Tesis</p>
-                </div>
-                <img src="./andres.jpg" alt="Mg. Andrés" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-amber-500/50 shadow-lg shadow-amber-900/40 flex-shrink-0 group-hover:scale-105 transition-transform duration-300" />
-              </div>
-              <p class="text-xs text-zinc-400 leading-relaxed mb-4">
-                Genera operadores booleanos precisos para Scopus/SciELO, alinea matrices de consistencia y formatea citas según APA 7ma edición.
-              </p>
-            </div>
-            <div class="pt-4 border-t border-cortex-border flex items-center justify-between text-xs font-semibold text-zinc-300 group-hover:text-amber-300">
-              <span>Formatear marco</span>
-              <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECCIÓN: CÓMO EMPEZAR EN 3 PASOS -->
-      <section id="pasos" class="py-16 border-t border-cortex-border">
-        <div class="text-center mb-12">
+      <!-- SECCIÓN 3: CÓMO EMPEZAR EN 3 PASOS -->
+      <section id="pasos" class="py-12 sm:py-16 border-t border-cortex-border">
+        <div class="text-center mb-10 sm:mb-12">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Flujo de Trabajo</span>
           <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Listo para entregar en 3 pasos</h2>
           <p class="text-xs text-zinc-400 mt-2">Sin configuraciones difíciles ni comandos complejos.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6 relative">
-          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-6 relative">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 relative">
+          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-5 sm:p-6 relative">
             <div class="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center font-extrabold text-sm mb-4">
               01
             </div>
@@ -313,7 +576,7 @@
             </p>
           </div>
 
-          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-6 relative">
+          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-5 sm:p-6 relative">
             <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-extrabold text-sm mb-4">
               02
             </div>
@@ -323,7 +586,7 @@
             </p>
           </div>
 
-          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-6 relative">
+          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-5 sm:p-6 relative">
             <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center font-extrabold text-sm mb-4">
               03
             </div>
@@ -335,23 +598,23 @@
         </div>
 
         <div class="text-center mt-10">
-          <button onclick="handleWorkspaceNavClick()" class="px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-violet-600/30 transition inline-flex items-center gap-2">
+          <button onclick="handleWorkspaceNavClick()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-violet-600/30 transition inline-flex items-center justify-center gap-2 active:scale-95">
             <span>Comenzar ahora mismo</span>
             <i class="fa-solid fa-arrow-right text-xs"></i>
           </button>
         </div>
       </section>
       
-      <!-- SECCIÓN: PLANES Y PRECIOS -->
-      <section id="planes" class="py-16 border-t border-cortex-border">
+      <!-- SECCIÓN 4: PLANES Y PRECIOS -->
+      <section id="planes" class="py-12 sm:py-16 border-t border-cortex-border">
         <div class="text-center mb-10">
           <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest block mb-1">Acceso Flexible</span>
           <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Elige tu plan según tu ritmo académico</h2>
           <p class="text-xs text-zinc-400 mt-2">Tarifas accesibles para estudiantes y practicantes de psicología en Perú.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6 items-stretch">
-          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-6 flex flex-col justify-between hover:border-zinc-700 transition">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
+          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:border-zinc-700 transition">
             <div>
               <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Pago Único</span>
               <h3 class="text-lg font-bold text-white mt-1">Estudiante en Apuros</h3>
@@ -378,12 +641,12 @@
               </ul>
             </div>
 
-            <a href="https://wa.me/51914484283?text=Hola,%20deseo%20activar%20el%20Plan%20Estudiante%20en%20Apuros%20(S/%204.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold text-center block transition">
+            <a href="https://wa.me/51914484283?text=%C2%A1Hola!%20Deseo%20activar%20el%20Plan%20Estudiante%20en%20Apuros%20(S/%204.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold text-center block transition active:scale-95">
               Elegir en Apuros
             </a>
           </div>
 
-          <div class="bg-cortex-card border-2 border-violet-500/80 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl shadow-violet-950/30">
+          <div class="bg-cortex-card border-2 border-violet-500/80 rounded-2xl p-5 sm:p-6 flex flex-col justify-between relative shadow-xl shadow-violet-950/30">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-violet-600 text-white text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider shadow">
               Más Popular en Pregrado
             </div>
@@ -417,12 +680,12 @@
               </ul>
             </div>
 
-            <a href="https://wa.me/51914484283?text=Hola,%20deseo%20activar%20el%20Plan%20Estudiante%20Mensual%20(S/%2019.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold text-center block shadow transition">
+            <a href="https://wa.me/51914484283?text=%C2%A1Hola!%20Deseo%20activar%20el%20Plan%20Estudiante%20Mensual%20(S/%2019.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold text-center block shadow transition active:scale-95">
               Activar Plan Estudiante
             </a>
           </div>
 
-          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-6 flex flex-col justify-between hover:border-zinc-700 transition">
+          <div class="bg-cortex-card border border-cortex-border rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:border-zinc-700 transition">
             <div>
               <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Internado &amp; Clínica</span>
               <h3 class="text-lg font-bold text-white mt-1">Plan Profesional</h3>
@@ -449,7 +712,7 @@
               </ul>
             </div>
 
-            <a href="https://wa.me/51914484283?text=Hola,%20deseo%20activar%20el%20Plan%20Profesional%20(S/%2034.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold text-center block transition">
+            <a href="https://wa.me/51914484283?text=%C2%A1Hola!%20Deseo%20activar%20el%20Plan%20Profesional%20(S/%2034.90)%20para%20C%C3%B3rtex" target="_blank" class="w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold text-center block transition active:scale-95">
               Elegir Profesional
             </a>
           </div>
@@ -460,15 +723,15 @@
         </div>
       </section>
 
-      <!-- SECCIÓN: PRUEBA SOCIAL / TESTIMONIOS WHATSAPP -->
-      <section id="testimonios" class="py-16 border-t border-cortex-border">
+      <!-- SECCIÓN 5: PRUEBA SOCIAL / TESTIMONIOS WHATSAPP -->
+      <section id="testimonios" class="py-12 sm:py-16 border-t border-cortex-border">
         <div class="text-center mb-10">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Resultados Reales</span>
           <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Lo que dicen estudiantes e internos que ya usan Córtex</h2>
           <p class="text-xs text-zinc-400 mt-2">Mensajes de estudiantes y practicantes en Lima, Piura, Trujillo y Arequipa.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div class="bg-[#0b141a] border border-cortex-border/70 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
             <div class="space-y-3 text-[11px] leading-relaxed">
               <div class="bg-[#202c33] text-zinc-200 p-2.5 rounded-xl rounded-tl-none max-w-[85%] border-l-2 border-emerald-500">
@@ -479,7 +742,7 @@
                 Hola Carlos. Pásale las PD directo y el grupo etario. Mateo te saca los escalares, la tabla de índices compuestos y las discrepancias de una.
               </div>
               <div class="bg-[#202c33] text-zinc-200 p-2.5 rounded-xl rounded-tl-none max-w-[85%]">
-                Hermano, una salvación total. Tenía que entregar el informe hoy a las 8 AM y me cuadró la tabla en 2 minutos. Ya lo descargué en Word. Gracias!! 🙏
+                Hermano, una salvación total. Tenía que entregar el informe hoy a las 8 AM y me cuadró la tabla en 2 minutos. Ya lo descargué en Word. ¡Muchísimas gracias! <i class="fa-solid fa-check-double text-emerald-400 text-xs ml-1"></i>
               </div>
             </div>
             <div class="mt-4 pt-3 border-t border-zinc-800/80 flex items-center justify-between text-[10px] text-zinc-500 font-mono">
@@ -554,8 +817,8 @@
         </div>
       </section>
 
-      <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ ACORDEÓN) -->
-      <section id="faq" class="py-16 border-t border-cortex-border">
+      <!-- SECCIÓN 6: PREGUNTAS FRECUENTES (FAQ ACORDEÓN) -->
+      <section id="faq" class="py-12 sm:py-16 border-t border-cortex-border">
         <div class="text-center mb-10">
           <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">Dudas Habituales</span>
           <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Preguntas frecuentes</h2>
@@ -615,11 +878,11 @@
         </div>
       </section>
 
-      <!-- SECCIÓN: PRIVACIDAD Y ÉTICA PROFESIONAL -->
-      <section id="seguridad" class="py-16 border-t border-cortex-border">
-        <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 flex items-start gap-4 max-w-4xl mx-auto">
-          <div class="p-3 bg-violet-950/60 border border-violet-800/40 rounded-xl text-violet-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      <!-- SECCIÓN 7: PRIVACIDAD Y ÉTICA PROFESIONAL -->
+      <section id="seguridad" class="py-12 sm:py-16 border-t border-cortex-border">
+        <div class="p-5 sm:p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 flex flex-col sm:flex-row items-start gap-4 max-w-4xl mx-auto">
+          <div class="p-3 bg-violet-950/60 border border-violet-800/40 rounded-xl text-violet-400 shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 0 0-8 0v4h8z"/></svg>
           </div>
           <div>
             <h4 class="text-white font-bold text-sm mb-1">Confidencialidad y Privacidad de Casos</h4>
@@ -631,7 +894,7 @@
       </section>
 
       <!-- FOOTER -->
-      <footer class="max-w-5xl mx-auto px-6 py-8 border-t border-cortex-border text-center text-[11px] text-zinc-400 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer class="max-w-5xl mx-auto px-4 sm:px-6 py-8 border-t border-cortex-border text-center text-[11px] text-zinc-400 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>© 2026 Córtex · Workspace de Psicología en Perú. Todos los derechos reservados.</div>
         <div class="flex items-center gap-4">
           <a href="#especialistas" class="hover:text-zinc-300 transition">Especialistas</a>
@@ -644,110 +907,281 @@
     </div>
   </div>
   
-  <!-- PANTALLA 2: WORKSPACE (CHATS) -->
-  <div id="view-workspace" style="display: none;" class="w-full h-full flex flex-col md:flex-row overflow-hidden">
-    <!-- BARRA SUPERIOR / LATERAL DE ESPECIALISTAS -->
-    <aside class="w-full md:w-64 bg-cortex-card border-b md:border-b-0 md:border-r border-cortex-border flex flex-col justify-between shrink-0">
-      <div class="p-2 md:p-4">
+  <!-- PANTALLA 2: WORKSPACE (MODERN CHAT VIEW) -->
+  <div id="view-workspace" style="display: none;" class="w-full flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden bg-cortex-bg">
+    <!-- BARRA SUPERIOR (Móvil) / LATERAL (Desktop) DE ESPECIALISTAS -->
+    <aside class="w-full md:w-64 bg-cortex-card border-b md:border-b-0 md:border-r border-cortex-border flex flex-col justify-between shrink-0 z-10">
+      <div class="p-2 sm:p-3 md:p-4">
         <div class="flex items-center justify-between px-2 mb-2">
           <span class="hidden md:block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Especialistas</span>
           <!-- Botón Perfil Estudiante -->
-          <button onclick="openProfileModal()" class="text-[10px] text-violet-400 hover:text-violet-300 flex items-center gap-1 transition">
+          <button onclick="openProfileModal()" class="text-[11px] sm:text-[10px] text-violet-400 hover:text-violet-300 flex items-center gap-1.5 transition active:scale-95 py-1 px-2 rounded-lg bg-violet-950/30 md:bg-transparent border border-violet-800/30 md:border-transparent">
             <i class="fa-solid fa-user-graduate"></i>
-            <span id="user-profile-badge" class="font-medium truncate max-w-[100px]">Mi Perfil</span>
+            <span id="user-profile-badge" class="font-medium truncate max-w-[110px]">Mi Perfil</span>
           </button>
         </div>
-        <div class="flex flex-row md:flex-col gap-2 overflow-x-auto pb-1 md:pb-0">
+        
+        <!-- Lista deslizante de especialistas (Ultra ergonómica en celulares) -->
+        <div class="flex flex-row md:flex-col gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           <!-- Valeria -->
-          <button id="tab-valeria" onclick="setSpecialist('valeria')" class="shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-violet-500/50 bg-violet-950/30 text-left transition">
-            <img src="./valeria.jpg" alt="Dra. Valeria" class="w-8 h-8 rounded-lg object-cover border border-violet-500/50 shrink-0" />
+          <button id="tab-valeria" onclick="setSpecialist('valeria')" class="shrink-0 flex items-center gap-2 p-1.5 px-2.5 sm:p-2 sm:px-3 rounded-xl border border-violet-500/50 bg-violet-950/40 text-left transition shadow-md shadow-violet-950/40 active:scale-95">
+            <img src="./valeria.jpg" alt="Dra. Valeria" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-cover border border-violet-500/50 shrink-0" />
             <div class="min-w-0">
-              <div class="tab-title font-bold text-xs text-white whitespace-nowrap">Dra. Valeria</div>
-              <div class="tab-subtitle text-[10px] text-violet-300/80 whitespace-nowrap">Clínica &amp; DSM-5-TR</div>
+              <div class="tab-title font-bold text-[11px] sm:text-xs text-white whitespace-nowrap">Dra. Valeria</div>
+              <div class="tab-subtitle text-[9px] sm:text-[10px] text-violet-300/80 whitespace-nowrap">Clínica · DSM-5-TR</div>
             </div>
           </button>
 
           <!-- Mateo -->
-          <button id="tab-mateo" onclick="setSpecialist('mateo')" class="shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <img src="./mateo.jpg" alt="Dr. Mateo" class="w-8 h-8 rounded-lg object-cover border border-zinc-700 shrink-0" />
+          <button id="tab-mateo" onclick="setSpecialist('mateo')" class="shrink-0 flex items-center gap-2 p-1.5 px-2.5 sm:p-2 sm:px-3 rounded-xl border border-transparent hover:border-cyan-500/40 hover:bg-cortex-hover text-left transition active:scale-95">
+            <img src="./mateo.jpg" alt="Dr. Mateo" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-cover border border-zinc-700 shrink-0" />
             <div class="min-w-0">
-              <div class="tab-title font-bold text-xs text-zinc-400 whitespace-nowrap">Dr. Mateo</div>
-              <div class="tab-subtitle text-[10px] text-zinc-500 whitespace-nowrap">Psicometría &amp; Baremos</div>
+              <div class="tab-title font-bold text-[11px] sm:text-xs text-zinc-400 whitespace-nowrap">Dr. Mateo</div>
+              <div class="tab-subtitle text-[9px] sm:text-[10px] text-zinc-500 whitespace-nowrap">Psicometría &amp; Baremos</div>
             </div>
           </button>
 
           <!-- Andrés -->
-          <button id="tab-andres" onclick="setSpecialist('andres')" class="shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition">
-            <img src="./andres.jpg" alt="Mg. Andrés" class="w-8 h-8 rounded-lg object-cover border border-zinc-700 shrink-0" />
+          <button id="tab-andres" onclick="setSpecialist('andres')" class="shrink-0 flex items-center gap-2 p-1.5 px-2.5 sm:p-2 sm:px-3 rounded-xl border border-transparent hover:border-amber-500/40 hover:bg-cortex-hover text-left transition active:scale-95">
+            <img src="./andres.jpg" alt="Mg. Andrés" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-cover border border-zinc-700 shrink-0" />
             <div class="min-w-0">
-              <div class="tab-title font-bold text-xs text-zinc-400 whitespace-nowrap">Mg. Andrés</div>
-              <div class="tab-subtitle text-[10px] text-zinc-500 whitespace-nowrap">Metodología &amp; APA 7</div>
+              <div class="tab-title font-bold text-[11px] sm:text-xs text-zinc-400 whitespace-nowrap">Mg. Andrés</div>
+              <div class="tab-subtitle text-[9px] sm:text-[10px] text-zinc-500 whitespace-nowrap">Metodología &amp; APA 7</div>
             </div>
           </button>
         </div>
       </div>
 
+      <!-- Acceso Directo al Monitoreo en Sidebar del Workspace -->
+      <div class="px-2 sm:px-3 md:px-4 py-2 border-t border-cortex-border">
+        <a
+          href="/admin"
+          target="_blank"
+          class="w-full flex items-center justify-between p-2 rounded-xl bg-violet-950/30 hover:bg-violet-900/50 border border-violet-800/40 text-violet-200 transition group active:scale-95 text-left"
+          title="Abrir Panel Seguro de Monitoreo de IPs y Correos"
+        >
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="w-6 h-6 rounded-lg bg-violet-600/30 border border-violet-500/40 flex items-center justify-center text-violet-300 text-xs shrink-0 group-hover:bg-violet-600 group-hover:text-white transition">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-[11px] font-bold text-white group-hover:text-violet-200 truncate">Monitoreo IPs</div>
+              <div class="text-[9px] text-zinc-400 truncate">Auditoría en vivo</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-zinc-500 group-hover:text-violet-300 transition"></i>
+        </a>
+      </div>
+
       <div class="hidden md:flex p-3 border-t border-cortex-border text-[11px] text-zinc-400 items-center justify-between">
         <span>Motor Activo</span>
-        <span class="text-emerald-400 font-semibold flex items-center gap-1">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Claude
+        <span class="text-violet-300 font-semibold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Gemini 2.0 Flash
         </span>
       </div>
     </aside>
 
-    <!-- AREA DE CONVERSACION -->
-    <section class="flex-1 min-w-0 flex flex-col bg-cortex-bg overflow-hidden h-full">
-      <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4"></div>
+    <!-- AREA DE CONVERSACION (ESTILO CHAT MODERNO) -->
+    <section class="flex-1 min-w-0 flex flex-col bg-cortex-bg overflow-hidden h-full relative">
+      
+      <!-- HEADER INTERNO DEL CHAT (Como WhatsApp / ChatGPT / Claude) -->
+      <div id="chat-header" class="px-3 sm:px-5 py-2.5 sm:py-3 border-b border-cortex-border bg-cortex-card/80 backdrop-blur flex items-center justify-between shrink-0 z-10">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div class="relative shrink-0">
+            <img id="chat-header-avatar" src="./valeria.jpg" alt="Especialista" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border-2 border-violet-500 shadow-sm" />
+            <span id="chat-header-dot" class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-cortex-card"></span>
+          </div>
+          <div class="min-w-0">
+            <div id="chat-header-name" class="font-bold text-xs sm:text-sm text-white truncate">Dra. Valeria</div>
+            <div id="chat-header-status" class="text-[10px] text-zinc-400 font-medium truncate flex items-center gap-1.5">
+              <span>Clínica · DSM-5-TR</span>
+              <span class="text-zinc-600 hidden sm:inline">·</span>
+              <span class="text-emerald-400 hidden sm:inline">Gemini 2.0 Flash Activo</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- BOTÓN MONITOREO IPS DENTRO DEL CHAT WORKSPACE -->
+          <a
+            href="/admin"
+            target="_blank"
+            id="workspace-admin-ips-btn"
+            title="Panel de Monitoreo de Accesos, Correos e IPs (Solo Administrador)"
+            class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold bg-violet-950/70 hover:bg-violet-900 border border-violet-700/60 text-violet-200 hover:text-white transition flex items-center gap-1.5 active:scale-95 shadow-sm"
+          >
+            <i class="fa-solid fa-shield-halved text-xs text-violet-400"></i>
+            <span class="inline">Monitoreo IPs</span>
+          </a>
+          <button id="clear-btn" onclick="clearHistory()" title="Limpiar y empezar nuevo chat" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-cortex-border transition flex items-center gap-1.5 active:scale-95 shadow-sm">
+            <i class="fa-regular fa-trash-can text-xs text-zinc-400"></i>
+            <span class="hidden sm:inline">Nuevo chat</span>
+          </button>
+        </div>
+      </div>
 
-      <!-- Barra de entrada de texto e interacciones -->
-      <div class="p-3 md:p-4 border-t border-cortex-border bg-cortex-card/30 shrink-0">
-        <div class="max-w-4xl mx-auto space-y-2">
+      <!-- FLUJO DE MENSAJES -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto p-3 sm:p-5 md:p-6 space-y-3.5"></div>
+
+      <!-- DOCK DE ENTRADA ESTILO CHAT NORMAL (REDONDEADO, CON SEND BUTTON & CHIPS) -->
+      <div class="p-2 sm:p-3 border-t border-cortex-border bg-[#0b0b0f] shrink-0">
+        <div class="max-w-3xl mx-auto space-y-2">
           
-          <div class="flex items-center justify-between gap-2">
-            <div id="chips-container" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs flex-1"></div>
-            <button onclick="clearHistory()" title="Limpiar conversación actual" class="shrink-0 text-[10px] text-zinc-400 hover:text-rose-400 bg-cortex-card hover:bg-zinc-800 border border-cortex-border px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
-              <i class="fa-regular fa-trash-can text-[10px]"></i>
-              <span class="hidden sm:inline">Limpiar chat</span>
+          <!-- Chips superiores contextuales -->
+          <div id="chips-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs scrollbar-none"></div>
+
+          <!-- Input Dock redondeado (Estilo WhatsApp / ChatGPT / Claude) -->
+          <div id="chat-input-dock" class="flex items-center gap-1.5 sm:gap-2 bg-[#14141c] border border-[#272738] focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/25 rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 pl-2.5 sm:pl-3 transition shadow-xl shadow-black/50">
+            <!-- Botón de Plantillas Clínicas -->
+            <button type="button" onclick="openTemplatesModal()" title="Plantillas Clínicas Rápidas" class="w-8 h-8 rounded-full flex items-center justify-center text-violet-400 hover:text-white hover:bg-violet-950/50 transition shrink-0 active:scale-95">
+              <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+            </button>
+
+            <!-- Textarea centrado -->
+            <textarea id="user-input" rows="1" placeholder="Describe el caso clínico o síntomas..." class="flex-1 bg-transparent text-[13px] sm:text-sm text-white placeholder-zinc-400/80 resize-none px-2 py-1.5 sm:py-2 focus:outline-none max-h-32 leading-normal my-auto"></textarea>
+
+            <!-- Botón de Dictado por Voz (Speech-to-Text) -->
+            <button id="voice-btn" type="button" onclick="toggleSpeechRecognition()" title="Dictar caso clínico por voz (Español)" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition shrink-0 active:scale-95">
+              <i id="voice-icon" class="fa-solid fa-microphone text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Botón Enviar -->
+            <button id="send-btn" onclick="sendMessage()" title="Enviar mensaje (Enter)" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-violet-600 hover:bg-violet-500 active:scale-90 text-white flex items-center justify-center transition shrink-0 shadow-md shadow-violet-900/50">
+              <i id="send-icon" class="fa-solid fa-arrow-up text-xs sm:text-sm"></i>
             </button>
           </div>
 
-          <div class="flex items-end gap-2 bg-cortex-card border border-cortex-border focus-within:border-violet-500 rounded-xl p-2 transition">
-            <textarea id="user-input" rows="2" placeholder="Escribe tu consulta o caso clínico..." class="flex-1 bg-transparent text-xs text-white placeholder-zinc-500 resize-none px-2 py-1 focus:outline-none"></textarea>
-            <button id="send-btn" onclick="sendMessage()" class="w-9 h-9 rounded-lg bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center transition shrink-0">
-              <i class="fa-solid fa-arrow-up text-xs"></i>
-            </button>
-          </div>
-
-          <div class="flex items-center justify-between text-[10px] text-zinc-500">
-            <span id="trial-counter-badge" class="font-mono text-violet-400">Consultas de prueba: 3 restantes</span>
-            <span class="hidden sm:inline">Shift + Enter para salto de línea · Formato Word</span>
+          <!-- Indicador de consultas -->
+          <div class="flex items-center justify-between text-[10px] text-zinc-500 px-1">
+            <span id="trial-counter-badge" class="font-mono text-cyan-400 font-medium">Consultas de prueba: 3 restantes</span>
+            <span class="hidden sm:inline">Enter para enviar · Shift + Enter para salto de línea</span>
           </div>
         </div>
       </div>
     </section>
   </div>
 
+  <!-- MODAL DE PLANTILLAS CLÍNICAS RÁPIDAS -->
+  <div id="templates-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[110] hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-cortex-card border border-cortex-border max-w-lg w-full rounded-2xl p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-cortex-border mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-violet-600/20 text-violet-400 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">Plantillas Clínicas Rápidas</h3>
+            <p class="text-[11px] text-zinc-400">Selecciona un modelo estructurado para consultar en 1 clic</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeTemplatesModal()" class="text-zinc-500 hover:text-white text-base">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2.5">
+        <!-- Plantilla 1: Caso Clínico Adulto -->
+        <div onclick="useTemplateText('Paciente femenino de 24 años acude a consulta por crisis de angustia recurrentes con taquicardia, opresión torácica y miedo a perder el control. Síntomas presentes desde hace 4 meses. Solicito formulación diagnóstica DSM-5-TR, diagnósticos diferenciales y propuesta de intervención cognitivo-conductual.')" class="p-3 rounded-xl bg-zinc-900/70 hover:bg-violet-950/30 border border-zinc-800 hover:border-violet-500/50 cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs font-semibold text-white mb-1">
+            <span class="flex items-center gap-1.5 text-violet-300">
+              <i class="fa-solid fa-brain text-[11px]"></i> Caso Clínico Adulto (DSM-5-TR)
+            </span>
+            <span class="text-[10px] text-violet-400 group-hover:translate-x-0.5 transition-transform">Usar <i class="fa-solid fa-arrow-right ml-0.5 text-[9px]"></i></span>
+          </div>
+          <p class="text-[11px] text-zinc-400 line-clamp-2">Paciente con crisis de angustia, taquicardia y miedo a perder el control. Formulación diagnóstica y diferenciales.</p>
+        </div>
+
+        <!-- Plantilla 2: Evaluación WISC-V -->
+        <div onclick="useTemplateText('Solicito baremación e informe psicométrico WISC-V para paciente masculino de 9 años 6 meses en Lima: ICV=112, IVE=95, IRF=108, IMT=82, IAP=88. Por favor incluir tabla de percentiles, análisis de discrepancias inter-índices y recomendaciones pedagógicas.')" class="p-3 rounded-xl bg-zinc-900/70 hover:bg-cyan-950/30 border border-zinc-800 hover:border-cyan-500/50 cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs font-semibold text-white mb-1">
+            <span class="flex items-center gap-1.5 text-cyan-300">
+              <i class="fa-solid fa-chart-simple text-[11px]"></i> Baremos & Percentiles WISC-V (Perú)
+            </span>
+            <span class="text-[10px] text-cyan-400 group-hover:translate-x-0.5 transition-transform">Usar <i class="fa-solid fa-arrow-right ml-0.5 text-[9px]"></i></span>
+          </div>
+          <p class="text-[11px] text-zinc-400 line-clamp-2">Perfil cognitivo con índices directos para análisis de fortalezas y debilidades inter-índices.</p>
+        </div>
+
+        <!-- Plantilla 3: Experimento CyberRat -->
+        <div onclick="useTemplateText('Experimento de laboratorio virtual CyberRat: Fase 1 moldeamiento por aproximaciones sucesivas de la conducta de palanqueo. Fase 2 programa de reforzamiento continuo (CRF). Fase 3 programa de razón fija (FR-10). Solicito informe conductual con análisis de curva de extinción y contingencias de reforzamiento.')" class="p-3 rounded-xl bg-zinc-900/70 hover:bg-emerald-950/30 border border-zinc-800 hover:border-emerald-500/50 cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs font-semibold text-white mb-1">
+            <span class="flex items-center gap-1.5 text-emerald-300">
+              <i class="fa-solid fa-vial text-[11px]"></i> Experimento CyberRat (Conductual)
+            </span>
+            <span class="text-[10px] text-emerald-400 group-hover:translate-x-0.5 transition-transform">Usar <i class="fa-solid fa-arrow-right ml-0.5 text-[9px]"></i></span>
+          </div>
+          <p class="text-[11px] text-zinc-400 line-clamp-2">Moldeamiento, contingencias de reforzamiento y curva de extinción en condicionamiento operante.</p>
+        </div>
+
+        <!-- Plantilla 4: Tesis APA 7 -->
+        <div onclick="useTemplateText('Propuesta de investigación cuantitativa correlacional: Autoeficacia académica y estrés percibido en estudiantes universitarios de psicología durante prácticas pre-profesionales en Lima. Solicito formulación del problema, hipótesis, operacionalización de variables y recomendaciones metodológicas en APA 7ma ed.')" class="p-3 rounded-xl bg-zinc-900/70 hover:bg-amber-950/30 border border-zinc-800 hover:border-amber-500/50 cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs font-semibold text-white mb-1">
+            <span class="flex items-center gap-1.5 text-amber-300">
+              <i class="fa-solid fa-book-bookmark text-[11px]"></i> Diseño de Tesis & Metodología APA 7
+            </span>
+            <span class="text-[10px] text-amber-400 group-hover:translate-x-0.5 transition-transform">Usar <i class="fa-solid fa-arrow-right ml-0.5 text-[9px]"></i></span>
+          </div>
+          <p class="text-[11px] text-zinc-400 line-clamp-2">Estructura metodológica completa, operacionalización de variables e instrumentos validados en Perú.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL DE PERFIL / UNIVERSIDAD DEL ESTUDIANTE -->
-  <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
-    <div class="bg-cortex-card border border-cortex-border max-w-md w-full rounded-2xl p-6 shadow-2xl relative">
-      <div class="w-12 h-12 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center mx-auto text-xl mb-4">
+  <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[110] hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-cortex-card border border-cortex-border max-w-md w-full rounded-2xl p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center mx-auto text-xl mb-3 sm:mb-4">
         <i class="fa-solid fa-graduation-cap"></i>
       </div>
       
       <h3 class="text-base font-bold text-white mb-1 text-center">Configura tu Perfil Académico</h3>
-      <p class="text-xs text-zinc-400 leading-relaxed mb-5 text-center">
+      <p class="text-xs text-zinc-400 leading-relaxed mb-4 sm:mb-5 text-center">
         Tus especialistas adaptarán las formulaciones clínicas, los baremos y la búsqueda de antecedentes al repositorio de tu universidad en Perú.
       </p>
 
-      <form onsubmit="saveUserProfile(event)" class="space-y-4 text-left">
+      <!-- Tarjeta de vinculación con Google -->
+      <div id="profile-google-section" class="mb-4">
+        <!-- Estado Vinculado -->
+        <div id="profile-google-linked" class="hidden p-3 rounded-xl bg-violet-950/40 border border-violet-800/50 items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img id="profile-modal-avatar" src="" alt="Google User" class="w-9 h-9 rounded-full object-cover border border-violet-400 shrink-0" />
+            <div class="min-w-0">
+              <div id="profile-modal-email" class="text-xs font-mono text-zinc-200 truncate font-semibold">correo@gmail.com</div>
+              <div class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                <i class="fa-brands fa-google text-[9px]"></i> Cuenta de Google Verificada
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="logoutGoogle()" class="text-[11px] text-rose-400 hover:text-rose-300 underline shrink-0">Cambiar</button>
+        </div>
+
+        <!-- Estado No Vinculado -->
+        <div id="profile-google-unlinked" class="block">
+          <button type="button" onclick="openGoogleAuthModal()" class="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 hover:border-violet-500/60 text-white text-xs font-semibold flex items-center justify-center gap-2.5 transition active:scale-95 shadow-sm">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Acceder con tu cuenta de Google / Gmail</span>
+          </button>
+          <div class="relative my-3 text-center">
+            <span class="absolute inset-0 flex items-center"><span class="w-full border-t border-zinc-800"></span></span>
+            <span class="relative px-2 bg-cortex-card text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">o completa manualmente</span>
+          </div>
+        </div>
+      </div>
+
+      <form onsubmit="saveUserProfile(event)" class="space-y-3 sm:space-y-4 text-left">
         <div>
-          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Tu Nombre de Pila</label>
-          <input type="text" id="profile-name-input" required placeholder="Ej. Sergio" class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none" />
+          <label class="block text-xs font-semibold text-zinc-300 mb-1">Tu Nombre de Pila</label>
+          <input type="text" id="profile-name-input" required placeholder="Ej. Sergio" class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Universidad (Perú)</label>
-          <select id="profile-uni-select" required class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+          <label class="block text-xs font-semibold text-zinc-300 mb-1">Universidad (Perú)</label>
+          <select id="profile-uni-select" required class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none">
             <option value="" disabled selected>Selecciona tu universidad...</option>
             <option value="Universidad Tecnológica del Perú (UTP)">Universidad Tecnológica del Perú (UTP)</option>
             <option value="Universidad César Vallejo (UCV)">Universidad César Vallejo (UCV)</option>
@@ -769,11 +1203,11 @@
           </select>
         </div>
 
-        <div class="pt-2 flex gap-3">
-          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs text-center transition shadow-lg shadow-violet-950/40">
-            Guardar y Entrar al Workspace
+        <div class="pt-2 flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+          <button type="submit" class="w-full sm:flex-1 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs sm:text-sm text-center transition shadow-lg shadow-violet-950/40 active:scale-95">
+            Guardar y Entrar
           </button>
-          <button type="button" onclick="closeProfileModal()" class="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-xs transition">
+          <button type="button" onclick="closeProfileModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-xs sm:text-sm transition active:scale-95 text-center">
             Cancelar
           </button>
         </div>
@@ -781,25 +1215,137 @@
     </div>
   </div>
 
-  <!-- MODAL SOFT PAYWALL (LÍMITE ALCANZADO) -->
-  <div id="paywall-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-    <div class="bg-cortex-card border border-cortex-border max-w-md w-full rounded-2xl p-6 text-center shadow-2xl relative">
-      <div class="w-12 h-12 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center mx-auto text-xl mb-4">
-        <i class="fa-solid fa-lock"></i>
+  <!-- MODAL DE ACCESO CON GOOGLE / GMAIL -->
+  <div id="google-auth-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[130] hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#12121a] border border-[#272738] max-w-md w-full rounded-2xl p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeGoogleAuthModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-3 shadow-inner">
+        <svg class="w-6 h-6" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
       </div>
-      
-      <h3 class="text-lg font-bold text-white mb-2">Has completado tus 3 consultas gratuitas</h3>
-      <p class="text-xs text-zinc-400 leading-relaxed mb-6">
-        Esperamos que Córtex te haya ahorrado tiempo de redacción y cálculo. Para continuar generando informes psicométricos y clínicos ilimitados, activa tu acceso.
+
+      <h3 class="text-base sm:text-lg font-bold text-white text-center mb-1">Acceso con cuenta de Google</h3>
+      <p class="text-xs text-zinc-400 text-center leading-relaxed mb-4">
+        Inicia sesión con tu cuenta de Gmail para sincronizar tus informes clínicos, pruebas psicométricas y adaptaciones universitarias en Córtex.
       </p>
 
-      <div class="space-y-2.5">
-        <a href="https://wa.me/51914484283?text=%C2%A1Hola!%20Quiero%20activar%20el%20Pase%20de%20Emergencia%20de%20C%C3%B3rtex%20(S/%204.90)%20por%20Yape/Plin." target="_blank" class="block w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold text-center transition">
-          Pase de Emergencia (S/ 4.90 · 5 + 1 consultas)
+      <!-- Contenedor Oficial de Google Identity Services -->
+      <div id="g_id_signin_wrapper" class="flex justify-center mb-4">
+        <div id="g_id_signin_btn"></div>
+      </div>
+
+      <!-- Acceso Directo con Gmail del Estudiante -->
+      <div class="space-y-3 pt-3 border-t border-zinc-800/80">
+        <div class="text-[11px] font-semibold text-zinc-300 text-left">O ingresa directamente tu cuenta de Gmail:</div>
+        
+        <div>
+          <label class="block text-[11px] text-zinc-400 mb-1 text-left">Tu Correo Gmail</label>
+          <div class="relative">
+            <input type="email" id="google-input-email" placeholder="tu_correo@gmail.com" class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none pl-8" />
+            <i class="fa-solid fa-envelope absolute left-2.5 top-3 text-[11px] text-zinc-500"></i>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] text-zinc-400 mb-1 text-left">Tu Nombre y Apellido</label>
+          <div class="relative">
+            <input type="text" id="google-input-name" placeholder="Ej. Sergio Ortega" class="w-full bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none pl-8" />
+            <i class="fa-solid fa-user absolute left-2.5 top-3 text-[11px] text-zinc-500"></i>
+          </div>
+        </div>
+
+        <button onclick="handleQuickGmailSubmit()" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs sm:text-sm transition active:scale-95 shadow-md shadow-violet-950/50 flex items-center justify-center gap-2">
+          <i class="fa-brands fa-google text-xs"></i>
+          <span>Vincular mi Gmail y Entrar</span>
+        </button>
+
+        <!-- Accesos rápidos sugeridos para demostración inmediata -->
+        <div class="pt-2 text-left">
+          <span class="text-[10px] text-zinc-500 block mb-1.5 uppercase font-semibold">Cuentas rápidas con 1 clic:</span>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="quickSelectAccount('Sergio Ortega', 'sergio.ortega.psi@gmail.com', 'Universidad Tecnológica del Perú (UTP)')" class="p-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/60 text-left transition active:scale-95">
+              <div class="text-[11px] font-bold text-white truncate">Sergio Ortega</div>
+              <div class="text-[9px] text-zinc-400 truncate font-mono">UTP · Lima</div>
+            </button>
+            <button onclick="quickSelectAccount('Valeria Mendoza', 'valeria.mendoza.clinica@gmail.com', 'Pontificia Universidad Católica del Perú (PUCP)')" class="p-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/60 text-left transition active:scale-95">
+              <div class="text-[11px] font-bold text-white truncate">Valeria Mendoza</div>
+              <div class="text-[9px] text-zinc-400 truncate font-mono">PUCP · Lima</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SOFT PAYWALL (LÍMITE ALCANZADO & ACTIVACIÓN YAPE/PLIN) -->
+  <div id="paywall-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[110] hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-cortex-card border border-cortex-border max-w-md w-full rounded-2xl p-5 sm:p-6 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closePaywallModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-900 via-indigo-800 to-purple-600 text-white flex items-center justify-center mx-auto text-xl mb-3 shadow-lg shadow-purple-900/40">
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+      
+      <h3 class="text-base sm:text-lg font-bold text-white mb-1.5">Has completado tus 3 consultas gratuitas</h3>
+      <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+        Esperamos que Córtex te haya ahorrado horas de tabulación y redacción. Elige tu modalidad de activación inmediata vía <strong>Yape</strong> o <strong>Plin</strong>:
+      </p>
+
+      <!-- Caja Yape / Plin Oficial -->
+      <div class="bg-[#181824] border border-[#2d2d42] rounded-xl p-3 mb-4 text-left flex items-center justify-between gap-3 shadow-inner">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 text-sm">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-[11px] font-bold text-white flex items-center gap-1.5">
+              <span>Yape / Plin</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/40">Inmediato</span>
+            </div>
+            <div class="text-[11px] font-mono text-zinc-300 font-bold tracking-wider">914 484 283</div>
+          </div>
+        </div>
+        <button onclick="copyPaymentNumber(this)" class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white text-[10.5px] font-semibold transition active:scale-95 shrink-0 border border-zinc-700">
+          <i class="fa-regular fa-copy text-[10px]"></i> <span>Copiar</span>
+        </button>
+      </div>
+
+      <!-- Opciones de Planes -->
+      <div class="space-y-2 mb-4">
+        <a href="https://wa.me/51914484283?text=%C2%A1Hola!%20Quiero%20activar%20el%20Pase%20de%20Emergencia%20de%20C%C3%B3rtex%20(S/%204.90)%20por%20Yape/Plin." target="_blank" class="w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold flex items-center justify-between transition active:scale-95 border border-zinc-700">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid fa-ticket text-amber-400"></i>
+            <span>Pase de Emergencia (5+1 consultas)</span>
+          </span>
+          <span class="text-white font-mono font-bold">S/ 4.90</span>
         </a>
-        <a href="https://wa.me/51914484283?text=%C2%A1Hola!%20Quiero%20suscribirme%20al%20Plan%20Estudiante%20Mensual%20de%20C%C3%B3rtex%20(S/%2019.90)%20por%20Yape/Plin." target="_blank" class="block w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold text-center shadow transition">
-          Plan Estudiante Mensual (S/ 19.90 / mes)
+        <a href="https://wa.me/51914484283?text=%C2%A1Hola!%20Quiero%20suscribirme%20al%20Plan%20Estudiante%20Mensual%20de%20C%C3%B3rtex%20(S/%2019.90)%20por%20Yape/Plin." target="_blank" class="w-full py-2.5 px-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold flex items-center justify-between shadow-lg shadow-violet-950/50 transition active:scale-95">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap text-violet-200"></i>
+            <span>Plan Estudiante Mensual</span>
+          </span>
+          <span class="text-white font-mono font-bold">S/ 19.90/mes</span>
         </a>
+      </div>
+
+      <!-- Campo de Clave de Activación -->
+      <div class="pt-3 border-t border-zinc-800 text-left">
+        <label class="block text-[10.5px] font-semibold text-zinc-300 mb-1.5">¿Ya tienes tu clave de activación o pase?</label>
+        <div class="flex gap-2">
+          <input type="text" id="paywall-key-input" placeholder="Ej. adminortega09 o tu clave" class="flex-1 bg-zinc-900 border border-zinc-700 focus:border-violet-500 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none" />
+          <button onclick="submitPaywallKey()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition active:scale-95 shrink-0 shadow-sm">
+            Activar
+          </button>
+        </div>
       </div>
 
       <button onclick="closePaywallModal()" class="mt-4 text-[11px] text-zinc-500 hover:text-zinc-300 transition">
@@ -808,53 +1354,168 @@
     </div>
   </div>
 
-  <!-- Botón Flotante de WhatsApp -->
-  <a id="wa-floating-btn" href="https://wa.me/51914484283?text=Hola,%20tengo%20una%20consulta%20sobre%20C%C3%B3rtex" target="_blank" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition hover:scale-105 z-50">
-    <i class="fa-brands fa-whatsapp text-2xl"></i>
+  <!-- MODAL PANEL DE ADMINISTRACIÓN Y GENERACIÓN DE LICENCIAS (SOLO DUEÑO) -->
+  <div id="admin-licenses-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[130] hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#12121c] border border-[#2d2d44] max-w-lg w-full rounded-2xl p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeAdminLicensesModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4 pb-3 border-b border-zinc-800">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center text-lg shrink-0">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="text-left">
+          <h3 class="text-base font-bold text-white">Panel de Administración de Licencias</h3>
+          <p class="text-xs text-zinc-400">Genera códigos oficiales para tus clientes tras su pago en Yape o Plin.</p>
+        </div>
+      </div>
+
+      <!-- Selección de Plan para el cliente -->
+      <div class="space-y-3 mb-4 text-left">
+        <label class="block text-xs font-semibold text-zinc-300">Selecciona el plan que compró el estudiante:</label>
+        
+        <div class="grid grid-cols-1 gap-2.5">
+          <label class="flex items-center justify-between p-3 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:border-violet-500/50 cursor-pointer transition">
+            <div class="flex items-center gap-2.5">
+              <input type="radio" name="admin-plan-select" value="apuros" checked class="text-violet-600 focus:ring-violet-500" />
+              <div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i class="fa-solid fa-ticket text-amber-400"></i> Pase Estudiante en Apuros
+                </div>
+                <div class="text-[11px] text-zinc-400 font-normal">6 consultas completas · Sin vencimiento inmediato</div>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-amber-400 font-mono">S/ 4.90</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:border-violet-500/50 cursor-pointer transition">
+            <div class="flex items-center gap-2.5">
+              <input type="radio" name="admin-plan-select" value="mensual" class="text-violet-600 focus:ring-violet-500" />
+              <div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i class="fa-solid fa-graduation-cap text-violet-400"></i> Plan Estudiante Mensual
+                </div>
+                <div class="text-[11px] text-zinc-400 font-normal">Acceso continuo durante 30 días (100 consultas)</div>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-violet-400 font-mono">S/ 19.90</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:border-violet-500/50 cursor-pointer transition">
+            <div class="flex items-center gap-2.5">
+              <input type="radio" name="admin-plan-select" value="pro" class="text-violet-600 focus:ring-violet-500" />
+              <div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i class="fa-solid fa-award text-emerald-400"></i> Plan Profesional / Internado
+                </div>
+                <div class="text-[11px] text-zinc-400 font-normal">Prioritario durante 30 días (250 consultas)</div>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-emerald-400 font-mono">S/ 34.90</span>
+          </label>
+        </div>
+
+        <button onclick="handleAdminGenerateCode()" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs transition active:scale-95 shadow-lg shadow-violet-950/50 flex items-center justify-center gap-2 mt-2">
+          <i class="fa-solid fa-key"></i>
+          <span>Generar Código Único para Cliente</span>
+        </button>
+      </div>
+
+      <!-- Resultado del Código Generado -->
+      <div id="admin-result-box" class="hidden bg-[#181828] border border-violet-500/40 rounded-xl p-4 text-left space-y-3">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-violet-400 block mb-1">Código de Activación Oficial:</span>
+          <div class="flex items-center justify-between bg-black/60 p-2.5 rounded-lg border border-zinc-800">
+            <span id="admin-generated-code" class="text-base font-mono font-extrabold text-amber-300 tracking-wider">AP-8492-9C12</span>
+            <button onclick="copyGeneratedCode()" class="px-2.5 py-1 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold transition active:scale-95">
+              <i class="fa-regular fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <span class="text-[10px] uppercase font-bold text-zinc-400 block mb-1">Mensaje listo para WhatsApp:</span>
+          <textarea id="admin-generated-message" rows="4" readonly class="w-full bg-black/40 border border-zinc-800 rounded-lg p-2 text-[11px] text-zinc-300 font-sans resize-none focus:outline-none"></textarea>
+          <button onclick="copyGeneratedWhatsAppMessage()" class="w-full mt-2 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>Copiar Mensaje y Enviar al Cliente</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Enlace directo al nuevo Panel de Monitoreo -->
+      <div class="mt-4 pt-3 border-t border-zinc-800 text-left">
+        <a href="/admin" target="_blank" class="w-full py-2.5 px-3 rounded-xl bg-violet-950/70 hover:bg-violet-900 border border-violet-700/60 text-violet-200 text-xs font-semibold flex items-center justify-center gap-2 transition active:scale-95 shadow-sm">
+          <i class="fa-solid fa-chart-line text-violet-400"></i>
+          <span>Abrir Panel de Monitoreo de IPs y Correos</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Flotante de WhatsApp (Visible solo en Lobby) -->
+  <a id="wa-floating-btn" href="https://wa.me/51914484283?text=Hola,%20tengo%20una%20consulta%20sobre%20C%C3%B3rtex" target="_blank" class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition hover:scale-105 active:scale-95 z-50">
+    <i class="fa-brands fa-whatsapp text-xl sm:text-2xl"></i>
   </a>
 
   <script>
+    // =========================================================
+    // CONFIGURACIÓN DE ESPECIALISTAS Y TEMAS (PSICOLOGÍA DEL COLOR)
+    // =========================================================
     const CONFIG = {
       valeria: {
         title: 'Dra. Valeria · Diagnóstico Clínico (DSM-5-TR)',
+        displayName: 'Dra. Valeria',
         subtitle: 'Clínica & DSM-5-TR',
         avatar: './valeria.jpg',
+        themeColor: 'violet',
+        accentClass: 'text-violet-400',
+        waitingMessage: 'Dra. Valeria está estructurando la formulación diagnóstica (DSM-5-TR)...',
         getWelcome: (name, uni) => {
-          const greet = name ? `Hola, ${name}.` : 'Hola.';
-          const uniRef = uni ? ` Tomaré en cuenta los criterios evaluativos de tu facultad en ${uni}.` : '';
-          return `${greet} Soy la Dra. Valeria. Comparte los signos, síntomas o viñeta de consulta para estructurar la formulación clínica bajo el DSM-5-TR, calcular diagnósticos diferenciales y sustentar criterios.${uniRef}`;
+          const greet = name ? `¡Hola, ${name}!` : '¡Hola!';
+          const uniRef = uni ? ` Tomaré en cuenta los lineamientos y criterios evaluativos de ${uni}.` : '';
+          return `${greet} Soy la **Dra. Valeria**, especialista en Psicología Clínica y diagnóstico bajo el **DSM-5-TR** y CIE-10/CIE-11.${uniRef}\n\nPuedo ayudarte a:\n- **Estructurar la Formulación Diagnóstica Principal** con justificación de criterios A, B, C, D.\n- **Fundamentar Diagnósticos Diferenciales** con sus códigos oficiales y motivos de descarte.\n- **Plantear Recomendaciones de Evaluación** y pruebas complementarias bajo supervisión colegiada.\n\n*Comparte los signos, síntomas, motivo de consulta o viñeta de tu caso para comenzar.*`;
         },
         chips: [
           'Caso de Ansiedad Generalizada vs Pánico',
           'Diferencial: Depresión Mayor vs Distimia',
           'Estructura de Anamnesis / Examen Mental',
-          'Formulación de caso en TAG'
+          'Formulación de caso clínico de adicciones'
         ]
       },
       mateo: {
         title: 'Dr. Mateo · Psicometría, Baremos y Evaluación',
-        subtitle: 'Psicometría & Baremos',
+        displayName: 'Dr. Mateo',
+        subtitle: 'Psicometría, Baremos & Tests',
         avatar: './mateo.jpg',
+        themeColor: 'cyan',
+        accentClass: 'text-cyan-400',
+        waitingMessage: 'Dr. Mateo está procesando las puntuaciones y analizando discrepancias...',
         getWelcome: (name, uni) => {
-          const greet = name ? `Hola, ${name}.` : 'Hola.';
-          const uniRef = uni ? ` Si tu práctica para ${uni} requiere baremos peruanos específicos, indícalo directamente.` : '';
-          return `${greet} Soy el Dr. Mateo. Facilítame el instrumento y las puntuaciones directas (PD) o baremos para calcular percentiles y redactar el informe técnico.${uniRef}`;
+          const greet = name ? `¡Hola, ${name}!` : '¡Hola!';
+          const uniRef = uni ? ` Consideraré los baremos y lineamientos de ${uni}.` : '';
+          return `${greet} Soy el **Dr. Mateo**, especialista en **Psicometría, Evaluación Psicológica, Baremos y Análisis Cuantitativo**.${uniRef}\n\nPuedo ayudarte a:\n- **Baremos y percentiles:** WISC-V, WAIS-IV, BDI-II, STAI, MMPI-2, DAST-20, entre otros.\n- **Análisis de discrepancias inter-índices:** Identificación de fortalezas, debilidades y perfiles clínicos.\n- **Casos clínicos, escolares o experimentales:** Formulación de baterías psicométricas o informes conductuales (incluyendo experimentos como CyberRat y condicionamiento operante).\n\n*Pega tus puntuaciones directas o describe el caso/instrumento que deseas evaluar para comenzar.*`;
         },
         chips: [
-          'Informe para BDI-II (PD 23, adulto)',
-          'Interpretación WISC-V (Discrepancias)',
-          'STAI Ansiedad Rasgo/Estado',
-          'Conversión de Puntaje T a Percentil'
+          'WISC-V: Discrepancias inter-índices (CIT, ICV, IRP)',
+          'BDI-II (Depresión): PD 24, clasificación y baremos',
+          'CyberRat: Informe experimental y moldeamiento',
+          'Batería para adicciones (DAST-20, ASSIST)'
         ]
       },
       andres: {
         title: 'Mg. Andrés · Metodología de Investigación & APA 7',
+        displayName: 'Mg. Andrés',
         subtitle: 'Metodología & APA 7',
         avatar: './andres.jpg',
+        themeColor: 'amber',
+        accentClass: 'text-amber-400',
+        waitingMessage: 'Mg. Andrés está analizando la metodología y normativa APA 7...',
         getWelcome: (name, uni) => {
-          const greet = name ? `Hola, ${name}.` : 'Hola.';
+          const greet = name ? `¡Hola, ${name}!` : '¡Hola!';
           const uniRef = uni ? ` Diseñemos antecedentes priorizando el repositorio de ${uni} y la regla de 1 internacional, 1 nacional y 1 regional.` : '';
-          return `${greet} Soy el Mg. Andrés. Diseñemos antecedentes, ecuaciones de búsqueda científica o matrices metodológicas según APA 7ma edición.${uniRef}`;
+          return `${greet} Soy el **Mg. Andrés**, metodólogo senior de investigación en psicología y especialista en normativa **APA 7ma edición**.${uniRef}\n\nPuedo ayudarte a:\n- **Redactar antecedentes de tesis:** 3 antecedentes (Internacional, Nacional y Regional) con síntesis técnica y citas completas.\n- **Ecuaciones de búsqueda:** Operadores booleanos de alta precisión para Scopus, SciELO y Web of Science.\n- **Matrices de consistencia:** Alineación entre problema, objetivos, hipótesis y variables.\n\n*Escribe el tema de tu tesis o la duda metodológica para estructurarlo de inmediato.*`;
         },
         chips: [
           '3 Antecedentes (Int/Nac/Reg) para mi Tesis',
@@ -867,28 +1528,389 @@
 
     let activeKey = 'valeria';
     let chatHistories = { valeria: [], mateo: [], andres: [] };
+    let lastFailedMessage = '';
 
     const FREE_LIMIT = 3;
     let freeQueriesUsed = parseInt(localStorage.getItem('cortex_free_queries') || '0', 10);
 
-    // Manejo de Perfil del Estudiante
+    // Configuración del Renderer de Marked para envolver tablas en contenedor responsive
+    const markedRenderer = new marked.Renderer();
+    const originalTableRenderer = markedRenderer.table.bind(markedRenderer);
+    markedRenderer.table = function(header, body) {
+      return `<div class="table-responsive-wrapper">${originalTableRenderer(header, body)}</div>`;
+    };
+    marked.setOptions({ renderer: markedRenderer, breaks: true });
+
+    // Sanitización básica para prevenir XSS
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function sanitizeHtml(html) {
+      if (!html) return '';
+      return html
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+        .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+        .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
+        .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, '')
+        .replace(/javascript:/gi, '');
+    }
+
+    // Iconos modernos vectoriales (Font Awesome) para cada consulta sugerida
+    function getChipIcon(text) {
+      const t = (text || '').toLowerCase();
+      if (t.includes('wisc') || t.includes('wais') || t.includes('baremos') || t.includes('percentil')) {
+        return 'fa-solid fa-chart-column text-cyan-400';
+      }
+      if (t.includes('bdi') || t.includes('depresión') || t.includes('stai')) {
+        return 'fa-solid fa-chart-line text-cyan-400';
+      }
+      if (t.includes('cyberrat') || t.includes('experimento') || t.includes('moldeamiento')) {
+        return 'fa-solid fa-flask-vial text-cyan-400';
+      }
+      if (t.includes('adicciones') || t.includes('dast') || t.includes('assist')) {
+        return 'fa-solid fa-capsules text-cyan-400';
+      }
+      if (t.includes('ansiedad') || t.includes('pánico') || t.includes('fobia')) {
+        return 'fa-solid fa-brain text-violet-400';
+      }
+      if (t.includes('diferencial') || t.includes('distimia') || t.includes('dsm')) {
+        return 'fa-solid fa-code-compare text-violet-400';
+      }
+      if (t.includes('anamnesis') || t.includes('examen mental') || t.includes('clínico')) {
+        return 'fa-solid fa-clipboard-user text-violet-400';
+      }
+      if (t.includes('antecedentes') || t.includes('tesis')) {
+        return 'fa-solid fa-graduation-cap text-amber-400';
+      }
+      if (t.includes('scopus') || t.includes('scielo') || t.includes('ecuación') || t.includes('búsqueda')) {
+        return 'fa-solid fa-magnifying-glass text-amber-400';
+      }
+      if (t.includes('matriz') || t.includes('consistencia')) {
+        return 'fa-solid fa-table-cells-large text-amber-400';
+      }
+      if (t.includes('apa') || t.includes('citas') || t.includes('autores')) {
+        return 'fa-solid fa-quote-left text-amber-400';
+      }
+      return 'fa-solid fa-wand-magic-sparkles text-zinc-400';
+    }
+
+    // Notificaciones Toast Modernas con Iconografía Vectorial
+    function showNotification(message, type = 'info') {
+      let container = document.getElementById('cortex-toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'cortex-toast-container';
+        container.className = 'fixed top-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0';
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement('div');
+      const iconMap = {
+        success: 'fa-solid fa-circle-check text-emerald-400',
+        error: 'fa-solid fa-circle-xmark text-rose-400',
+        warning: 'fa-solid fa-triangle-exclamation text-amber-400',
+        admin: 'fa-solid fa-key text-amber-400',
+        info: 'fa-solid fa-circle-info text-cyan-400'
+      };
+      const icon = iconMap[type] || iconMap.info;
+      const borderMap = {
+        success: 'border-emerald-500/40 bg-[#0f1715]/95 shadow-emerald-950/40',
+        error: 'border-rose-500/40 bg-[#170f12]/95 shadow-rose-950/40',
+        warning: 'border-amber-500/40 bg-[#17140f]/95 shadow-amber-950/40',
+        admin: 'border-amber-500/50 bg-[#17140f]/95 shadow-amber-950/50',
+        info: 'border-cortex-border bg-cortex-card/95 shadow-black/60'
+      };
+      const border = borderMap[type] || borderMap.info;
+
+      toast.className = `pointer-events-auto flex items-start gap-3 p-3.5 rounded-xl border ${border} backdrop-blur-md shadow-xl text-white text-xs leading-relaxed transform transition-all duration-300 translate-y-[-10px] opacity-0`;
+      toast.innerHTML = `
+        <i class="${icon} text-sm mt-0.5 shrink-0"></i>
+        <div class="flex-1 font-medium whitespace-pre-line">${escapeHtml(message)}</div>
+        <button onclick="this.parentElement.remove()" class="text-zinc-500 hover:text-zinc-300 ml-1 text-xs shrink-0">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      `;
+
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-[-10px]', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-[-10px]');
+        setTimeout(() => toast.remove(), 300);
+      }, 4500);
+    }
+
+    // Limpieza profunda de errores obsoletos y mensajes huérfanos para que el saludo siempre aparezca
+    function cleanLegacyErrors(history) {
+      if (!Array.isArray(history)) return [];
+      const cleaned = history.filter(item => {
+        if (!item || !item.text || typeof item.text !== 'string') return false;
+        if (item.text.includes('models/gemini') || 
+            item.text.includes('is not found for API') || 
+            item.text.includes('GEMINI_API_KEY no configurada') ||
+            item.text.startsWith('\u26A0') ||
+            item.text.includes('fa-triangle-exclamation') ||
+            item.isError) return false;
+        return true;
+      });
+      // Si la conversación termina en un mensaje de usuario que quedó sin respuesta por error previo, removerlo
+      while (cleaned.length > 0 && cleaned[cleaned.length - 1].role === 'user') {
+        cleaned.pop();
+      }
+      return cleaned;
+    }
+
+    // =========================================================
+    // AUTENTICACIÓN GOOGLE & MANEJO DE PERFIL DEL ESTUDIANTE
+    // =========================================================
     let userProfile = null;
+    let googleClientId = '';
+
     try {
       userProfile = JSON.parse(localStorage.getItem('cortex_user_profile') || 'null');
     } catch(e) {
       userProfile = null;
     }
 
-    function updateUserProfileUI() {
-      const badge = document.getElementById('user-profile-badge');
-      if (!badge) return;
-      if (userProfile && userProfile.name) {
-        badge.textContent = userProfile.name;
-        badge.title = `${userProfile.name} · ${userProfile.university || 'Perú'}`;
-      } else {
-        badge.textContent = 'Mi Perfil';
-        badge.title = 'Configura tu nombre y universidad';
+    // Registro transparente de visitas, inicios de sesión y actividad para el Administrador
+    function sendTrackingEvent(action = 'visit', extra = {}) {
+      try {
+        const payload = {
+          action: action,
+          path: window.location.pathname || '/',
+          email: userProfile?.email || extra.email || null,
+          name: userProfile?.name || extra.name || null,
+          university: userProfile?.university || extra.university || null,
+          plan: typeof userPlan !== 'undefined' && userPlan ? userPlan.type : 'free',
+          ...extra
+        };
+        fetch('/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    // Decodificador seguro de JWT (Google ID Token) sin dependencias
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        return null;
       }
+    }
+
+    function updateUserProfileUI() {
+      const workspaceBadge = document.getElementById('user-profile-badge');
+      const btnGoogleLogin = document.getElementById('btn-google-login');
+      const userLoggedBadge = document.getElementById('user-logged-badge');
+      const navAvatar = document.getElementById('nav-user-avatar');
+      const navName = document.getElementById('nav-user-name');
+      const dropdownAvatar = document.getElementById('dropdown-user-avatar');
+      const dropdownName = document.getElementById('dropdown-user-name');
+      const dropdownEmail = document.getElementById('dropdown-user-email');
+      const dropdownUni = document.getElementById('dropdown-user-uni');
+      const profileGoogleLinked = document.getElementById('profile-google-linked');
+      const profileGoogleUnlinked = document.getElementById('profile-google-unlinked');
+      const profileModalAvatar = document.getElementById('profile-modal-avatar');
+      const profileModalEmail = document.getElementById('profile-modal-email');
+
+      const defaultAvatar = 'https://api.dicebear.com/7.x/initials/svg?seed=Estudiante&backgroundColor=7c3aed,6d28d9';
+
+      if (userProfile && (userProfile.name || userProfile.email)) {
+        const displayName = userProfile.name || userProfile.email.split('@')[0];
+        const userPic = userProfile.picture || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(displayName)}&backgroundColor=7c3aed,6d28d9`;
+
+        if (workspaceBadge) {
+          workspaceBadge.textContent = displayName;
+          workspaceBadge.title = `${displayName} · ${userProfile.university || 'Perú'}`;
+        }
+
+        if (btnGoogleLogin) btnGoogleLogin.style.display = 'none';
+        if (userLoggedBadge) {
+          userLoggedBadge.style.display = 'flex';
+          userLoggedBadge.classList.remove('hidden');
+        }
+
+        if (navAvatar) navAvatar.src = userPic;
+        if (navName) navName.textContent = displayName;
+        if (dropdownAvatar) dropdownAvatar.src = userPic;
+        if (dropdownName) dropdownName.textContent = displayName;
+        if (dropdownEmail) dropdownEmail.textContent = userProfile.email || 'Cuenta Local';
+        if (dropdownUni) dropdownUni.textContent = userProfile.university || 'Por configurar';
+
+        if (profileGoogleLinked) {
+          profileGoogleLinked.style.display = userProfile.email ? 'flex' : 'none';
+          profileGoogleLinked.classList.remove('hidden');
+        }
+        if (profileGoogleUnlinked) {
+          profileGoogleUnlinked.style.display = userProfile.email ? 'none' : 'block';
+        }
+        if (profileModalAvatar) profileModalAvatar.src = userPic;
+        if (profileModalEmail) profileModalEmail.textContent = userProfile.email || displayName;
+
+      } else {
+        if (workspaceBadge) {
+          workspaceBadge.textContent = 'Mi Perfil';
+          workspaceBadge.title = 'Configura tu nombre y universidad';
+        }
+
+        if (btnGoogleLogin) btnGoogleLogin.style.display = 'flex';
+        if (userLoggedBadge) {
+          userLoggedBadge.style.display = 'none';
+          userLoggedBadge.classList.add('hidden');
+        }
+
+        if (profileGoogleLinked) {
+          profileGoogleLinked.style.display = 'none';
+          profileGoogleLinked.classList.add('hidden');
+        }
+        if (profileGoogleUnlinked) {
+          profileGoogleUnlinked.style.display = 'block';
+        }
+      }
+    }
+
+    function toggleUserDropdown(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('user-dropdown-menu');
+      if (!menu) return;
+      menu.classList.toggle('hidden');
+    }
+
+    // Cierra dropdowns al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('auth-nav-container');
+      const menu = document.getElementById('user-dropdown-menu');
+      if (menu && container && !container.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    function openGoogleAuthModal() {
+      const modal = document.getElementById('google-auth-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+
+      // Renderizar el botón oficial de Google si el SDK está cargado y hay Client ID
+      if (window.google && google.accounts && google.accounts.id && googleClientId) {
+        const btnContainer = document.getElementById('g_id_signin_btn');
+        if (btnContainer && !btnContainer.hasChildNodes()) {
+          google.accounts.id.renderButton(btnContainer, {
+            theme: 'filled_black',
+            size: 'large',
+            shape: 'pill',
+            text: 'continue_with',
+            width: 280
+          });
+        }
+      }
+    }
+
+    function closeGoogleAuthModal() {
+      const modal = document.getElementById('google-auth-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    // Callback oficial de Google Identity Services
+    function handleGoogleCredentialResponse(response) {
+      if (!response || !response.credential) return;
+      const payload = parseJwt(response.credential);
+      if (!payload) return;
+
+      userProfile = {
+        name: payload.name || payload.given_name || 'Estudiante',
+        email: payload.email,
+        picture: payload.picture,
+        googleId: payload.sub,
+        university: userProfile?.university || 'Universidad Tecnológica del Perú (UTP)'
+      };
+
+      localStorage.setItem('cortex_user_profile', JSON.stringify(userProfile));
+      sendTrackingEvent('login', { email: userProfile.email, name: userProfile.name, university: userProfile.university });
+      updateUserProfileUI();
+      closeGoogleAuthModal();
+      showNotification(`¡Bienvenido a Córtex, ${userProfile.name}!\nTu cuenta de Gmail (${userProfile.email}) ha sido vinculada con éxito.`, 'success');
+      renderChat();
+    }
+
+    function handleQuickGmailSubmit() {
+      const emailInput = document.getElementById('google-input-email');
+      const nameInput = document.getElementById('google-input-name');
+      const email = emailInput ? emailInput.value.trim() : '';
+      const name = nameInput ? nameInput.value.trim() : '';
+
+      if (!email || !email.includes('@')) {
+        showNotification('Por favor ingresa un correo electrónico válido (ej. usuario@gmail.com).', 'warning');
+        if (emailInput) emailInput.focus();
+        return;
+      }
+
+      const finalName = name || email.split('@')[0];
+      const avatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(finalName)}&backgroundColor=7c3aed,6d28d9`;
+
+      userProfile = {
+        name: finalName,
+        email: email,
+        picture: avatarUrl,
+        googleId: 'gmail_' + Date.now(),
+        university: userProfile?.university || 'Universidad Tecnológica del Perú (UTP)'
+      };
+
+      localStorage.setItem('cortex_user_profile', JSON.stringify(userProfile));
+      sendTrackingEvent('login', { email: userProfile.email, name: userProfile.name, university: userProfile.university });
+      updateUserProfileUI();
+      closeGoogleAuthModal();
+      renderChat();
+    }
+
+    function quickSelectAccount(name, email, uni) {
+      const avatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=7c3aed,6d28d9`;
+      userProfile = {
+        name: name,
+        email: email,
+        picture: avatarUrl,
+        googleId: 'gmail_demo_' + Date.now(),
+        university: uni
+      };
+      localStorage.setItem('cortex_user_profile', JSON.stringify(userProfile));
+      sendTrackingEvent('login', { email: userProfile.email, name: userProfile.name, university: userProfile.university });
+      updateUserProfileUI();
+      closeGoogleAuthModal();
+      renderChat();
+    }
+
+    function logoutGoogle() {
+      userProfile = null;
+      localStorage.removeItem('cortex_user_profile');
+      updateUserProfileUI();
+      const menu = document.getElementById('user-dropdown-menu');
+      if (menu) menu.classList.add('hidden');
+      if (window.google && google.accounts && google.accounts.id) {
+        google.accounts.id.disableAutoSelect();
+      }
+      renderChat();
     }
 
     function openProfileModal() {
@@ -903,6 +1925,7 @@
         modal.classList.remove('hidden');
         modal.classList.add('flex');
       }
+      updateUserProfileUI();
     }
 
     function closeProfileModal() {
@@ -919,7 +1942,12 @@
       const uni = document.getElementById('profile-uni-select').value;
       if (!name || !uni) return;
 
-      userProfile = { name, university: uni };
+      userProfile = {
+        ...(userProfile || {}),
+        name: name,
+        university: uni
+      };
+
       localStorage.setItem('cortex_user_profile', JSON.stringify(userProfile));
       updateUserProfileUI();
       closeProfileModal();
@@ -935,23 +1963,165 @@
       }
     }
 
+    // Inicialización del cliente de Google OAuth al cargar la página
+    async function initGoogleAuth() {
+      try {
+        const res = await fetch('/api/config');
+        const data = await res.json().catch(() => ({}));
+        googleClientId = data.googleClientId || '';
+
+        if (googleClientId && window.google && google.accounts && google.accounts.id) {
+          google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: handleGoogleCredentialResponse,
+            auto_select: false
+          });
+        }
+      } catch (e) {}
+
+      updateUserProfileUI();
+    }
+
+    let userPlan = null;
+    try {
+      userPlan = JSON.parse(localStorage.getItem('cortex_user_plan') || 'null');
+    } catch (e) {
+      userPlan = null;
+    }
+
+    // Compatibilidad con sesiones previas de administrador maestro
+    if (!userPlan && localStorage.getItem('cortex_is_admin') === 'true') {
+      const storedKey = (localStorage.getItem('cortex_admin_key') || '').trim();
+      if (storedKey.toLowerCase() === 'adminortega09') {
+        userPlan = { type: 'admin', name: 'Dueño Maestro', queries: Infinity, isMaster: true, code: storedKey };
+        localStorage.setItem('cortex_user_plan', JSON.stringify(userPlan));
+      }
+    }
+
     function updateTrialUI() {
       const badge = document.getElementById('trial-counter-badge');
-      const isAdmin = localStorage.getItem('cortex_admin_key');
+      if (!badge) return;
 
-      if (isAdmin) {
-        if (badge) {
-          badge.textContent = 'Acceso Admin: Ilimitado ⚡';
-          badge.className = 'font-mono text-emerald-400 font-semibold';
-        }
+      if (userPlan?.type === 'admin') {
+        badge.innerHTML = 'Acceso Dueño: Ilimitado <i class="fa-solid fa-crown text-amber-400 ml-1"></i>';
+        badge.className = 'font-mono text-amber-400 font-semibold inline-flex items-center';
+        return;
+      }
+
+      if (userPlan?.type === 'apuros') {
+        const remaining = userPlan.remainingQueries != null ? userPlan.remainingQueries : 6;
+        badge.innerHTML = `<i class="fa-solid fa-ticket text-amber-400 mr-1.5 text-[11px]"></i>Pase en Apuros: ${remaining} consultas restantes`;
+        badge.className = 'font-mono text-amber-400 font-medium inline-flex items-center';
+        return;
+      }
+
+      if (userPlan?.type === 'mensual') {
+        const days = Math.max(1, Math.ceil(((userPlan.expiresAt || Date.now()) - Date.now()) / (1000 * 60 * 60 * 24)));
+        badge.innerHTML = `<i class="fa-solid fa-graduation-cap text-violet-400 mr-1.5 text-[11px]"></i>Plan Mensual · ${days} días restantes`;
+        badge.className = 'font-mono text-violet-400 font-semibold inline-flex items-center';
+        return;
+      }
+
+      if (userPlan?.type === 'pro') {
+        const days = Math.max(1, Math.ceil(((userPlan.expiresAt || Date.now()) - Date.now()) / (1000 * 60 * 60 * 24)));
+        badge.innerHTML = `<i class="fa-solid fa-award text-emerald-400 mr-1.5 text-[11px]"></i>Plan Profesional · ${days} días restantes`;
+        badge.className = 'font-mono text-emerald-400 font-semibold inline-flex items-center';
         return;
       }
 
       const remaining = Math.max(0, FREE_LIMIT - freeQueriesUsed);
-      if (badge) {
-        badge.textContent = `Consultas de prueba: ${remaining} restantes`;
-        badge.className = 'font-mono text-violet-400';
+      const accent = activeKey === 'mateo' ? 'text-cyan-400' : activeKey === 'andres' ? 'text-amber-400' : 'text-violet-400';
+      badge.innerHTML = `<i class="fa-solid fa-hourglass-half ${accent} mr-1.5 text-[11px]"></i>Consultas de prueba: ${remaining} restantes`;
+      badge.className = `font-mono ${accent} font-medium inline-flex items-center`;
+    }
+
+    function updateAdminUI() {
+      const isOwner = userPlan?.type === 'admin' || localStorage.getItem('cortex_is_admin') === 'true';
+      const btnAdmin = document.getElementById('btn-admin-panel');
+      const menuBtnAdmin = document.getElementById('menu-btn-admin-panel');
+      const btnAnalytics = document.getElementById('btn-admin-analytics');
+      const workspaceBtnAnalytics = document.getElementById('workspace-admin-ips-btn');
+
+      if (btnAdmin) {
+        btnAdmin.classList.toggle('hidden', !isOwner);
+        btnAdmin.classList.toggle('inline-flex', isOwner);
       }
+      if (menuBtnAdmin) {
+        menuBtnAdmin.classList.toggle('hidden', !isOwner);
+        menuBtnAdmin.classList.toggle('flex', isOwner);
+      }
+
+      // Los accesos a Monitoreo IPs permanecen siempre accesibles (protegidos por contraseña)
+      if (btnAnalytics && isOwner) {
+        btnAnalytics.classList.add('ring-1', 'ring-amber-400/50');
+      }
+      if (workspaceBtnAnalytics && isOwner) {
+        workspaceBtnAnalytics.classList.add('ring-1', 'ring-amber-400/50');
+      }
+    }
+
+    function openAdminLicensesModal() {
+      const modal = document.getElementById('admin-licenses-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeAdminLicensesModal() {
+      const modal = document.getElementById('admin-licenses-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    async function handleAdminGenerateCode() {
+      const selectedPlanEl = document.querySelector('input[name="admin-plan-select"]:checked');
+      const planType = selectedPlanEl ? selectedPlanEl.value : 'apuros';
+      const storedKey = localStorage.getItem('cortex_admin_key') || 'adminortega09';
+
+      try {
+        const res = await fetch('/api/generate-license', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ adminKey: storedKey, planType })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          showNotification(data.error || 'No se pudo generar el código.', 'error');
+          return;
+        }
+
+        const box = document.getElementById('admin-result-box');
+        const codeEl = document.getElementById('admin-generated-code');
+        const msgEl = document.getElementById('admin-generated-message');
+
+        if (codeEl) codeEl.textContent = data.license.code;
+        if (msgEl) msgEl.value = data.whatsappMessage;
+        if (box) box.classList.remove('hidden');
+
+        showNotification(`Código ${data.license.code} generado con éxito.`, 'success');
+      } catch (e) {
+        showNotification('Error al contactar al servidor para generar código.', 'error');
+      }
+    }
+
+    function copyGeneratedCode() {
+      const codeEl = document.getElementById('admin-generated-code');
+      if (!codeEl) return;
+      navigator.clipboard.writeText(codeEl.textContent.trim()).then(() => {
+        showNotification('Código copiado al portapapeles.', 'success');
+      });
+    }
+
+    function copyGeneratedWhatsAppMessage() {
+      const msgEl = document.getElementById('admin-generated-message');
+      if (!msgEl) return;
+      navigator.clipboard.writeText(msgEl.value.trim()).then(() => {
+        showNotification('Mensaje de WhatsApp copiado. ¡Listo para enviar al cliente!', 'success');
+      });
     }
 
     function openPaywallModal() {
@@ -968,14 +2138,116 @@
         modal.classList.add('hidden');
         modal.classList.remove('flex');
       }
-      showLobbyView();
+    }
+
+    async function activatePlanCode(code) {
+      const clean = (code || '').trim();
+      if (!clean) {
+        showNotification('Por favor ingresa un código de activación o clave.', 'warning');
+        return false;
+      }
+
+      setFormBusy(true);
+      try {
+        const res = await fetch('/api/verify-license', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: clean })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          showNotification(data.error || 'Código no reconocido o inválido.', 'error');
+          return false;
+        }
+
+        if (data.isMaster) {
+          userPlan = {
+            type: 'admin',
+            name: 'Dueño / Administrador Maestro',
+            queries: Infinity,
+            isMaster: true,
+            code: clean
+          };
+          localStorage.setItem('cortex_user_plan', JSON.stringify(userPlan));
+          localStorage.setItem('cortex_is_admin', 'true');
+          localStorage.setItem('cortex_admin_key', clean);
+          sessionStorage.setItem('cortex_admin_secret', clean);
+          sendTrackingEvent('license', { code: clean, plan: 'admin', details: 'Activación Modo Dueño' });
+          showNotification('Modo Dueño validado: Acceso ilimitado y panel de monitoreo activados.', 'admin');
+        } else if (data.plan === 'apuros') {
+          userPlan = {
+            type: 'apuros',
+            name: data.name,
+            remainingQueries: data.queries || 6,
+            durationDays: data.durationDays || 30,
+            code: clean,
+            activatedAt: Date.now()
+          };
+          localStorage.setItem('cortex_user_plan', JSON.stringify(userPlan));
+          localStorage.removeItem('cortex_is_admin');
+          showNotification(`¡${data.name} Activado! Cuentas con ${userPlan.remainingQueries} consultas completas.`, 'success');
+        } else if (data.plan === 'mensual' || data.plan === 'pro') {
+          const days = data.durationDays || 30;
+          userPlan = {
+            type: data.plan,
+            name: data.name,
+            remainingQueries: data.queries || 100,
+            durationDays: days,
+            expiresAt: Date.now() + days * 24 * 60 * 60 * 1000,
+            code: clean,
+            activatedAt: Date.now()
+          };
+          localStorage.setItem('cortex_user_plan', JSON.stringify(userPlan));
+          localStorage.removeItem('cortex_is_admin');
+          showNotification(`¡${data.name} Activado! Acceso continuo activo por ${days} días.`, 'success');
+        }
+
+        closePaywallModal();
+        updateTrialUI();
+        updateAdminUI();
+        return true;
+      } catch (e) {
+        showNotification('No se pudo verificar el código con el servidor.', 'warning');
+        return false;
+      } finally {
+        setFormBusy(false);
+      }
+    }
+
+    async function submitPaywallKey() {
+      const input = document.getElementById('paywall-key-input');
+      const key = input ? input.value.trim() : '';
+      if (!key) {
+        showNotification('Por favor ingresa tu clave o código de activación.', 'warning');
+        if (input) input.focus();
+        return;
+      }
+      const success = await activatePlanCode(key);
+      if (success) {
+        if (input) input.value = '';
+        if (document.getElementById('view-workspace').style.display === 'none') {
+          handleWorkspaceNavClick();
+        }
+      }
+    }
+
+    function copyPaymentNumber(btn) {
+      navigator.clipboard.writeText('914484283').then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copiado';
+        setTimeout(() => { btn.innerHTML = orig; }, 1800);
+        showNotification('Número 914 484 283 copiado para Yape o Plin.', 'success');
+      }).catch(() => {
+        showNotification('Número de pago: 914 484 283', 'info');
+      });
     }
 
     try {
       chatHistories = {
-        valeria: JSON.parse(localStorage.getItem('cortex_valeria') || '[]'),
-        mateo: JSON.parse(localStorage.getItem('cortex_mateo') || '[]'),
-        andres: JSON.parse(localStorage.getItem('cortex_andres') || '[]')
+        valeria: cleanLegacyErrors(JSON.parse(localStorage.getItem('cortex_valeria') || '[]')),
+        mateo: cleanLegacyErrors(JSON.parse(localStorage.getItem('cortex_mateo') || '[]')),
+        andres: cleanLegacyErrors(JSON.parse(localStorage.getItem('cortex_andres') || '[]'))
       };
     } catch (e) {
       chatHistories = { valeria: [], mateo: [], andres: [] };
@@ -1009,17 +2281,17 @@
 
       if (activeView === 'lobby') {
         if (lobbyBtn) {
-          lobbyBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition";
+          lobbyBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition active:scale-95";
         }
         if (workspaceBtn) {
-          workspaceBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition";
+          workspaceBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition active:scale-95";
         }
       } else {
         if (workspaceBtn) {
-          workspaceBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition";
+          workspaceBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition active:scale-95";
         }
         if (lobbyBtn) {
-          lobbyBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition";
+          lobbyBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900/80 text-zinc-300 hover:text-white border border-zinc-800 transition active:scale-95";
         }
       }
     }
@@ -1064,6 +2336,63 @@
 
     function setSpecialist(key) {
       activeKey = key;
+      const data = CONFIG[key];
+
+      // Actualizar Header interno del chat
+      const headerAvatar = document.getElementById('chat-header-avatar');
+      const headerName = document.getElementById('chat-header-name');
+      const headerStatus = document.getElementById('chat-header-status');
+      
+      if (headerAvatar) {
+        headerAvatar.src = data.avatar || './' + key + '.jpg';
+        headerAvatar.className = `w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border-2 shadow-sm ${key === 'mateo' ? 'border-cyan-500' : key === 'andres' ? 'border-amber-500' : 'border-violet-500'}`;
+      }
+      if (headerName) {
+        headerName.textContent = data.displayName || data.title;
+      }
+      if (headerStatus) {
+        headerStatus.innerHTML = `<span>${data.subtitle}</span> <span class="text-zinc-600 hidden sm:inline">·</span> <span class="text-emerald-400 font-medium hidden sm:inline"><i class="fa-solid fa-circle text-[7px] mr-1"></i>En línea · Gemini Activo</span>`;
+      }
+
+      // Actualizar placeholder y colores del dock de entrada
+      const chatInput = document.getElementById('user-input');
+      const chatInputDock = document.getElementById('chat-input-dock');
+      const sendBtn = document.getElementById('send-btn');
+      const trialBadge = document.getElementById('trial-counter-badge');
+
+      if (chatInput) {
+        if (key === 'mateo') {
+          chatInput.placeholder = "Pega baremos, percentiles o pruebas al Dr. Mateo...";
+        } else if (key === 'andres') {
+          chatInput.placeholder = "Consulta de tesis, metodología o APA 7...";
+        } else {
+          chatInput.placeholder = "Describe el caso clínico o síntomas...";
+        }
+      }
+
+      if (chatInputDock) {
+        const isMulti = chatInput && chatInput.scrollHeight > 44;
+        const alignClass = isMulti ? 'items-end' : 'items-center';
+        if (key === 'mateo') {
+          chatInputDock.className = `flex ${alignClass} gap-1.5 sm:gap-2 bg-[#14141c] border border-[#272738] focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/25 rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 pl-2.5 sm:pl-3 transition shadow-xl shadow-black/50`;
+        } else if (key === 'andres') {
+          chatInputDock.className = `flex ${alignClass} gap-1.5 sm:gap-2 bg-[#14141c] border border-[#272738] focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/25 rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 pl-2.5 sm:pl-3 transition shadow-xl shadow-black/50`;
+        } else {
+          chatInputDock.className = `flex ${alignClass} gap-1.5 sm:gap-2 bg-[#14141c] border border-[#272738] focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/25 rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 pl-2.5 sm:pl-3 transition shadow-xl shadow-black/50`;
+        }
+      }
+
+      if (sendBtn) {
+        if (key === 'mateo') {
+          sendBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-cyan-600 hover:bg-cyan-500 active:scale-90 text-white flex items-center justify-center transition shrink-0 shadow-md shadow-cyan-900/50";
+        } else if (key === 'andres') {
+          sendBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-600 hover:bg-amber-500 active:scale-90 text-white flex items-center justify-center transition shrink-0 shadow-md shadow-amber-900/50";
+        } else {
+          sendBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-violet-600 hover:bg-violet-500 active:scale-90 text-white flex items-center justify-center transition shrink-0 shadow-md shadow-violet-900/50";
+        }
+      }
+
+      updateTrialUI();
 
       ['valeria', 'mateo', 'andres'].forEach(k => {
         const tab = document.getElementById(`tab-${k}`);
@@ -1072,21 +2401,33 @@
         const subtitleEl = tab.querySelector('.tab-subtitle');
 
         if (k === key) {
-          tab.className = "shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-violet-500/50 bg-violet-950/30 text-left transition";
-          if (titleEl) titleEl.className = "tab-title font-bold text-xs text-white whitespace-nowrap";
-          if (subtitleEl) subtitleEl.className = "tab-subtitle text-[10px] text-violet-300/80 whitespace-nowrap";
+          if (k === 'valeria') {
+            tab.className = "shrink-0 flex items-center gap-2 p-1.5 px-2.5 sm:p-2 sm:px-3 rounded-xl border border-violet-500/60 bg-violet-950/40 text-left transition shadow-md shadow-violet-950/40 active:scale-95";
+            if (titleEl) titleEl.className = "tab-title font-bold text-[11px] sm:text-xs text-white whitespace-nowrap";
+            if (subtitleEl) subtitleEl.className = "tab-subtitle text-[9px] sm:text-[10px] text-violet-300/80 whitespace-nowrap";
+          } else if (k === 'mateo') {
+            tab.className = "shrink-0 flex items-center gap-2 p-1.5 px-2.5 sm:p-2 sm:px-3 rounded-xl border border-cyan-500/60 bg-cyan-950/40 text-left transition shadow-md shadow-cyan-950/40 active:scale-95";
+            if (titleEl) titleEl.className = "tab-title font-bold text-[11px] sm:text-xs text-white whitespace-nowrap";
+            if (subtitleEl) subtitleEl.className = "tab-subtitle text-[9px] sm:text-[10px] text-cyan-300/80 whitespace-nowrap";
+          } else if (k === 'andres') {
+            tab.className = "shrink-0 flex items-center gap-2 p-1.5 px-2.5 sm:p-2 sm:px-3 rounded-xl border border-amber-500/60 bg-amber-950/40 text-left transition shadow-md shadow-amber-950/40 active:scale-95";
+            if (titleEl) titleEl.className = "tab-title font-bold text-[11px] sm:text-xs text-white whitespace-nowrap";
+            if (subtitleEl) subtitleEl.className = "tab-subtitle text-[9px] sm:text-[10px] text-amber-300/80 whitespace-nowrap";
+          }
         } else {
-          tab.className = "shrink-0 flex items-center gap-2.5 p-2 px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition";
-          if (titleEl) titleEl.className = "tab-title font-bold text-xs text-zinc-400 whitespace-nowrap";
-          if (subtitleEl) subtitleEl.className = "tab-subtitle text-[10px] text-zinc-500 whitespace-nowrap";
+          tab.className = "shrink-0 flex items-center gap-2 p-1.5 px-2.5 sm:p-2 sm:px-3 rounded-xl border border-transparent hover:border-cortex-border hover:bg-cortex-hover text-left transition active:scale-95";
+          if (titleEl) titleEl.className = "tab-title font-bold text-[11px] sm:text-xs text-zinc-400 whitespace-nowrap";
+          if (subtitleEl) subtitleEl.className = "tab-subtitle text-[9px] sm:text-[10px] text-zinc-500 whitespace-nowrap";
         }
       });
 
       const chipsBox = document.getElementById('chips-container');
       if (chipsBox) {
+        const hoverBorder = key === 'mateo' ? 'hover:border-cyan-500/50 hover:text-cyan-200' : key === 'andres' ? 'hover:border-amber-500/50 hover:text-amber-200' : 'hover:border-violet-500/50 hover:text-violet-200';
         chipsBox.innerHTML = CONFIG[key].chips.map(chip => `
-          <button onclick="useChip('${chip}')" class="whitespace-nowrap px-2.5 py-1 rounded-lg bg-cortex-card hover:bg-zinc-800 border border-cortex-border text-zinc-300 text-[11px] transition">
-            ${chip}
+          <button onclick="useChip('${chip.replace(/'/g, "\\'")}')" class="whitespace-nowrap px-3 py-1.5 rounded-full bg-[#181824] hover:bg-zinc-800 border border-[#2b2b3a] ${hoverBorder} text-zinc-300 text-[10.5px] sm:text-[11px] transition active:scale-95 shadow-sm inline-flex items-center gap-1.5">
+            <i class="${getChipIcon(chip)} text-[10px]"></i>
+            <span>${chip}</span>
           </button>
         `).join('');
       }
@@ -1095,13 +2436,16 @@
     }
 
     function useChip(text) {
-      document.getElementById('user-input').value = text;
+      const input = document.getElementById('user-input');
+      if (input.disabled) return;
+      input.value = text;
       sendMessage();
     }
 
     function clearHistory() {
       chatHistories[activeKey] = [];
       saveToStorage();
+      lastFailedMessage = '';
       renderChat();
     }
 
@@ -1132,37 +2476,62 @@
     }
 
     function downloadWordDoc(rawMarkdown) {
-      const htmlBody = marked.parse(rawMarkdown);
+      const data = CONFIG[activeKey];
+      const uName = userProfile?.name || 'Estudiante';
+      const uUni = userProfile?.university || 'Facultad de Psicología';
+      const today = new Date().toLocaleDateString('es-PE', {
+        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+
+      const parsedHtml = marked.parse(rawMarkdown);
+
       const wordDocumentContent = `
         <!DOCTYPE html>
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
-          <title>Informe Córtex</title>
+          <title>Informe Córtex - ${data.subtitle}</title>
           <style>
-            body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #000; }
-            h1 { font-size: 16pt; color: #1e1b4b; border-bottom: 2pt solid #4338ca; padding-bottom: 4pt; margin-top: 14pt; }
-            h2 { font-size: 13pt; color: #312e81; margin-top: 12pt; }
-            h3 { font-size: 12pt; color: #4338ca; }
+            body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #1e293b; margin: 30pt; }
+            .header-box { border-bottom: 2pt solid #4338ca; padding-bottom: 8pt; margin-bottom: 16pt; }
+            .brand-title { font-size: 16pt; font-weight: bold; color: #312e81; }
+            .meta-info { font-size: 9.5pt; color: #64748b; margin-top: 4pt; }
+            h1 { font-size: 14pt; color: #1e1b4b; border-bottom: 1pt solid #cbd5e1; padding-bottom: 3pt; margin-top: 14pt; margin-bottom: 6pt; }
+            h2 { font-size: 12.5pt; color: #312e81; margin-top: 12pt; margin-bottom: 4pt; }
+            h3 { font-size: 11.5pt; color: #4338ca; margin-top: 10pt; margin-bottom: 3pt; }
+            p { margin-top: 0; margin-bottom: 8pt; text-align: justify; }
             table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
-            th, td { border: 1pt solid #cbd5e1; padding: 6pt 8pt; text-align: left; }
+            th, td { border: 1pt solid #94a3b8; padding: 6pt 8pt; text-align: left; }
             th { background-color: #f1f5f9; font-weight: bold; color: #0f172a; }
-            blockquote { border-left: 3pt solid #6366f1; margin-left: 0; padding-left: 10pt; color: #475569; font-style: italic; }
-            ul, ol { margin-left: 18pt; }
+            tr:nth-child(even) td { background-color: #f8fafc; }
+            blockquote { border-left: 3pt solid #6366f1; margin-left: 0; padding-left: 10pt; color: #475569; font-style: italic; background-color: #f8fafc; padding-top: 4pt; padding-bottom: 4pt; }
+            ul, ol { margin-left: 18pt; margin-bottom: 8pt; }
             li { margin-bottom: 3pt; }
+            .report-footer { margin-top: 24pt; border-top: 1pt solid #e2e8f0; padding-top: 8pt; font-size: 8.5pt; color: #94a3b8; text-align: center; }
           </style>
         </head>
         <body>
-          ${htmlBody}
+          <div class="header-box">
+            <div class="brand-title">CÓRTEX · INFORME TÉCNICO DE PSICOLOGÍA</div>
+            <div class="meta-info">
+              <strong>Especialista:</strong> ${data.title} &nbsp;|&nbsp;
+              <strong>Evaluador / Estudiante:</strong> ${uName} (${uUni}) &nbsp;|&nbsp;
+              <strong>Fecha:</strong> ${today}
+            </div>
+          </div>
+          ${parsedHtml}
+          <div class="report-footer">
+            Documento emitido mediante Córtex - Workspace Clínico, Psicométrico y Metodológico.
+          </div>
         </body>
         </html>
       `;
 
-      const blob = new Blob(['\ufeff', wordDocumentContent], { type: 'application/msword' });
+      const blob = new Blob(['\ufeff', wordDocumentContent], { type: 'application/msword;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Informe_${activeKey.toUpperCase()}_Cortex.doc`;
+      link.download = `Informe_${activeKey.toUpperCase()}_Cortex_${Date.now()}.doc`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1176,14 +2545,46 @@
 
       const uName = userProfile ? userProfile.name : '';
       const uUni = userProfile ? userProfile.university : '';
-      const welcomeText = typeof data.getWelcome === 'function' ? data.getWelcome(uName, uUni) : data.welcome;
+      const welcomeRaw = typeof data.getWelcome === 'function' ? data.getWelcome(uName, uUni) : data.welcome;
+      const parsedWelcome = sanitizeHtml(marked.parse(welcomeRaw));
 
+      // Pantalla de Bienvenida estilo Chat Moderno cuando el chat está vacío
       if (list.length === 0) {
+        const themeBorder = activeKey === 'mateo' ? 'border-cyan-500/60 shadow-cyan-950/40' : activeKey === 'andres' ? 'border-amber-500/60 shadow-amber-950/40' : 'border-violet-500/60 shadow-violet-950/40';
+        const ringBorder = activeKey === 'mateo' ? 'border-cyan-500' : activeKey === 'andres' ? 'border-amber-500' : 'border-violet-500';
+        const chipHover = activeKey === 'mateo' ? 'hover:border-cyan-500/50 hover:bg-cyan-950/20' : activeKey === 'andres' ? 'hover:border-amber-500/50 hover:bg-amber-950/20' : 'hover:border-violet-500/50 hover:bg-violet-950/20';
+        const arrowColor = activeKey === 'mateo' ? 'group-hover:text-cyan-400' : activeKey === 'andres' ? 'group-hover:text-amber-400' : 'group-hover:text-violet-400';
+        
         box.innerHTML = `
-          <div class="flex items-start gap-3 max-w-2xl">
-            <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0" />
-            <div class="bg-cortex-card border border-cortex-border p-4 rounded-xl text-xs text-zinc-300 leading-relaxed">
-              ${welcomeText}
+          <div class="flex flex-col items-center justify-center min-h-[360px] max-w-xl mx-auto text-center px-2 py-6 view-smooth">
+            <div class="relative mb-3.5">
+              <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 ${themeBorder} shadow-xl" />
+              <span class="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-4 ring-[#08080a]"></span>
+            </div>
+            
+            <h2 class="text-base sm:text-lg font-extrabold text-white mb-1 flex items-center justify-center gap-2">
+              <span>${data.displayName || data.title}</span>
+              <span class="px-2 py-0.5 rounded-full bg-zinc-800 text-[10px] text-zinc-400 border border-zinc-700/60 font-mono">En línea</span>
+            </h2>
+            <div class="text-[11px] text-zinc-400 font-mono mb-4">${data.subtitle}</div>
+            
+            <div class="bg-cortex-card/90 border border-cortex-border p-4 sm:p-5 rounded-2xl text-xs sm:text-[13px] text-zinc-300 leading-relaxed text-left shadow-lg w-full mb-6">
+              <div class="markdown-body">${parsedWelcome}</div>
+            </div>
+
+            <div class="w-full text-left">
+              <span class="text-[10px] uppercase font-bold tracking-wider text-zinc-500 block mb-2 px-1">Consultas sugeridas con 1 clic:</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                ${data.chips.map(chip => `
+                  <button onclick="useChip('${chip.replace(/'/g, "\\'")}')" class="p-3 rounded-xl bg-cortex-card hover:bg-zinc-800 border border-cortex-border ${chipHover} text-zinc-300 text-xs transition flex items-center justify-between gap-2.5 group active:scale-[0.98] shadow-sm">
+                    <span class="truncate flex items-center gap-2">
+                      <i class="${getChipIcon(chip)} text-[11px] shrink-0"></i>
+                      <span class="truncate">${chip}</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-zinc-500 ${arrowColor} transition-transform group-hover:translate-x-0.5 shrink-0"></i>
+                  </button>
+                `).join('')}
+              </div>
             </div>
           </div>
         `;
@@ -1193,31 +2594,63 @@
       box.innerHTML = list.map((item, idx) => {
         if (item.role === 'user') {
           return `
-            <div class="flex justify-end my-2">
-              <div class="max-w-[85%] sm:max-w-[75%] bg-violet-600/90 hover:bg-violet-600 text-white p-3.5 px-4 rounded-2xl rounded-tr-sm text-xs leading-relaxed shadow-md shadow-violet-950/20 whitespace-pre-wrap border border-violet-400/20">
-                ${item.text}
+            <div class="user-msg-container max-w-3xl mx-auto w-full flex justify-end px-1 my-1">
+              <div class="user-msg">
+                <div class="user-msg-text">${escapeHtml(item.text)}</div>
+                <div class="user-msg-meta">
+                  <span>${item.time || ''}</span>
+                  <i class="fa-solid fa-check-double text-[9px] text-violet-200 ml-0.5"></i>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (item.isError) {
+          return `
+            <div class="flex items-start gap-2.5 sm:gap-3 max-w-3xl mx-auto w-full my-2.5">
+              <div class="w-8 h-8 rounded-full bg-rose-950/80 border border-rose-700/60 flex items-center justify-center text-rose-400 shrink-0 mt-0.5 shadow-sm">
+                <i class="fa-solid fa-triangle-exclamation text-xs"></i>
+              </div>
+              <div class="p-3.5 sm:p-4 rounded-2xl bg-rose-950/40 border border-rose-800/50 text-rose-200 text-xs w-full shadow-lg">
+                <p class="font-bold text-rose-300">No se pudo procesar la consulta</p>
+                <p class="text-[11px] text-zinc-300 mt-1 leading-relaxed">${escapeHtml(item.text)}</p>
+                <button onclick="retryLastMessage()" class="mt-2.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition active:scale-95 shadow">
+                  <i class="fa-solid fa-rotate-right"></i> Reintentar consulta
+                </button>
               </div>
             </div>
           `;
         } else {
-          const parsed = marked.parse(item.text);
+          const parsed = sanitizeHtml(marked.parse(item.text));
           const wordCount = item.text.trim().split(/\s+/).filter(Boolean).length;
+          const specialistAccent = activeKey === 'mateo' ? 'text-cyan-400' : activeKey === 'andres' ? 'text-amber-400' : 'text-violet-400';
+          const specialistBorder = activeKey === 'mateo' ? 'border-cyan-500/60' : activeKey === 'andres' ? 'border-amber-500/60' : 'border-violet-500/60';
+          
           return `
-            <div class="flex items-start gap-3 max-w-3xl my-2">
-              <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0 mt-0.5" />
-              <div class="bg-cortex-card border border-cortex-border p-5 rounded-2xl rounded-tl-sm text-xs text-zinc-200 leading-relaxed w-full shadow-lg">
-                <div class="flex items-center justify-between mb-3 border-b border-zinc-800 pb-2">
-                  <span class="text-[10px] text-zinc-500 font-mono">${wordCount} palabras</span>
+            <div class="flex items-start gap-2 sm:gap-3 max-w-3xl mx-auto w-full my-3">
+              <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-full object-cover border ${specialistBorder} shrink-0 mt-0.5 shadow-sm" />
+              <div class="bg-[#121218] border border-[#232330] p-3.5 sm:p-5 rounded-2xl rounded-tl-sm text-xs sm:text-[13px] text-zinc-200 leading-relaxed w-full shadow-lg">
+                <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2.5 border-b border-zinc-800/80 pb-2">
+                  <span class="font-bold text-[11px] sm:text-xs ${specialistAccent} flex items-center gap-1.5">
+                    <span>${data.displayName || data.title}</span>
+                    <span class="text-[10px] text-zinc-500 font-normal">· ${wordCount} palabras</span>
+                  </span>
                   <div class="flex items-center gap-1.5">
-                    <button id="copy-btn-${idx}" class="text-[10px] text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5 border border-zinc-700/60">
-                      <i class="fa-regular fa-copy"></i> Copiar informe
+                    <button id="copy-btn-${idx}" class="text-[10px] text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2 sm:px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-zinc-700/60 active:scale-95" title="Copiar informe clínico">
+                      <i class="fa-regular fa-copy"></i> <span>Copiar</span>
                     </button>
-                    <button id="word-btn-${idx}" class="text-[10px] text-indigo-300 hover:text-white bg-indigo-950/50 hover:bg-indigo-900/60 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5 border border-indigo-700/50">
-                      <i class="fa-regular fa-file-word"></i> Descargar Word
+                    <button id="word-btn-${idx}" class="text-[10px] text-indigo-300 hover:text-white bg-indigo-950/50 hover:bg-indigo-900/60 px-2 sm:px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-indigo-700/50 active:scale-95" title="Descargar como archivo Word">
+                      <i class="fa-regular fa-file-word"></i> <span>Word</span>
+                    </button>
+                    <button id="speak-btn-${idx}" class="text-[10px] text-emerald-300 hover:text-white bg-emerald-950/40 hover:bg-emerald-900/50 px-2 sm:px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-700/40 active:scale-95" title="Escuchar formulación clínica en voz alta">
+                      <i class="fa-solid fa-volume-high"></i> <span>Escuchar</span>
                     </button>
                   </div>
                 </div>
                 <div class="markdown-body">${parsed}</div>
+                <div class="text-[10px] text-zinc-500 mt-3 pt-2 border-t border-zinc-800/60 flex items-center justify-between">
+                  <span>${item.time || ''}</span>
+                  <span class="flex items-center gap-1 text-emerald-400/80"><i class="fa-solid fa-check"></i> Criterios técnicos de ${data.displayName} verificados</span>
+                </div>
               </div>
             </div>
           `;
@@ -1225,16 +2658,60 @@
       }).join('');
 
       list.forEach((item, idx) => {
-        if (item.role !== 'user') {
+        if (item.role !== 'user' && !item.isError) {
           const copyBtn = document.getElementById(`copy-btn-${idx}`);
           if (copyBtn) copyBtn.onclick = () => copyCleanReport(copyBtn, item.text);
 
           const wordBtn = document.getElementById(`word-btn-${idx}`);
           if (wordBtn) wordBtn.onclick = () => downloadWordDoc(item.text);
+
+          const speakBtn = document.getElementById(`speak-btn-${idx}`);
+          if (speakBtn) speakBtn.onclick = () => toggleSpeechSynthesis(item.text, speakBtn);
         }
       });
 
       box.scrollTop = box.scrollHeight;
+    }
+
+    // Control de concurrencia y bloqueo de interacción durante la petición
+    function setFormBusy(busy) {
+      const sendBtn = document.getElementById('send-btn');
+      const input = document.getElementById('user-input');
+      const clearBtn = document.getElementById('clear-btn');
+      const chips = document.querySelectorAll('#chips-container button');
+
+      if (sendBtn) {
+        sendBtn.disabled = busy;
+        sendBtn.classList.toggle('opacity-50', busy);
+        sendBtn.classList.toggle('cursor-not-allowed', busy);
+      }
+      if (input) {
+        input.disabled = busy;
+        input.classList.toggle('opacity-50', busy);
+        input.classList.toggle('cursor-not-allowed', busy);
+      }
+      if (clearBtn) {
+        clearBtn.disabled = busy;
+        clearBtn.classList.toggle('opacity-50', busy);
+        clearBtn.classList.toggle('cursor-not-allowed', busy);
+      }
+      chips.forEach(c => {
+        c.disabled = busy;
+        c.classList.toggle('opacity-50', busy);
+        c.classList.toggle('cursor-not-allowed', busy);
+      });
+    }
+
+    function retryLastMessage() {
+      if (!lastFailedMessage) return;
+      const list = chatHistories[activeKey];
+      if (list.length > 0 && list[list.length - 1].isError) {
+        list.pop();
+        saveToStorage();
+      }
+      const input = document.getElementById('user-input');
+      input.value = lastFailedMessage;
+      sendMessage();
     }
 
     async function sendMessage() {
@@ -1242,57 +2719,76 @@
       const val = input.value.trim();
       if (!val) return;
 
-      if (val.startsWith('/admin ')) {
-        const key = val.replace('/admin ', '').trim();
-        localStorage.setItem('cortex_admin_key', key);
-        alert('🔑 Modo Administrador activado: consultas ilimitadas configuradas.');
+      // Comando de activación de código o clave de administrador
+      if (val.startsWith('/admin ') || val.startsWith('/activar ') || val.startsWith('/codigo ')) {
+        const key = val.replace(/^(\/admin|\/activar|\/codigo)\s+/, '').trim();
         input.value = '';
-        updateTrialUI();
+        input.style.height = 'auto';
+        await activatePlanCode(key);
         return;
       }
 
-      const isAdminUser = localStorage.getItem('cortex_admin_key') === 'adminortega09';
-
-      if (!isAdminUser && freeQueriesUsed >= FREE_LIMIT) {
-        openPaywallModal();
-        return;
+      // Verificación de disponibilidad de consultas según el plan activo
+      if (userPlan?.type === 'admin') {
+        // Dueño maestro: consultas ilimitadas siempre
+      } else if (userPlan?.type === 'apuros') {
+        if (!userPlan.remainingQueries || userPlan.remainingQueries <= 0) {
+          openPaywallModal();
+          showNotification('Has completado las consultas de tu Pase en Apuros. Adquiere un nuevo pase o pasa al Plan Mensual.', 'warning');
+          return;
+        }
+      } else if (userPlan?.type === 'mensual' || userPlan?.type === 'pro') {
+        if (userPlan.expiresAt && Date.now() > userPlan.expiresAt) {
+          openPaywallModal();
+          showNotification('Tu suscripción mensual ha expirado. Por favor renueva tu acceso.', 'warning');
+          return;
+        }
+      } else {
+        // Plan Gratuito (Trial de 3 consultas)
+        if (freeQueriesUsed >= FREE_LIMIT) {
+          openPaywallModal();
+          return;
+        }
       }
 
-      const btn = document.getElementById('send-btn');
-      btn.disabled = true;
-      input.disabled = true;
+      setFormBusy(true);
 
-      chatHistories[activeKey].push({ role: 'user', text: val });
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      chatHistories[activeKey].push({ role: 'user', text: val, time: currentTime });
       saveToStorage();
       input.value = '';
+      input.style.height = 'auto';
+      const inputDock = document.getElementById('chat-input-dock');
+      if (inputDock) {
+        inputDock.classList.add('items-center');
+        inputDock.classList.remove('items-end');
+      }
       renderChat();
 
       const box = document.getElementById('chat-messages');
       const data = CONFIG[activeKey];
+      const borderTheme = activeKey === 'mateo' ? 'border-cyan-500/60' : activeKey === 'andres' ? 'border-amber-500/60' : 'border-violet-500/60';
+      const bounceColor = activeKey === 'mateo' ? 'bg-cyan-400' : activeKey === 'andres' ? 'bg-amber-400' : 'bg-violet-400';
 
       const liveDiv = document.createElement('div');
-      liveDiv.className = 'flex items-start gap-3 max-w-3xl my-2';
+      liveDiv.id = 'live-waiting-bubble';
+      liveDiv.className = 'flex items-start gap-2.5 sm:gap-3 max-w-3xl mx-auto w-full my-2.5 view-smooth';
       liveDiv.innerHTML = `
-        <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-lg object-cover border border-violet-500/40 shrink-0 mt-0.5" />
-        <div class="bg-cortex-card border border-cortex-border p-4 sm:p-5 rounded-2xl rounded-tl-sm text-xs text-zinc-300 leading-relaxed w-full shadow-lg">
-          <div id="live-stream-content" class="markdown-body">
-            <span class="inline-flex items-center gap-2.5 text-violet-300 font-medium">
-              <span class="relative flex h-2.5 w-2.5">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-500"></span>
-              </span>
-              Procesando según criterios de tu universidad...
-            </span>
+        <img src="${data.avatar || './' + activeKey + '.jpg'}" alt="${data.title}" class="w-8 h-8 rounded-full object-cover border-2 ${borderTheme} shrink-0 mt-0.5 shadow-sm" />
+        <div class="bg-[#121218] border border-[#232330] p-3 sm:p-4 rounded-2xl rounded-tl-sm text-xs sm:text-[13px] text-zinc-300 shadow-lg flex items-center gap-3">
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span class="w-2 h-2 rounded-full ${bounceColor} animate-bounce" style="animation-delay: 0ms"></span>
+            <span class="w-2 h-2 rounded-full ${bounceColor} animate-bounce" style="animation-delay: 150ms"></span>
+            <span class="w-2 h-2 rounded-full ${bounceColor} animate-bounce" style="animation-delay: 300ms"></span>
           </div>
+          <span class="text-xs font-medium text-zinc-400">${data.waitingMessage || 'Procesando según criterios técnicos...'}</span>
         </div>
       `;
       box.appendChild(liveDiv);
       box.scrollTop = box.scrollHeight;
 
-      const targetContent = document.getElementById('live-stream-content');
-
       try {
-        const storedAdminKey = localStorage.getItem('cortex_admin_key') || '';
+        const storedLicenseCode = userPlan?.code || localStorage.getItem('cortex_admin_key') || '';
 
         const res = await fetch('/api/chat', {
           method: 'POST',
@@ -1300,70 +2796,303 @@
           body: JSON.stringify({
             specialist: activeKey,
             message: val,
-            history: chatHistories[activeKey].slice(0, -1),
-            adminKey: storedAdminKey,
+            licenseCode: storedLicenseCode,
+            adminKey: storedLicenseCode,
             userProfile: userProfile || null
           })
         });
 
-        const contentType = res.headers.get('content-type') || '';
-        let fullText = '';
+        const dataRes = await res.json().catch(() => ({}));
 
-        if (contentType.includes('application/json')) {
-          const dataRes = await res.json();
-          if (!res.ok) {
-            if (res.status === 429) {
-              targetContent.innerHTML = '<p class="text-amber-400 font-medium">⚠️ Has alcanzado el límite de 3 consultas gratuitas de prueba. Suscríbete a un plan para continuar redactando sin límites.</p>';
-              if (typeof openPaywallModal === 'function') {
-                openPaywallModal();
-              }
-              return;
-            }
-            throw new Error(dataRes.error || 'Error al comunicarse con el servidor');
+        if (!res.ok) {
+          if (res.status === 429) {
+            openPaywallModal();
+            throw new Error('Has alcanzado el límite de consultas disponibles. Adquiere o renueva tu plan.');
           }
-          fullText = dataRes.reply || '';
-          targetContent.innerHTML = marked.parse(fullText);
-        } else {
-          if (!res.ok) {
-            const errObj = await res.json().catch(() => ({}));
-            throw new Error(errObj.error || 'Error en la respuesta del servidor');
-          }
-          const reader = res.body.getReader();
-          const decoder = new TextDecoder();
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            fullText += decoder.decode(value, { stream: true });
-            targetContent.innerHTML = marked.parse(fullText);
-            box.scrollTop = box.scrollHeight;
-          }
+          throw new Error(dataRes.error || `Error del servidor (${res.status})`);
         }
 
-        chatHistories[activeKey].push({ role: 'assistant', text: fullText });
+        const replyText = dataRes.reply || 'No se generó respuesta.';
+        const replyTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        chatHistories[activeKey].push({ role: 'assistant', text: replyText, time: replyTime });
         saveToStorage();
+        lastFailedMessage = '';
 
-        freeQueriesUsed++;
-        localStorage.setItem('cortex_free_queries', freeQueriesUsed.toString());
-        updateTrialUI();
+        if (!dataRes.isConversational) {
+          if (dataRes.isAdmin) {
+            userPlan = { type: 'admin', name: 'Dueño Maestro', queries: Infinity, isMaster: true, code: storedLicenseCode };
+            localStorage.setItem('cortex_user_plan', JSON.stringify(userPlan));
+            localStorage.setItem('cortex_is_admin', 'true');
+            updateAdminUI();
+          } else if (userPlan?.type === 'apuros') {
+            userPlan.remainingQueries = Math.max(0, (userPlan.remainingQueries != null ? userPlan.remainingQueries : 6) - 1);
+            localStorage.setItem('cortex_user_plan', JSON.stringify(userPlan));
+          } else if (!userPlan || userPlan.type === 'free') {
+            freeQueriesUsed++;
+            localStorage.setItem('cortex_free_queries', freeQueriesUsed.toString());
+          }
+          updateTrialUI();
+        }
 
       } catch (err) {
-        targetContent.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${err.message}</span>`;
-        chatHistories[activeKey].push({ role: 'assistant', text: `⚠️ ${err.message}` });
+        lastFailedMessage = val;
+        const errorTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const friendlyMsg = !navigator.onLine
+          ? 'Sin conexión a internet. Por favor verifica tu red e inténtalo de nuevo.'
+          : (err.message || 'No se pudo procesar la consulta con el servidor.');
+        chatHistories[activeKey].push({
+          role: 'assistant',
+          text: friendlyMsg,
+          isError: true,
+          time: errorTime
+        });
         saveToStorage();
       } finally {
-        btn.disabled = false;
-        input.disabled = false;
-        input.focus();
+        const waitingBubble = document.getElementById('live-waiting-bubble');
+        if (waitingBubble) waitingBubble.remove();
+        setFormBusy(false);
         renderChat();
+        input.focus();
       }
     }
 
-    document.getElementById('user-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+    async function verifyAdminSecret(key) {
+      return activatePlanCode(key);
+    }
+
+    /* ========================================================= */
+    /* CONTROL DE PLANTILLAS CLÍNICAS RÁPIDAS                    */
+    /* ========================================================= */
+    function openTemplatesModal() {
+      const modal = document.getElementById('templates-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
       }
-    });
+    }
+
+    function closeTemplatesModal() {
+      const modal = document.getElementById('templates-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function useTemplateText(text) {
+      const input = document.getElementById('user-input');
+      const dock = document.getElementById('chat-input-dock');
+      if (input) {
+        input.value = text;
+        input.style.height = 'auto';
+        const newH = Math.min(input.scrollHeight, 120);
+        input.style.height = newH + 'px';
+        if (dock) {
+          if (newH > 42) {
+            dock.classList.remove('items-center');
+            dock.classList.add('items-end');
+          } else {
+            dock.classList.add('items-center');
+            dock.classList.remove('items-end');
+          }
+        }
+        input.focus();
+      }
+      closeTemplatesModal();
+      showNotification('Plantilla cargada en el campo de texto.', 'info');
+    }
+
+    /* ========================================================= */
+    /* DICTADO POR VOZ CLÍNICO (WEB SPEECH API)                  */
+    /* ========================================================= */
+    let recognition = null;
+    let isRecordingVoice = false;
+
+    function toggleSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showNotification('Tu navegador no soporta dictado por voz. Recomendamos Google Chrome.', 'warning');
+        return;
+      }
+
+      const voiceBtn = document.getElementById('voice-btn');
+      const chatInput = document.getElementById('user-input');
+      const dock = document.getElementById('chat-input-dock');
+
+      if (isRecordingVoice) {
+        if (recognition) {
+          try { recognition.stop(); } catch(e) {}
+        }
+        isRecordingVoice = false;
+        if (voiceBtn) {
+          voiceBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition shrink-0 active:scale-95";
+        }
+        showNotification('Dictado por voz finalizado.', 'info');
+        return;
+      }
+
+      try {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'es-PE';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        let baseText = chatInput.value ? chatInput.value.trim() + ' ' : '';
+
+        recognition.onstart = () => {
+          isRecordingVoice = true;
+          if (voiceBtn) {
+            voiceBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-rose-600 text-white animate-pulse flex items-center justify-center transition shrink-0 shadow-lg shadow-rose-900/50";
+          }
+          showNotification('Escuchando caso clínico... habla con normalidad.', 'info');
+        };
+
+        recognition.onresult = (event) => {
+          let interimTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              baseText += event.results[i][0].transcript + ' ';
+            } else {
+              interimTranscript += event.results[i][0].transcript;
+            }
+          }
+          chatInput.value = baseText + interimTranscript;
+          chatInput.style.height = 'auto';
+          const newH = Math.min(chatInput.scrollHeight, 120);
+          chatInput.style.height = newH + 'px';
+          if (dock) {
+            if (newH > 42) {
+              dock.classList.remove('items-center');
+              dock.classList.add('items-end');
+            } else {
+              dock.classList.add('items-center');
+              dock.classList.remove('items-end');
+            }
+          }
+        };
+
+        recognition.onerror = (event) => {
+          console.warn('Speech recognition error:', event.error);
+          isRecordingVoice = false;
+          if (voiceBtn) {
+            voiceBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition shrink-0 active:scale-95";
+          }
+          if (event.error === 'not-allowed') {
+            showNotification('Permiso de micrófono denegado. Permítelo en tu navegador para dictar.', 'error');
+          }
+        };
+
+        recognition.onend = () => {
+          isRecordingVoice = false;
+          if (voiceBtn) {
+            voiceBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition shrink-0 active:scale-95";
+          }
+        };
+
+        recognition.start();
+      } catch (err) {
+        console.error('Error starting speech recognition:', err);
+        showNotification('No se pudo iniciar el dictado por voz.', 'error');
+      }
+    }
+
+    /* ========================================================= */
+    /* LECTURA EN VOZ ALTA (SPEECH SYNTHESIS)                    */
+    /* ========================================================= */
+    let isSpeaking = false;
+    let activeSpeakBtn = null;
+
+    function toggleSpeechSynthesis(text, btnElement) {
+      if (!('speechSynthesis' in window)) {
+        showNotification('Tu navegador no soporta lectura en voz alta.', 'warning');
+        return;
+      }
+
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        if (activeSpeakBtn) {
+          activeSpeakBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Escuchar</span>';
+          activeSpeakBtn.className = 'text-[10px] text-emerald-300 hover:text-white bg-emerald-950/40 hover:bg-emerald-900/50 px-2 sm:px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-700/40 active:scale-95';
+        }
+        activeSpeakBtn = null;
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const cleanText = text
+        .replace(/[#*`_~]/g, '')
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+        .replace(/\|/g, ' ')
+        .replace(/---/g, '')
+        .trim();
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'es-PE';
+      utterance.rate = 1.05;
+
+      utterance.onstart = () => {
+        isSpeaking = true;
+        activeSpeakBtn = btnElement;
+        if (btnElement) {
+          btnElement.innerHTML = '<i class="fa-solid fa-stop text-rose-400"></i> <span class="text-rose-300">Detener</span>';
+          btnElement.className = 'text-[10px] text-rose-300 hover:text-white bg-rose-950/60 hover:bg-rose-900/70 px-2 sm:px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-rose-700/60 active:scale-95 animate-pulse';
+        }
+        showNotification('Reproduciendo diagnóstico clínico en audio...', 'info');
+      };
+
+      utterance.onend = () => {
+        isSpeaking = false;
+        if (btnElement) {
+          btnElement.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Escuchar</span>';
+          btnElement.className = 'text-[10px] text-emerald-300 hover:text-white bg-emerald-950/40 hover:bg-emerald-900/50 px-2 sm:px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-700/40 active:scale-95';
+        }
+        activeSpeakBtn = null;
+      };
+
+      utterance.onerror = () => {
+        isSpeaking = false;
+        if (btnElement) {
+          btnElement.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Escuchar</span>';
+          btnElement.className = 'text-[10px] text-emerald-300 hover:text-white bg-emerald-950/40 hover:bg-emerald-900/50 px-2 sm:px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-700/40 active:scale-95';
+        }
+        activeSpeakBtn = null;
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Auto-ajuste de altura del textarea al escribir (como en WhatsApp/ChatGPT)
+    const chatInput = document.getElementById('user-input');
+    if (chatInput) {
+      chatInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        const newH = Math.min(this.scrollHeight, 120);
+        this.style.height = newH + 'px';
+        const dock = document.getElementById('chat-input-dock');
+        if (dock) {
+          if (newH > 42) {
+            dock.classList.remove('items-center');
+            dock.classList.add('items-end');
+          } else {
+            dock.classList.add('items-center');
+            dock.classList.remove('items-end');
+          }
+        }
+      });
+
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          // En pantallas táctiles móviles, permitir salto de línea con Enter y enviar con el botón táctil
+          if (window.innerWidth < 640) {
+            return;
+          }
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    }
 
     function setActiveNavLink(activeId) {
       const links = document.querySelectorAll('#landing-nav .nav-item');
@@ -1411,7 +3140,10 @@
 
     setSpecialist('valeria');
     updateTrialUI();
+    updateAdminUI();
     updateUserProfileUI();
+    initGoogleAuth();
+    sendTrackingEvent('visit');
   </script>
 </body>
 </html>
