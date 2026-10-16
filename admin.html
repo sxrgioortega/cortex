@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Córtex · Panel de Seguridad y Monitoreo de Accesos</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+              950: '#2e1065'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #18181b;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #3f3f46;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #71717a;
+    }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.98); }
+    }
+    .animate-pulse-slow {
+      animation: pulse-slow 3s infinite ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .animate-shake {
+      animation: shake 0.4s ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-zinc-950 text-zinc-100 selection:bg-violet-600 selection:text-white">
+
+  <!-- ========================================== -->
+  <!-- 1. PANTALLA DE ACCESO RESTRINGIDO (LOGIN)  -->
+  <!-- ========================================== -->
+  <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/95 backdrop-blur-md">
+    <div class="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden" id="login-card">
+      <div class="absolute -top-24 -right-24 w-52 h-52 bg-violet-600/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-52 h-52 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-violet-950/80 border border-violet-700/60 text-violet-400 mb-4 shadow-inner">
+          <i class="fa-solid fa-shield-halved text-2xl"></i>
+        </div>
+        <h1 class="text-2xl font-black tracking-tight text-white flex items-center justify-center gap-2">
+          Córtex <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-violet-900/60 text-violet-300 border border-violet-700/50 uppercase tracking-wider">Admin</span>
+        </h1>
+        <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+          Portal seguro de auditoría y monitoreo en tiempo real. Acceso exclusivo para el administrador de Córtex.
+        </p>
+      </div>
+
+      <form id="login-form" onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">
+            Clave Maestra del Administrador
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
+              <i class="fa-solid fa-key text-xs"></i>
+            </span>
+            <input
+              type="password"
+              id="admin-key-input"
+              required
+              autocomplete="current-password"
+              placeholder="Ingresa ADMIN_SECRET..."
+              class="w-full bg-zinc-950 border border-zinc-700/80 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-xl py-3 pl-10 pr-10 text-sm text-white placeholder-zinc-500 transition outline-none font-mono"
+            />
+            <button
+              type="button"
+              onclick="togglePasswordVisibility()"
+              class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-500 hover:text-zinc-300 transition"
+              title="Mostrar / Ocultar"
+            >
+              <i class="fa-regular fa-eye" id="pwd-icon"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-zinc-400">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" id="remember-me" class="rounded border-zinc-700 bg-zinc-950 text-violet-600 focus:ring-0 w-4 h-4" />
+            <span>Recordar en este equipo</span>
+          </label>
+          <a href="/" class="hover:text-violet-400 transition flex items-center gap-1">
+            <i class="fa-solid fa-arrow-left text-[10px]"></i> Volver a Córtex
+          </a>
+        </div>
+
+        <div id="login-error" class="hidden p-3 rounded-xl bg-rose-950/60 border border-rose-800/60 text-xs text-rose-300 flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400 shrink-0"></i>
+          <span id="login-error-msg">Clave maestra inválida. Intenta nuevamente.</span>
+        </div>
+
+        <button
+          type="submit"
+          id="btn-login"
+          class="w-full py-3 px-4 rounded-xl bg-violet-600 hover:bg-violet-500 active:scale-[0.99] text-white font-semibold text-sm shadow-lg shadow-violet-900/30 transition flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <i class="fa-solid fa-lock-open text-xs"></i>
+          <span>Ingresar al Panel de Seguridad</span>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-zinc-800/80 text-center">
+        <p class="text-[11px] text-zinc-500">
+          Conexión segura encriptada con validación criptográfica en backend.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 2. PANEL PRINCIPAL DE ADMINISTRACIÓN       -->
+  <!-- ========================================== -->
+  <div id="admin-panel" class="hidden flex-1 flex flex-col min-h-screen">
+    
+    <!-- Barra Superior / Navbar -->
+    <header class="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3.5">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- Logo & Titulo -->
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-700 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-violet-900/30">
+            <i class="fa-solid fa-chart-line text-sm"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-base font-bold tracking-tight text-white">Córtex Monitor</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/70 text-emerald-400 border border-emerald-800/60 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                EN VIVO
+              </span>
+            </div>
+            <p class="text-[11px] text-zinc-400">Control de Accesos, Correos de Estudiantes y Direcciones IP</p>
+          </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          
+          <!-- Auto-refresco -->
+          <div class="hidden sm:flex items-center gap-1.5 bg-zinc-900/90 border border-zinc-800 px-2.5 py-1.5 rounded-xl text-xs text-zinc-300">
+            <i class="fa-solid fa-rotate text-zinc-500 text-[11px]"></i>
+            <span class="text-[11px] text-zinc-400">Refresco:</span>
+            <select id="select-auto-refresh" onchange="changeAutoRefresh(this.value)" class="bg-transparent text-xs text-violet-400 font-medium focus:outline-none cursor-pointer">
+              <option value="0" class="bg-zinc-900 text-zinc-200">Manual</option>
+              <option value="15" selected class="bg-zinc-900 text-zinc-200">Cada 15s</option>
+              <option value="30" class="bg-zinc-900 text-zinc-200">Cada 30s</option>
+              <option value="60" class="bg-zinc-900 text-zinc-200">Cada 1m</option>
+            </select>
+          </div>
+
+          <!-- Botón Actualizar -->
+          <button
+            onclick="fetchAnalyticsData(true)"
+            id="btn-refresh"
+            class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-semibold text-zinc-200 hover:text-white transition flex items-center gap-1.5 cursor-pointer"
+            title="Actualizar datos ahora"
+          >
+            <i class="fa-solid fa-arrows-rotate text-xs" id="refresh-icon"></i>
+            <span class="hidden sm:inline">Actualizar</span>
+          </button>
+
+          <!-- Botón Ir a Córtex -->
+          <a
+            href="/"
+            class="px-3 py-1.5 rounded-xl bg-violet-950/60 hover:bg-violet-900/80 border border-violet-700/60 text-xs font-semibold text-violet-200 hover:text-white transition flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            <span class="hidden md:inline">Ir al Workspace</span>
+          </a>
+
+          <!-- Botón Cerrar Sesión -->
+          <button
+            onclick="handleAdminLogout()"
+            class="px-3 py-1.5 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/50 text-xs font-semibold text-rose-300 hover:text-rose-100 transition flex items-center gap-1.5 cursor-pointer"
+            title="Cerrar Sesión del Panel"
+          >
+            <i class="fa-solid fa-right-from-bracket text-xs"></i>
+            <span class="hidden sm:inline">Salir</span>
+          </button>
+
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+      <!-- ========================================== -->
+      <!-- TARJETAS DE MÉTRICAS (KPIS)               -->
+      <!-- ========================================== -->
+      <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        
+        <!-- 1. Total Visitas -->
+        <div class="bg-zinc-900/80 border border-zinc-800 hover:border-violet-600/40 rounded-2xl p-4 transition-all shadow-sm">
+          <div class="flex items-center justify-between text-zinc-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Total Ingresos</span>
+            <div class="w-7 h-7 rounded-lg bg-violet-950/60 border border-violet-800/50 flex items-center justify-center text-violet-400">
+              <i class="fa-solid fa-chart-simple text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-white tracking-tight" id="kpi-total-visits">0</div>
+          <p class="text-[11px] text-zinc-500 mt-1">Aperturas de página registradas</p>
+        </div>
+
+        <!-- 2. Visitantes Únicos (IPs) -->
+        <div class="bg-zinc-900/80 border border-zinc-800 hover:border-emerald-600/40 rounded-2xl p-4 transition-all shadow-sm">
+          <div class="flex items-center justify-between text-zinc-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">IPs Únicas</span>
+            <div class="w-7 h-7 rounded-lg bg-emerald-950/60 border border-emerald-800/50 flex items-center justify-center text-emerald-400">
+              <i class="fa-solid fa-network-wired text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight" id="kpi-unique-ips">0</div>
+          <p class="text-[11px] text-zinc-500 mt-1">Dispositivos / Redes distintas</p>
+        </div>
+
+        <!-- 3. Correos Registrados -->
+        <div class="bg-zinc-900/80 border border-zinc-800 hover:border-cyan-600/40 rounded-2xl p-4 transition-all shadow-sm">
+          <div class="flex items-center justify-between text-zinc-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Correos / Gmail</span>
+            <div class="w-7 h-7 rounded-lg bg-cyan-950/60 border border-cyan-800/50 flex items-center justify-center text-cyan-400">
+              <i class="fa-brands fa-google text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-cyan-400 tracking-tight" id="kpi-registered-emails">0</div>
+          <p class="text-[11px] text-zinc-500 mt-1">Alumnos con cuenta vinculada</p>
+        </div>
+
+        <!-- 4. Visitas Hoy -->
+        <div class="bg-zinc-900/80 border border-zinc-800 hover:border-amber-600/40 rounded-2xl p-4 transition-all shadow-sm">
+          <div class="flex items-center justify-between text-zinc-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Actividad Hoy</span>
+            <div class="w-7 h-7 rounded-lg bg-amber-950/60 border border-amber-800/50 flex items-center justify-center text-amber-400">
+              <i class="fa-solid fa-bolt text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-amber-400 tracking-tight" id="kpi-today-visits">0</div>
+          <p class="text-[11px] text-zinc-500 mt-1">Ingresos en las últimas 24h</p>
+        </div>
+
+        <!-- 5. Consultas Realizadas -->
+        <div class="col-span-2 sm:col-span-1 bg-zinc-900/80 border border-zinc-800 hover:border-pink-600/40 rounded-2xl p-4 transition-all shadow-sm">
+          <div class="flex items-center justify-between text-zinc-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Consultas IA</span>
+            <div class="w-7 h-7 rounded-lg bg-pink-950/60 border border-pink-800/50 flex items-center justify-center text-pink-400">
+              <i class="fa-solid fa-brain text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-pink-400 tracking-tight" id="kpi-total-chats">0</div>
+          <p class="text-[11px] text-zinc-500 mt-1">Preguntas a Valeria, Mateo y Andrés</p>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- CONTENEDOR PRINCIPAL CON TABS & TABLAS     -->
+      <!-- ========================================== -->
+      <section class="bg-zinc-900/70 border border-zinc-800/80 rounded-3xl overflow-hidden shadow-xl">
+        
+        <!-- Header de la sección de tablas con navegación y filtros -->
+        <div class="p-4 sm:p-5 border-b border-zinc-800/80 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          
+          <!-- Pestañas (Tabs) -->
+          <div class="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-2xl border border-zinc-800 self-start">
+            <button
+              id="tab-btn-users"
+              onclick="switchTab('users')"
+              class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 bg-violet-600 text-white shadow-sm cursor-pointer"
+            >
+              <i class="fa-solid fa-users text-xs"></i>
+              <span>Correos & Usuarios (<span id="badge-users-count">0</span>)</span>
+            </button>
+            <button
+              id="tab-btn-ips"
+              onclick="switchTab('ips')"
+              class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 text-zinc-400 hover:text-white cursor-pointer"
+            >
+              <i class="fa-solid fa-network-wired text-xs"></i>
+              <span>Todas las IPs (<span id="badge-ips-count">0</span>)</span>
+            </button>
+            <button
+              id="tab-btn-logs"
+              onclick="switchTab('logs')"
+              class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 text-zinc-400 hover:text-white cursor-pointer"
+            >
+              <i class="fa-solid fa-clock-rotate-left text-xs"></i>
+              <span>Bitácora en Vivo</span>
+            </button>
+          </div>
+
+          <!-- Barra de Búsqueda y Botones de Acción -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            
+            <!-- Input de Búsqueda -->
+            <div class="relative flex-1 sm:w-64">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500">
+                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+              </span>
+              <input
+                type="text"
+                id="search-input"
+                oninput="handleSearch(this.value)"
+                placeholder="Buscar por correo o IP..."
+                class="w-full bg-zinc-950 border border-zinc-700/80 focus:border-violet-500 rounded-xl py-2 pl-9 pr-8 text-xs text-white placeholder-zinc-500 transition outline-none"
+              />
+              <button
+                id="search-clear-btn"
+                onclick="clearSearch()"
+                class="hidden absolute inset-y-0 right-0 pr-2.5 flex items-center text-zinc-500 hover:text-zinc-300"
+              >
+                <i class="fa-solid fa-circle-xmark text-xs"></i>
+              </button>
+            </div>
+
+            <!-- Botón Copiar Correos -->
+            <button
+              onclick="copyEmailsList()"
+              class="px-3 py-2 rounded-xl bg-zinc-950 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-semibold text-zinc-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+              title="Copiar todos los correos al portapapeles"
+            >
+              <i class="fa-regular fa-copy text-xs"></i>
+              <span class="hidden sm:inline">Copiar Correos</span>
+            </button>
+
+            <!-- Botón Exportar CSV -->
+            <button
+              onclick="exportToCSV()"
+              class="px-3 py-2 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-800/60 text-xs font-semibold text-emerald-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+              title="Descargar reporte completo en formato CSV compatible con Excel"
+            >
+              <i class="fa-solid fa-file-excel text-xs"></i>
+              <span>Exportar CSV</span>
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: CORREOS Y USUARIOS CON SUS IPS      -->
+        <!-- ========================================== -->
+        <div id="tab-content-users" class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-zinc-950/80 text-zinc-400 border-b border-zinc-800/80 uppercase font-semibold text-[10px] tracking-wider">
+                <th class="py-3 px-4">Usuario / Correo Electrónico</th>
+                <th class="py-3 px-4">Dirección IP Primaria</th>
+                <th class="py-3 px-4">Todas las IPs Vinculadas</th>
+                <th class="py-3 px-4 text-center">Ingresos</th>
+                <th class="py-3 px-4 text-center">Consultas</th>
+                <th class="py-3 px-4">Dispositivo / SO</th>
+                <th class="py-3 px-4">Último Ingreso</th>
+                <th class="py-3 px-4">Primer Ingreso</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body" class="divide-y divide-zinc-800/60 text-zinc-300">
+              <!-- Renderizado dinámico -->
+              <tr>
+                <td colspan="8" class="py-12 text-center text-zinc-500">
+                  <i class="fa-solid fa-spinner fa-spin text-xl text-violet-500 mb-2"></i>
+                  <p>Cargando registros de usuarios y correos...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: TODAS LAS CONEXIONES POR IP         -->
+        <!-- ========================================== -->
+        <div id="tab-content-ips" class="hidden overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-zinc-950/80 text-zinc-400 border-b border-zinc-800/80 uppercase font-semibold text-[10px] tracking-wider">
+                <th class="py-3 px-4">Dirección IP</th>
+                <th class="py-3 px-4">Correo(s) Asociado(s)</th>
+                <th class="py-3 px-4">Nombre / Perfil</th>
+                <th class="py-3 px-4 text-center">Visitas</th>
+                <th class="py-3 px-4 text-center">Consultas</th>
+                <th class="py-3 px-4">Dispositivo y Navegador</th>
+                <th class="py-3 px-4">Última Actividad</th>
+                <th class="py-3 px-4">Primera Visita</th>
+              </tr>
+            </thead>
+            <tbody id="ips-table-body" class="divide-y divide-zinc-800/60 text-zinc-300">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: BITÁCORA EN VIVO (EVENT LOGS)       -->
+        <!-- ========================================== -->
+        <div id="tab-content-logs" class="hidden overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-zinc-950/80 text-zinc-400 border-b border-zinc-800/80 uppercase font-semibold text-[10px] tracking-wider">
+                <th class="py-3 px-4">Fecha y Hora</th>
+                <th class="py-3 px-4">Acción</th>
+                <th class="py-3 px-4">Dirección IP</th>
+                <th class="py-3 px-4">Correo / Usuario</th>
+                <th class="py-3 px-4">Detalle / Ruta</th>
+                <th class="py-3 px-4">Dispositivo</th>
+              </tr>
+            </thead>
+            <tbody id="logs-table-body" class="divide-y divide-zinc-800/60 text-zinc-300">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer de la tabla con resumen -->
+        <div class="p-4 bg-zinc-950/80 border-t border-zinc-800/80 flex flex-wrap items-center justify-between text-xs text-zinc-400 gap-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+            <span>Mostrando datos sincronizados en tiempo real con el servidor.</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="last-updated-text" class="text-[11px] text-zinc-500">Última actualización: hace un momento</span>
+            <button
+              onclick="confirmResetData()"
+              class="text-[11px] text-zinc-500 hover:text-rose-400 transition underline cursor-pointer"
+            >
+              Reiniciar registros de prueba
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TOAST DE NOTIFICACIÓN RÁPIDA               -->
+  <!-- ========================================== -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="px-4 py-3 rounded-2xl bg-zinc-900 border border-violet-600/50 text-white text-xs font-medium shadow-2xl flex items-center gap-2.5">
+      <i class="fa-solid fa-check text-emerald-400" id="toast-icon"></i>
+      <span id="toast-msg">Mensaje</span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- LÓGICA JAVASCRIPT SEGURA                   -->
+  <!-- ========================================== -->
+  <script>
+    // Estado de la sesión del administrador
+    let currentAdminKey = '';
+    let analyticsData = null;
+    let autoRefreshInterval = null;
+    let activeTab = 'users';
+    let searchQuery = '';
+
+    // Inicialización al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      // Intenta restaurar sesión de sessionStorage o localStorage
+      const savedKey = sessionStorage.getItem('cortex_admin_secret') || localStorage.getItem('cortex_admin_secret');
+      if (savedKey) {
+        currentAdminKey = savedKey;
+        document.getElementById('admin-key-input').value = savedKey;
+        fetchAnalyticsData(false, () => {
+          showPanel();
+        }, () => {
+          // Si la clave guardada expiró o cambió
+          clearSavedSession();
+          showLoginScreen();
+        });
+      } else {
+        showLoginScreen();
+      }
+
+      // Iniciar temporizador de refresco por defecto (15s)
+      changeAutoRefresh(15);
+    });
+
+    function showLoginScreen() {
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('admin-panel').classList.add('hidden');
+      setTimeout(() => {
+        const inp = document.getElementById('admin-key-input');
+        if (inp) inp.focus();
+      }, 100);
+    }
+
+    function showPanel() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('admin-panel').classList.remove('hidden');
+    }
+
+    function togglePasswordVisibility() {
+      const inp = document.getElementById('admin-key-input');
+      const icon = document.getElementById('pwd-icon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash';
+      } else {
+        inp.type = 'password';
+        icon.className = 'fa-regular fa-eye';
+      }
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const keyInput = document.getElementById('admin-key-input');
+      const remember = document.getElementById('remember-me').checked;
+      const errorDiv = document.getElementById('login-error');
+      const btn = document.getElementById('btn-login');
+
+      const testKey = (keyInput.value || '').trim();
+      if (!testKey) return;
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Verificando credenciales...</span>';
+      errorDiv.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/analytics', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-key': testKey
+          },
+          body: JSON.stringify({ adminKey: testKey })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          currentAdminKey = testKey;
+          analyticsData = data;
+
+          if (remember) {
+            localStorage.setItem('cortex_admin_secret', testKey);
+          } else {
+            sessionStorage.setItem('cortex_admin_secret', testKey);
+            localStorage.removeItem('cortex_admin_secret');
+          }
+
+          renderAllMetrics(data);
+          showPanel();
+          showToast('Bienvenido, Administrador Maestro. Sesión autenticada.', 'success');
+        } else {
+          showLoginError(data.error || 'Clave de administrador incorrecta.');
+        }
+      } catch (err) {
+        showLoginError('Error al contactar con el servidor. Verifica tu conexión.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-lock-open text-xs"></i> <span>Ingresar al Panel de Seguridad</span>';
+      }
+    }
+
+    function showLoginError(msg) {
+      const errorDiv = document.getElementById('login-error');
+      const errorMsg = document.getElementById('login-error-msg');
+      const card = document.getElementById('login-card');
+      errorMsg.textContent = msg;
+      errorDiv.classList.remove('hidden');
+      card.classList.add('animate-shake');
+      setTimeout(() => card.classList.remove('animate-shake'), 400);
+    }
+
+    function clearSavedSession() {
+      currentAdminKey = '';
+      sessionStorage.removeItem('cortex_admin_secret');
+      localStorage.removeItem('cortex_admin_secret');
+    }
+
+    function handleAdminLogout() {
+      clearSavedSession();
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+      showToast('Sesión de administrador cerrada con éxito.', 'info');
+      showLoginScreen();
+    }
+
+    async function fetchAnalyticsData(isManual = false, onSuccess = null, onError = null) {
+      if (!currentAdminKey) return;
+
+      const refreshIcon = document.getElementById('refresh-icon');
+      if (isManual && refreshIcon) refreshIcon.classList.add('fa-spin');
+
+      try {
+        const res = await fetch('/api/analytics', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-key': currentAdminKey
+          },
+          body: JSON.stringify({ adminKey: currentAdminKey })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          analyticsData = data;
+          renderAllMetrics(data);
+          document.getElementById('last-updated-text').textContent = 'Última actualización: ' + new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          if (isManual) showToast('Datos actualizados en tiempo real.', 'success');
+          if (onSuccess) onSuccess(data);
+        } else {
+          if (onError) onError(data);
+        }
+      } catch (err) {
+        if (onError) onError(err);
+      } finally {
+        if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+      }
+    }
+
+    function changeAutoRefresh(seconds) {
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+      const sec = parseInt(seconds, 10);
+      if (sec > 0) {
+        autoRefreshInterval = setInterval(() => {
+          if (currentAdminKey && !document.getElementById('admin-panel').classList.contains('hidden')) {
+            fetchAnalyticsData(false);
+          }
+        }, sec * 1000);
+      }
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      const tabUsers = document.getElementById('tab-btn-users');
+      const tabIps = document.getElementById('tab-btn-ips');
+      const tabLogs = document.getElementById('tab-btn-logs');
+      const contentUsers = document.getElementById('tab-content-users');
+      const contentIps = document.getElementById('tab-content-ips');
+      const contentLogs = document.getElementById('tab-content-logs');
+
+      // Reset styles
+      [tabUsers, tabIps, tabLogs].forEach(btn => {
+        btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 text-zinc-400 hover:text-white cursor-pointer';
+      });
+
+      contentUsers.classList.add('hidden');
+      contentIps.classList.add('hidden');
+      contentLogs.classList.add('hidden');
+
+      if (tab === 'users') {
+        tabUsers.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 bg-violet-600 text-white shadow-sm cursor-pointer';
+        contentUsers.classList.remove('hidden');
+      } else if (tab === 'ips') {
+        tabIps.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 bg-violet-600 text-white shadow-sm cursor-pointer';
+        contentIps.classList.remove('hidden');
+      } else if (tab === 'logs') {
+        tabLogs.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 bg-violet-600 text-white shadow-sm cursor-pointer';
+        contentLogs.classList.remove('hidden');
+      }
+    }
+
+    function renderAllMetrics(data) {
+      const stats = data.stats || {};
+      document.getElementById('kpi-total-visits').textContent = Number(stats.totalVisits || 0).toLocaleString();
+      document.getElementById('kpi-unique-ips').textContent = Number(stats.uniqueIpsCount || 0).toLocaleString();
+      document.getElementById('kpi-registered-emails').textContent = Number(stats.registeredEmailsCount || 0).toLocaleString();
+      document.getElementById('kpi-today-visits').textContent = Number(stats.todayVisits || 0).toLocaleString();
+      document.getElementById('kpi-total-chats').textContent = Number(stats.totalChats || 0).toLocaleString();
+
+      document.getElementById('badge-users-count').textContent = (data.users || []).length;
+      document.getElementById('badge-ips-count').textContent = (data.visitors || []).length;
+
+      renderUsersTable(data.users || []);
+      renderIpsTable(data.visitors || []);
+      renderLogsTable(data.recentLogs || []);
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('users-table-body');
+      const filtered = filterList(users, ['email', 'name', 'primaryIp', 'university']);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-12 text-center text-zinc-500">
+              <i class="fa-solid fa-inbox text-3xl mb-2 text-zinc-600"></i>
+              <p class="font-medium">No se encontraron usuarios ni correos con los filtros actuales.</p>
+              <p class="text-[11px] text-zinc-600 mt-1">Los correos aparecerán aquí cuando los alumnos inicien sesión con Google o vinculen su correo.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(u => {
+        const initials = (u.name || u.email).slice(0, 2).toUpperCase();
+        const ipsPills = (u.allIps || [u.primaryIp || '127.0.0.1']).map(ip => `
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-zinc-950 border border-zinc-800 text-[10px] font-mono text-zinc-300">
+            <span class="w-1.5 h-1.5 rounded-full ${ip === '127.0.0.1' ? 'bg-amber-400' : 'bg-emerald-400'}"></span>
+            ${escapeHtml(ip)}
+            <button onclick="copyToClipboard('${escapeHtml(ip)}', 'IP copiada')" class="hover:text-violet-400 transition ml-0.5" title="Copiar IP">
+              <i class="fa-regular fa-copy text-[9px]"></i>
+            </button>
+          </span>
+        `).join(' ');
+
+        return `
+          <tr class="hover:bg-zinc-800/40 transition">
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-violet-950 border border-violet-700/60 flex items-center justify-center text-violet-300 font-bold text-xs shrink-0">
+                  ${initials}
+                </div>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-semibold text-white">${escapeHtml(u.email)}</span>
+                    <button onclick="copyToClipboard('${escapeHtml(u.email)}', 'Correo copiado')" class="text-zinc-500 hover:text-violet-400 transition" title="Copiar Correo">
+                      <i class="fa-regular fa-copy text-[10px]"></i>
+                    </button>
+                  </div>
+                  <div class="text-[11px] text-zinc-400">
+                    ${escapeHtml(u.name || 'Estudiante')} · <span class="text-zinc-500">${escapeHtml(u.university || 'Perú')}</span>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-700 text-xs font-mono font-semibold text-emerald-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                ${escapeHtml(u.primaryIp || '127.0.0.1')}
+                <button onclick="copyToClipboard('${escapeHtml(u.primaryIp || '127.0.0.1')}', 'IP copiada')" class="hover:text-white transition ml-1" title="Copiar IP">
+                  <i class="fa-regular fa-copy text-[10px]"></i>
+                </button>
+              </span>
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex flex-wrap gap-1 max-w-xs">
+                ${ipsPills}
+              </div>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="px-2 py-0.5 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-bold text-zinc-200">
+                ${u.visitsCount || 1}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="px-2 py-0.5 rounded-full ${u.chatCount > 0 ? 'bg-pink-950/70 border-pink-800/60 text-pink-300 font-bold' : 'bg-zinc-800/80 text-zinc-500'} text-[11px]">
+                ${u.chatCount || 0}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-[11px] text-zinc-400">
+              <span class="line-clamp-1" title="${escapeHtml(u.device || 'Navegador Web')}">${escapeHtml(u.device || 'Navegador Web')}</span>
+            </td>
+            <td class="py-3 px-4 text-[11px] text-zinc-300">
+              <div>${formatTimeAgo(u.lastSeen)}</div>
+              <div class="text-[10px] text-zinc-500">${formatFullDate(u.lastSeen)}</div>
+            </td>
+            <td class="py-3 px-4 text-[11px] text-zinc-500">
+              ${formatFullDate(u.firstSeen)}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderIpsTable(visitors) {
+      const tbody = document.getElementById('ips-table-body');
+      const filtered = filterList(visitors, ['ip', 'email', 'name', 'device']);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-12 text-center text-zinc-500">
+              <i class="fa-solid fa-network-wired text-3xl mb-2 text-zinc-600"></i>
+              <p class="font-medium">No hay registros de direcciones IP que coincidan con la búsqueda.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(v => {
+        const hasEmail = v.email || (v.allEmails && v.allEmails.length > 0);
+        const emailBadge = hasEmail ? `
+          <div class="flex items-center gap-1.5 text-cyan-400 font-medium">
+            <i class="fa-brands fa-google text-[10px]"></i>
+            <span>${escapeHtml(v.email || v.allEmails[0])}</span>
+            <button onclick="copyToClipboard('${escapeHtml(v.email || v.allEmails[0])}', 'Correo copiado')" class="text-zinc-500 hover:text-white transition">
+              <i class="fa-regular fa-copy text-[9px]"></i>
+            </button>
+          </div>
+        ` : `
+          <span class="inline-flex items-center gap-1 text-[11px] text-zinc-500 italic">
+            <i class="fa-regular fa-circle-question text-[10px]"></i> Visitante Anónimo
+          </span>
+        `;
+
+        return `
+          <tr class="hover:bg-zinc-800/40 transition">
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold ${v.ip === '127.0.0.1' ? 'text-amber-400' : 'text-emerald-400'}">
+                  ${escapeHtml(v.ip)}
+                </span>
+                <button onclick="copyToClipboard('${escapeHtml(v.ip)}', 'IP copiada')" class="text-zinc-500 hover:text-white transition" title="Copiar IP">
+                  <i class="fa-regular fa-copy text-[10px]"></i>
+                </button>
+                ${v.ip === '127.0.0.1' ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-950/70 text-amber-300 border border-amber-800/50">Local</span>' : ''}
+              </div>
+            </td>
+            <td class="py-3 px-4">
+              ${emailBadge}
+            </td>
+            <td class="py-3 px-4 text-zinc-300">
+              ${escapeHtml(v.name || 'Sin especificar')}
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="px-2 py-0.5 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-bold text-zinc-200">
+                ${v.visitsCount || 1}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="px-2 py-0.5 rounded-full ${v.chatCount > 0 ? 'bg-pink-950/70 border-pink-800/60 text-pink-300 font-bold' : 'bg-zinc-800/80 text-zinc-500'} text-[11px]">
+                ${v.chatCount || 0}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-[11px] text-zinc-400">
+              <span class="line-clamp-1" title="${escapeHtml(v.device || 'Navegador Web')}">${escapeHtml(v.device || 'Navegador Web')}</span>
+            </td>
+            <td class="py-3 px-4 text-[11px] text-zinc-300">
+              <div>${formatTimeAgo(v.lastSeen)}</div>
+              <div class="text-[10px] text-zinc-500">${formatFullDate(v.lastSeen)}</div>
+            </td>
+            <td class="py-3 px-4 text-[11px] text-zinc-500">
+              ${formatFullDate(v.firstSeen)}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderLogsTable(logs) {
+      const tbody = document.getElementById('logs-table-body');
+      const filtered = filterList(logs, ['ip', 'email', 'name', 'action', 'details', 'path']);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-12 text-center text-zinc-500">
+              <i class="fa-solid fa-clock-rotate-left text-3xl mb-2 text-zinc-600"></i>
+              <p class="font-medium">No hay eventos en la bitácora todavía.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(log => {
+        let actionBadge = '';
+        if (log.action === 'visit') {
+          actionBadge = '<span class="px-2 py-0.5 rounded-md bg-blue-950/80 text-blue-300 border border-blue-800/50 text-[10px] font-bold">VISITA</span>';
+        } else if (log.action === 'login') {
+          actionBadge = '<span class="px-2 py-0.5 rounded-md bg-emerald-950/80 text-emerald-300 border border-emerald-800/50 text-[10px] font-bold">LOGIN</span>';
+        } else if (log.action === 'chat') {
+          actionBadge = '<span class="px-2 py-0.5 rounded-md bg-pink-950/80 text-pink-300 border border-pink-800/50 text-[10px] font-bold">CONSULTA IA</span>';
+        } else if (log.action === 'license') {
+          actionBadge = '<span class="px-2 py-0.5 rounded-md bg-amber-950/80 text-amber-300 border border-amber-800/50 text-[10px] font-bold">LICENCIA</span>';
+        } else {
+          actionBadge = `<span class="px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 text-[10px] font-bold">${escapeHtml(log.action.toUpperCase())}</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-zinc-800/40 transition">
+            <td class="py-2.5 px-4 text-[11px] text-zinc-300 whitespace-nowrap">
+              ${formatFullDate(log.timestamp)}
+            </td>
+            <td class="py-2.5 px-4 whitespace-nowrap">
+              ${actionBadge}
+            </td>
+            <td class="py-2.5 px-4 font-mono text-emerald-400 font-semibold whitespace-nowrap">
+              ${escapeHtml(log.ip)}
+            </td>
+            <td class="py-2.5 px-4 text-zinc-300">
+              ${log.email ? `<span class="text-cyan-400 font-medium">${escapeHtml(log.email)}</span>` : '<span class="text-zinc-500 italic">Anónimo</span>'}
+            </td>
+            <td class="py-2.5 px-4 text-[11px] text-zinc-400">
+              <span class="text-zinc-200 font-mono text-[10px] mr-1.5">${escapeHtml(log.path || '/')}</span>
+              ${escapeHtml(log.details || '')}
+            </td>
+            <td class="py-2.5 px-4 text-[11px] text-zinc-500 whitespace-nowrap">
+              ${escapeHtml(log.device || '')}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function handleSearch(val) {
+      searchQuery = (val || '').toLowerCase().trim();
+      const clearBtn = document.getElementById('search-clear-btn');
+      if (searchQuery) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      if (analyticsData) {
+        renderAllMetrics(analyticsData);
+      }
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      handleSearch('');
+    }
+
+    function filterList(list, fields) {
+      if (!searchQuery) return list;
+      return list.filter(item => {
+        return fields.some(field => {
+          const val = item[field];
+          if (!val) return false;
+          if (Array.isArray(val)) return val.some(v => String(v).toLowerCase().includes(searchQuery));
+          return String(val).toLowerCase().includes(searchQuery);
+        });
+      });
+    }
+
+    function copyEmailsList() {
+      if (!analyticsData || !analyticsData.users || analyticsData.users.length === 0) {
+        showToast('No hay correos registrados todavía para copiar.', 'warning');
+        return;
+      }
+      const emails = analyticsData.users.map(u => u.email).filter(Boolean);
+      const csvEmails = emails.join(', ');
+      copyToClipboard(csvEmails, `${emails.length} correos copiados al portapapeles.`);
+    }
+
+    function exportToCSV() {
+      if (!analyticsData) return;
+      const users = analyticsData.users || [];
+      const visitors = analyticsData.visitors || [];
+
+      let csv = 'Tipo,Correo,Nombre,Universidad,IP_Primaria,Todas_las_IPs,Visitas,Consultas_IA,Dispositivo,Primer_Ingreso,Ultimo_Ingreso\n';
+
+      users.forEach(u => {
+        const row = [
+          'Usuario Registrado',
+          `"${(u.email || '').replace(/"/g, '""')}"`,
+          `"${(u.name || '').replace(/"/g, '""')}"`,
+          `"${(u.university || '').replace(/"/g, '""')}"`,
+          `"${u.primaryIp || ''}"`,
+          `"${(u.allIps || []).join('; ')}"`,
+          u.visitsCount || 1,
+          u.chatCount || 0,
+          `"${(u.device || '').replace(/"/g, '""')}"`,
+          `"${u.firstSeen || ''}"`,
+          `"${u.lastSeen || ''}"`
+        ];
+        csv += row.join(',') + '\n';
+      });
+
+      // Añadir visitantes anónimos
+      visitors.filter(v => !v.email && (!v.allEmails || v.allEmails.length === 0)).forEach(v => {
+        const row = [
+          'Visitante Anónimo',
+          '""',
+          '""',
+          '""',
+          `"${v.ip || ''}"`,
+          `"${v.ip || ''}"`,
+          v.visitsCount || 1,
+          v.chatCount || 0,
+          `"${(v.device || '').replace(/"/g, '""')}"`,
+          `"${v.firstSeen || ''}"`,
+          `"${v.lastSeen || ''}"`
+        ];
+        csv += row.join(',') + '\n';
+      });
+
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `cortex_accesos_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Reporte CSV descargado con éxito.', 'success');
+    }
+
+    async function confirmResetData() {
+      const confirmFirst = confirm('¿Estás seguro de que deseas reiniciar todos los registros de prueba?\nEsta acción vaciará el historial de visitas, IPs y logs acumulados.');
+      if (!confirmFirst) return;
+
+      try {
+        const res = await fetch('/api/analytics', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-key': currentAdminKey
+          },
+          body: JSON.stringify({ adminKey: currentAdminKey, action: 'reset' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Registros reiniciados correctamente.', 'info');
+          fetchAnalyticsData(true);
+        } else {
+          showToast(data.error || 'No se pudo reiniciar.', 'error');
+        }
+      } catch (err) {
+        showToast('Error al conectar con el servidor.', 'error');
+      }
+    }
+
+    function copyToClipboard(text, successMsg = 'Copiado al portapapeles') {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(successMsg, 'success');
+        }).catch(() => {
+          fallbackCopy(text, successMsg);
+        });
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg, 'success');
+      } catch (e) {
+        showToast('No se pudo copiar automáticamente.', 'error');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      const toastIcon = document.getElementById('toast-icon');
+
+      toastMsg.textContent = msg;
+
+      if (type === 'success') {
+        toastIcon.className = 'fa-solid fa-check text-emerald-400';
+      } else if (type === 'warning') {
+        toastIcon.className = 'fa-solid fa-triangle-exclamation text-amber-400';
+      } else if (type === 'error') {
+        toastIcon.className = 'fa-solid fa-circle-exclamation text-rose-400';
+      } else {
+        toastIcon.className = 'fa-solid fa-info text-violet-400';
+      }
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    function formatTimeAgo(isoString) {
+      if (!isoString) return 'Desconocido';
+      const date = new Date(isoString);
+      const now = new Date();
+      const diffSec = Math.floor((now - date) / 1000);
+
+      if (diffSec < 60) return 'Hace unos segundos';
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return `Hace ${diffMin} min`;
+      const diffHours = Math.floor(diffMin / 60);
+      if (diffHours < 24) return `Hace ${diffHours} h`;
+      const diffDays = Math.floor(diffHours / 24);
+      if (diffDays === 1) return 'Ayer';
+      if (diffDays < 30) return `Hace ${diffDays} días`;
+      return date.toLocaleDateString('es-PE');
+    }
+
+    function formatFullDate(isoString) {
+      if (!isoString) return '-';
+      const date = new Date(isoString);
+      return date.toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/chat",
+      "destination": "/api/chat.js"
+    },
+    {
+      "source": "/api/config",
+      "destination": "/api/config.js"
+    },
+    {
+      "source": "/api/verify-license",
+      "destination": "/api/verify-license.js"
+    },
+    {
+      "source": "/api/generate-license",
+      "destination": "/api/generate-license.js"
+    },
+    {
+      "source": "/api/track",
+      "destination": "/api/track.js"
+    },
+    {
+      "source": "/api/analytics",
+      "destination": "/api/analytics.js"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    }
+  ]
+}

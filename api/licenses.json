@@ -1,0 +1,26 @@
+{
+  "AP-4478-E0F9": {
+    "plan": "apuros",
+    "name": "Pase Estudiante en Apuros",
+    "queries": 6,
+    "durationDays": 30,
+    "createdAt": "2026-10-14T23:50:44.415Z",
+    "usedCount": 0
+  },
+  "MES-6672-9E3A": {
+    "plan": "mensual",
+    "name": "Plan Estudiante Mensual",
+    "queries": 100,
+    "durationDays": 30,
+    "createdAt": "2026-10-15T00:02:34.155Z",
+    "usedCount": 0
+  },
+  "AP-2051-7CF3": {
+    "plan": "apuros",
+    "name": "Pase Estudiante en Apuros",
+    "queries": 6,
+    "durationDays": 30,
+    "createdAt": "2026-10-15T16:47:38.951Z",
+    "usedCount": 0
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "totalVisits": 1,
+  "visitorsByIp": {
+    "127.0.0.1": {
+      "ip": "127.0.0.1",
+      "email": "strikerxdxd1@gmail.com",
+      "name": "striker",
+      "university": "Universidad Tecnológica del Perú (UTP)",
+      "allEmails": [
+        "strikerxdxd1@gmail.com"
+      ],
+      "device": "Google Chrome · Windows 10/11 (Escritorio)",
+      "firstSeen": "2026-10-16T17:02:37.354Z",
+      "lastSeen": "2026-10-16T17:02:37.354Z",
+      "visitsCount": 1,
+      "chatCount": 0,
+      "lastAction": "visit",
+      "lastPath": "/"
+    }
+  },
+  "usersByEmail": {
+    "strikerxdxd1@gmail.com": {
+      "email": "strikerxdxd1@gmail.com",
+      "name": "striker",
+      "university": "Universidad Tecnológica del Perú (UTP)",
+      "allIps": [
+        "127.0.0.1"
+      ],
+      "primaryIp": "127.0.0.1",
+      "firstSeen": "2026-10-16T17:02:37.354Z",
+      "lastSeen": "2026-10-16T17:02:37.354Z",
+      "visitsCount": 1,
+      "chatCount": 0,
+      "device": "Google Chrome · Windows 10/11 (Escritorio)",
+      "plan": "admin"
+    }
+  },
+  "logs": [
+    {
+      "id": "ev_1792170157356_b3hb",
+      "timestamp": "2026-10-16T17:02:37.354Z",
+      "ip": "127.0.0.1",
+      "email": "strikerxdxd1@gmail.com",
+      "name": "striker",
+      "university": "Universidad Tecnológica del Perú (UTP)",
+      "action": "visit",
+      "path": "/",
+      "device": "Google Chrome · Windows 10/11 (Escritorio)",
+      "details": ""
+    }
+  ]
+}
